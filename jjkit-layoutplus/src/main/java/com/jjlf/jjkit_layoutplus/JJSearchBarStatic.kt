@@ -2082,77 +2082,85 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     //endregion
 
+    //region layout params 
+
+    private fun lpWidth(w: Int) : JJSearchBarStatic{
+        mlpWidth = w
+        return this
+    }
+    private fun lpHeight(h: Int) : JJSearchBarStatic{
+        mlpHeight = h
+        return this
+    }
+    private fun lpPadding(pad: JJPadding) : JJSearchBarStatic{
+        mlpPadding = pad
+        return this
+    }
+
+    private fun lpMargin(mar: JJMargin) : JJSearchBarStatic{
+        mlpMargins = mar
+        return this
+    }
+
+    //endregion
+
+    //region layout params landscape
+
+    private fun lplWidth(w: Int) : JJSearchBarStatic{
+        mlsWidth = w
+        return this
+    }
+    private fun lplHeight(h: Int) : JJSearchBarStatic{
+        mlsHeight = h
+        return this
+    }
+    private fun lpladding(pad: JJPadding) : JJSearchBarStatic{
+        mlsPadding = pad
+        return this
+    }
+
+    private fun lplMargin(mar: JJMargin) : JJSearchBarStatic{
+        mlsMargins = mar
+        return this
+    }
+
+    //endregion 
+
     //region CoordinatorLayout params
 
-    private var mCol: CoordinatorLayout.LayoutParams? = null
     private fun setupCol() {
-        if (mCol == null) {
-            mCol = layoutParams as?  CoordinatorLayout.LayoutParams
-            layoutParams = mCol
-        }
-    }
-
-    fun colWidth(width: Int): JJSearchBarStatic {
-        setupCol()
-        mCol!!.width = width
-        return this
-    }
-
-    fun colHeight(height: Int): JJSearchBarStatic {
-        setupCol()
-        mCol!!.height = height
-        return this
+        val a = layoutParams as?  CoordinatorLayout.LayoutParams
+        layoutParams = a
     }
 
     fun colGravity(gravity: Int): JJSearchBarStatic {
         setupCol()
-        mCol!!.gravity = gravity
+        (layoutParams as?  CoordinatorLayout.LayoutParams)?.gravity = gravity
         return this
     }
 
     fun colBehavior(behavior: AppBarLayout.Behavior){
         setupCol()
-        mCol!!.behavior = behavior
+        (layoutParams as?  CoordinatorLayout.LayoutParams)?.behavior = behavior
     }
 
     //endregion
 
     //region AppBarLayout Params
-    private var ablp : AppBarLayout.LayoutParams? = null
     private  fun setupAblp(){
-        if(ablp == null) {
-            ablp = layoutParams as? AppBarLayout.LayoutParams
-            layoutParams = ablp
-        }
-    }
-
-    fun ablWidth(width: Int): JJSearchBarStatic {
-        setupAblp()
-        ablp!!.width = width
-        return this
-    }
-
-    fun ablHeight(height: Int): JJSearchBarStatic {
-        setupAblp()
-        ablp!!.height = height
-        return this
+        val a = layoutParams as? AppBarLayout.LayoutParams
+        layoutParams = a
     }
 
     fun ablScrollFlags(flags: Int) : JJSearchBarStatic {
         setupAblp()
-        ablp!!.scrollFlags = flags
+        (layoutParams as? AppBarLayout.LayoutParams)?.scrollFlags = flags
         return this
     }
 
     fun ablScrollInterpolator(interpolator: Interpolator) : JJSearchBarStatic {
         setupAblp()
-        ablp!!.scrollInterpolator = interpolator
-        return this
-    }
-
-    fun ablMargins(margins: JJMargin): JJSearchBarStatic {
-        setupAblp()
-        ablp!!.updateMarginsRelative(margins.left,margins.top,margins.right,margins.bottom)
+        (layoutParams as? AppBarLayout.LayoutParams)?.scrollInterpolator = interpolator
         return this
     }
 
@@ -2160,176 +2168,174 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     //region RelativeLayout Params
 
-    private var mRlp: RelativeLayout.LayoutParams? = null
-
     private fun setupRlp(){
-        if(mRlp == null) {
-            mRlp = layoutParams as? RelativeLayout.LayoutParams
-            layoutParams = mRlp
-        }
-    }
-
-    fun rlWidth(width: Int): JJSearchBarStatic {
-        setupRlp()
-        mRlp!!.width = width
-        return this
-    }
-
-    fun rlHeight(height: Int): JJSearchBarStatic {
-        setupRlp()
-        mRlp!!.height = height
-        return this
+        val a = layoutParams as? RelativeLayout.LayoutParams
+        layoutParams = a
     }
 
     fun rlAbove(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ABOVE,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ABOVE,viewId)
         return this
     }
 
     fun rlBelow(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.BELOW,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.BELOW,viewId)
         return this
     }
 
     fun rlAlignParentBottom(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,data)
         return this
     }
 
     fun rlAlignParentTop(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_TOP,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_TOP,data)
         return this
     }
 
     fun rlAlignParentStart(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_START,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_START,data)
         return this
     }
 
     fun rlAlignParentEnd(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_END,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_END,data)
         return this
     }
 
     fun rlAlignParentLeft(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_LEFT,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_LEFT,data)
         return this
     }
 
     fun rlAlignParentRight(value : Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,data)
         return this
     }
 
     fun rlAlignEnd(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_END,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_END,viewId)
         return this
     }
 
     fun rlAlignStart(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_START,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_START,viewId)
         return this
     }
 
     fun rlAlignTop(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_TOP,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_TOP,viewId)
         return this
     }
 
     fun rlAlignBottom(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_BOTTOM,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BOTTOM,viewId)
         return this
     }
 
 
     fun rlAlignLeft(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_LEFT,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_LEFT,viewId)
         return this
     }
 
     fun rlAlignRight(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_RIGHT,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_RIGHT,viewId)
         return this
     }
 
     fun rlRightToLeft(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.LEFT_OF,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.LEFT_OF,viewId)
         return this
     }
 
     fun rlLeftToRight(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.RIGHT_OF,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.RIGHT_OF,viewId)
         return this
     }
 
     fun rlStartToEnd(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.END_OF,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.END_OF,viewId)
         return this
     }
 
     fun rlEndToStart(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.START_OF,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.START_OF,viewId)
         return this
     }
 
     fun rlCenterInParent(value:Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.CENTER_IN_PARENT,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_IN_PARENT,data)
         return this
     }
 
     fun rlCenterInParentVertically(value:Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.CENTER_VERTICAL,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_VERTICAL,data)
         return this
     }
 
     fun rlCenterInParentHorizontally(value:Boolean = true): JJSearchBarStatic {
         setupRlp()
         val data = if(value) 1 else 0
-        mRlp!!.addRule(RelativeLayout.CENTER_HORIZONTAL,data)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_HORIZONTAL,data)
         return this
     }
 
     fun rlAlignBaseline(viewId: Int): JJSearchBarStatic {
         setupRlp()
-        mRlp!!.addRule(RelativeLayout.ALIGN_BASELINE,viewId)
+        (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BASELINE,viewId)
         return this
     }
 
-    fun rlMargins(margins: JJMargin): JJSearchBarStatic {
-        setupRlp()
-        mRlp!!.setMargins(margins.left,margins.top,margins.right,margins.bottom)
+
+    //endregion
+
+    //region LinearLayout Params
+    private fun setupLlp() {
+        val a = layoutParams as? LinearLayout.LayoutParams
+        layoutParams = a
+    }
+    fun llWeight(w: Float): JJSearchBarStatic {
+        setupLlp()
+        (layoutParams as? LinearLayout.LayoutParams)?.weight = w
+        return this
+    }
+    fun llGravity(gravity: Int): JJSearchBarStatic {
+        setupLlp()
+        (layoutParams as? LinearLayout.LayoutParams)?.gravity = gravity
         return this
     }
 
     //endregion
+    
 
     //region MotionLayout Params
 
@@ -3667,84 +3673,6 @@ open class JJSearchBarStatic : ConstraintLayout {
 
 //endregion
 
-    //region LinearLayout Params
-
-    private var mLlp: LinearLayout.LayoutParams? = null
-    private fun setupLlp() {
-        if (mLlp == null) {
-            mLlp = layoutParams as? LinearLayout.LayoutParams
-            layoutParams = mLlp
-        }
-    }
-
-    fun llWidth(width: Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.width = width
-        return this
-    }
-
-    fun llHeight(height: Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.height = height
-        return this
-    }
-
-    fun llWeight(weigth: Float): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.weight = weigth
-        return this
-    }
-
-    fun llGravity(gravity: Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.gravity = gravity
-        return this
-    }
-
-    fun llTopMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.topMargin = m
-        return this
-    }
-
-    fun llBottomMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.bottomMargin = m
-        return this
-    }
-
-    fun llStartMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.marginStart = m
-        return this
-    }
-
-    fun llEndMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.marginEnd = m
-        return this
-    }
-
-    fun llLeftMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.leftMargin = m
-        return this
-    }
-
-    fun llRightMargin(m : Int): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.rightMargin = m
-        return this
-    }
-
-
-    fun llMargins( margins : JJMargin): JJSearchBarStatic {
-        setupLlp()
-        mLlp!!.setMargins(margins.left,margins.top,margins.right,margins.bottom)
-        return this
-    }
-
-    //endregion
 
 
 }
