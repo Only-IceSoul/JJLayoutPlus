@@ -448,12 +448,22 @@
         <attr name="android:textAlignment" />
         <attr name="android:fontFamily" />
         <attr name="android:typeface" />
-        <attr name="android:textFontWeight" />
+        <attr name="android:textStyle" />
         <attr name="android:gravity" />
         <attr name="srcCompat" />
         <attr name="colorSurface" />
         <attr name="colorOnSurface"/>
 
     </declare-styleable>
-
+    <declare-styleable name="JJImageCategoryCircle" parent="jjlayoutplus" >
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="android:typeface" />
+        <attr name="android:textStyle" />
+        <attr name="srcCompat" />
+        <attr name="colorSurface" />
+        <attr name="colorOnSurface"/>
+    </declare-styleable>
 </resources>
