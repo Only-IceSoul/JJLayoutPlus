@@ -84,7 +84,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         val surface = ba.getColor(0,Color.parseColor("#F62F42"))
         val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
         ba.recycle()
-        val opacity = (0.7f * 255f).toInt()
+        val opacity = (0.4f * 255f).toInt()
         val bg = JJColorDrawablePlus().setFillColor(surface)
             .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
         val pre = JJColorDrawablePlus().setFillColor( ColorUtils.setAlphaComponent(surface,opacity))
