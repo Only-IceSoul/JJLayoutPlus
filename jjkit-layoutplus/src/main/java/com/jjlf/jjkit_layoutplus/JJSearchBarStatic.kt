@@ -2114,7 +2114,7 @@ open class JJSearchBarStatic : ConstraintLayout {
         mlsHeight = h
         return this
     }
-    fun lpladding(pad: JJPadding) : JJSearchBarStatic{
+    fun lplPadding(pad: JJPadding) : JJSearchBarStatic{
         mlsPadding = pad
         return this
     }

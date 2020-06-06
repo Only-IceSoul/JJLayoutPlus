@@ -2134,7 +2134,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         mlsHeight = h
         return this
     }
-    fun lpladding(pad: JJPadding) : JJImageCategoryCircle{
+    fun lplPadding(pad: JJPadding) : JJImageCategoryCircle{
         mlsPadding = pad
         return this
     }
