@@ -84,20 +84,22 @@ class JJImageCategoryCircle : ConstraintLayout {
         val surface = ba.getColor(0,Color.parseColor("#F62F42"))
         val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
         ba.recycle()
-        val opacity = (0.4f * 255f).toInt()
+
         val bg = JJColorDrawablePlus().setFillColor(surface)
             .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
-        val pre = JJColorDrawablePlus().setFillColor( ColorUtils.setAlphaComponent(surface,opacity))
+        val pre = JJColorDrawablePlus()
             .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
-
+        pre.alpha = (0.7f * 255f).toInt()
 
         val sd = StateListDrawable()
         sd.addState(intArrayOf(android.R.attr.state_pressed),pre)
-        sd.addState(intArrayOf(-android.R.attr.state_pressed),bg)
+        sd.addState(intArrayOf(-android.R.attr.state_pressed),null)
 //        val onSurPre =  (color and 0x00ffffff) or (opacity << 24)
-        mImageView.background = sd
-        mImageView.imageTintList = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_pressed) ,intArrayOf(-android.R.attr.state_pressed)),
-            intArrayOf(ColorUtils.setAlphaComponent(onSurface,opacity),onSurface))
+        mImageView.background = bg
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            mImageView.foreground = sd
+        }
+        mImageView.imageTintList = ColorStateList.valueOf(onSurface)
         mTextView.background = null
 
     }

@@ -1,8 +1,8 @@
 package com.jjlf.jjkit_layoutplus.utils
 
-import android.graphics.Matrix
-import android.graphics.RectF
+import android.graphics.*
 import androidx.annotation.FloatRange
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.transform
 import com.jjlf.jjkit_layoututils.JJPadding
 
@@ -19,4 +19,12 @@ internal fun RectF.paddingP(padding: JJPadding){
     right -= padding.right.toFloat()
     top += padding.top.toFloat()
     bottom -= padding.bottom.toFloat()
+}
+
+
+internal fun Int.colorWithAlpha(a:Int): Int{
+    return ColorUtils.setAlphaComponent(this,a)
+}
+internal fun Int.colorHighlightFilter(): ColorFilter{
+    return LightingColorFilter(Color.WHITE,this)
 }

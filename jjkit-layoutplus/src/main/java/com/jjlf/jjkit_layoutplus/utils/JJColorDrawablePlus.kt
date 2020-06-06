@@ -46,6 +46,7 @@ internal class JJColorDrawablePlus : Drawable() {
         mPaint.style = Paint.Style.FILL
         mPaint.color = Color.WHITE
         mPaintStroke.style = Paint.Style.STROKE
+
     }
 
     //effect where fill can be transparent with a stroke shadow
