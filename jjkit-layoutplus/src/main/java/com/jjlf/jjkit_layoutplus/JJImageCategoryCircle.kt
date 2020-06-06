@@ -58,13 +58,14 @@ class JJImageCategoryCircle : ConstraintLayout {
         mLinearLayout.orientation = LinearLayout.VERTICAL
 
         val sizeImg = JJScreen.percentHeight(0.075f)
-        val padImg = JJScreen.percentHeight(0.015f)
+        val padImg = JJScreen.percentHeight(0.016f)
         mImageView.setPaddingRelative(padImg,padImg,padImg,padImg)
         val lpI =  LinearLayout.LayoutParams(sizeImg,sizeImg)
         lpI.gravity = Gravity.CENTER_HORIZONTAL
         mImageView.layoutParams = lpI
         val lpT = LinearLayout.LayoutParams(ConstraintSet.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
         lpT.topMargin = JJScreen.percentHeight(0.008f)
+        lpT.gravity = Gravity.CENTER_HORIZONTAL
         mTextView.layoutParams = lpT
         mLinearLayout.addView(mImageView)
         mLinearLayout.addView(mTextView)
