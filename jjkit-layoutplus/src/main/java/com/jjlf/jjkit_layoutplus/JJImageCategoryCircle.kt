@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
@@ -25,6 +26,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.updateMarginsRelative
 import com.google.android.material.appbar.AppBarLayout
 import com.jjlf.jjkit_layoutplus.utils.JJColorDrawablePlus
@@ -82,14 +84,54 @@ class JJImageCategoryCircle : ConstraintLayout {
         val surface = ba.getColor(0,Color.parseColor("#F62F42"))
         val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
         ba.recycle()
-
-        mImageView.background = JJColorDrawablePlus().setFillColor(surface)
+        val opacity = (0.7f * 255f).toInt()
+        val bg = JJColorDrawablePlus().setFillColor(surface)
             .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
-        mImageView.imageTintList = ColorStateList.valueOf(onSurface)
+        val pre = JJColorDrawablePlus().setFillColor( ColorUtils.setAlphaComponent(surface,opacity))
+            .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
+
+
+        val sd = StateListDrawable()
+        sd.addState(intArrayOf(android.R.attr.state_pressed),pre)
+        sd.addState(intArrayOf(-android.R.attr.state_pressed),bg)
+//        val onSurPre =  (color and 0x00ffffff) or (opacity << 24)
+        mImageView.background = sd
+        mImageView.imageTintList = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_pressed) ,intArrayOf(-android.R.attr.state_pressed)),
+            intArrayOf(ColorUtils.setAlphaComponent(onSurface,opacity),onSurface))
         mTextView.background = null
 
     }
 
+
+
+
+    fun setOnImageClickListener(listener: (view: View) -> Unit): JJImageCategoryCircle{
+        mImageView.setOnClickListener(listener)
+        return this
+    }
+
+    fun setTextSize(size:Float) : JJImageCategoryCircle{
+        mTextView.textSize = size
+        return this
+    }
+    fun setTextColor(color:Int) : JJImageCategoryCircle{
+        mTextView.setTextColor(color)
+        return this
+    }
+    fun setTypeFace(typeface: Typeface) : JJImageCategoryCircle{
+        mTextView.typeface = typeface
+        return this
+    }
+
+    fun setColorSurface(color: Int): JJImageCategoryCircle{
+        val dr = (mImageView.background as JJColorDrawablePlus).setFillColor(color)
+        dr.invalidateSelf()
+        return this
+    }
+    fun setColorOnSurface(color: Int): JJImageCategoryCircle{
+        mImageView.imageTintList = ColorStateList.valueOf(color)
+        return this
+    }
 
     //region init
 
