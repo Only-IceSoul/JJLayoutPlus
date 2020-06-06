@@ -1,0 +1,3 @@
+include ':jjkit-layoutplus'
+include ':app'
+rootProject.name = "JJLayoutPlus"
