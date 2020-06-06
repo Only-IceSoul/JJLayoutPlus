@@ -452,4 +452,453 @@
         <attr name="cllHeightResponsivePercentScreenWidth"/>
         <attr name="cllWidthResponsivePercentScreenHeight"/>
     </declare-styleable>
+    <declare-styleable name="JJImageCategoryCircle" parent="JJConstraintLayout" >
+
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="android:typeface" />
+        <attr name="android:textFontWeight" />
+        <attr name="srcCompat" />
+        <attr name="colorSurface" />
+        <attr name="colorOnSurface"/>
+
+        <attr name="layout_ignoreCl"/>
+
+        <attr name="lpPaddingPercentScHeight"/>
+        <attr name="lpPaddingPercentScWidth"/>
+        <attr name="lpPaddingResponsive"/>
+        <attr name="lpPaddingResPerScHeight"/>
+        <attr name="lpPaddingResPerScWidth"/>
+
+        <attr name="lpPaddingVerticalPerScHeight"/>
+        <attr name="lpPaddingVerticalPerScWidth"/>
+        <attr name="lpPaddingVerticalResponsive"/>
+        <attr name="lpPaddingVerticalResPerScHeight"/>
+        <attr name="lpPaddingVerticalResPerScWidth"/>
+
+        <attr name="lpPaddingHorizontalPerScHeight"/>
+        <attr name="lpPaddingHorizontalPerScWidth"/>
+        <attr name="lpPaddingHorizontalResponsive"/>
+        <attr name="lpPaddingHorizontalResPerScHeight"/>
+        <attr name="lpPaddingHorizontalResPerScWidth"/>
+
+
+        <attr name="lpPaddingTopPerScHeight"/>
+        <attr name="lpPaddingLeftPerScHeight"/>
+        <attr name="lpPaddingRightPerScHeight"/>
+        <attr name="lpPaddingBottomPerScHeight"/>
+
+        <attr name="lpPaddingTopPerScWidth"/>
+        <attr name="lpPaddingLeftPerScWidth"/>
+        <attr name="lpPaddingRightPerScWidth"/>
+        <attr name="lpPaddingBottomPerScWidth"/>
+
+        <attr name="lpPaddingTopResponsive"/>
+        <attr name="lpPaddingLeftResponsive"/>
+        <attr name="lpPaddingRightResponsive"/>
+        <attr name="lpPaddingBottomResponsive"/>
+
+        <attr name="lpPaddingTopResPerScWidth"/>
+        <attr name="lpPaddingLeftResPerScWidth"/>
+        <attr name="lpPaddingRightResPerScWidth"/>
+        <attr name="lpPaddingBottomResPerScWidth"/>
+
+        <attr name="lpPaddingTopResPerScHeight"/>
+        <attr name="lpPaddingLeftResPerScHeight"/>
+        <attr name="lpPaddingRightResPerScHeight"/>
+        <attr name="lpPaddingBottomResPerScHeight"/>
+
+
+        <attr name="lpMarginPercentScHeight"/>
+        <attr name="lpMarginPercentScWidth"/>
+        <attr name="lpMarginResponsive"/>
+        <attr name="lpMarginResPerScHeight"/>
+        <attr name="lpMarginResPerScWidth"/>
+
+        <attr name="lpMarginVerticalPerScHeight"/>
+        <attr name="lpMarginVerticalPerScWidth"/>
+        <attr name="lpMarginVerticalResponsive"/>
+        <attr name="lpMarginVerticalResPerScHeight"/>
+        <attr name="lpMarginVerticalResPerScWidth"/>
+
+        <attr name="lpMarginHorizontalPerScHeight"/>
+        <attr name="lpMarginHorizontalPerScWidth"/>
+        <attr name="lpMarginHorizontalResponsive"/>
+        <attr name="lpMarginHorizontalResPerScHeight"/>
+        <attr name="lpMarginHorizontalResPerScWidth"/>
+
+
+        <attr name="lpMarginTopPerScHeight"/>
+        <attr name="lpMarginLeftPerScHeight"/>
+        <attr name="lpMarginRightPerScHeight"/>
+        <attr name="lpMarginBottomPerScHeight"/>
+
+        <attr name="lpMarginTopPerScWidth"/>
+        <attr name="lpMarginLeftPerScWidth"/>
+        <attr name="lpMarginRightPerScWidth"/>
+        <attr name="lpMarginBottomPerScWidth"/>
+
+        <attr name="lpMarginTopResponsive"/>
+        <attr name="lpMarginLeftResponsive"/>
+        <attr name="lpMarginRightResponsive"/>
+        <attr name="lpMarginBottomResponsive"/>
+
+        <attr name="lpMarginTopResPerScWidth"/>
+        <attr name="lpMarginLeftResPerScWidth"/>
+        <attr name="lpMarginRightResPerScWidth"/>
+        <attr name="lpMarginBottomResPerScWidth"/>
+
+        <attr name="lpMarginTopResPerScHeight"/>
+        <attr name="lpMarginLeftResPerScHeight"/>
+        <attr name="lpMarginRightResPerScHeight"/>
+        <attr name="lpMarginBottomResPerScHeight"/>
+
+        <attr name="lpHeightPercentScreenHeight"/>
+        <attr name="lpHeightPercentScreenWidth"/>
+        <attr name="lpWidthPercentScreenWidth"/>
+        <attr name="lpWidthPercentScreenHeight"/>
+
+        <attr name="lpHeightResponsive"/>
+        <attr name="lpWidthResponsive"/>
+
+        <attr name="lpHeightResponsivePercentScreenHeight"/>
+        <attr name="lpWidthResponsivePercentScreenWidth"/>
+        <attr name="lpHeightResponsivePercentScreenWidth"/>
+        <attr name="lpWidthResponsivePercentScreenHeight"/>
+
+
+        <attr name="clHeightPercent"/>
+        <attr name="clHeightPercentScreenHeight"/>
+        <attr name="clHeightPercentScreenWidth"/>
+        <attr name="clWidthPercent"/>
+        <attr name="clWidthPercentScreenWidth"/>
+        <attr name="clWidthPercentScreenHeight"/>
+
+        <attr name="clFillParent"/>
+        <attr name="clFillParentHorizontally"/>
+        <attr name="clFillParentVertically"/>
+
+        <attr name="clCenterInParent"/>
+        <attr name="clCenterInParentVertically"/>
+        <attr name="clCenterInParentTopVertically"/>
+        <attr name="clCenterInParentBottomVertically"/>
+        <attr name="clCenterInParentHorizontally"/>
+        <attr name="clCenterInParentStartHorizontally"/>
+        <attr name="clCenterInParentEndHorizontally"/>
+
+        <attr name="clCenterVerticallyOf"/>
+        <attr name="clCenterHorizontallyOf"/>
+        <attr name="clCenterInTopVerticallyOf"/>
+        <attr name="clCenterInBottomVerticallyOf"/>
+        <attr name="clCenterInStartHorizontallyOf"/>
+        <attr name="clCenterInEndHorizontallyOf"/>
+
+
+        <attr name="clMarginEnd"/>
+        <attr name="clMarginStart"/>
+        <attr name="clMarginBottom"/>
+        <attr name="clMarginTop"/>
+        <attr name="clMarginEndPercentScreenHeight"/>
+        <attr name="clMarginStartPercentScreenHeight"/>
+        <attr name="clMarginBottomPercentScreenHeight"/>
+        <attr name="clMarginTopPercentScreenHeight"/>
+        <attr name="clMarginEndPercentScreenWidth"/>
+        <attr name="clMarginStartPercentScreenWidth"/>
+        <attr name="clMarginBottomPercentScreenWidth"/>
+        <attr name="clMarginTopPercentScreenWidth"/>
+
+        <attr name="clMargin"/>
+        <attr name="clMarginPerScHeight"/>
+        <attr name="clMarginPerScWidth"/>
+        <attr name="clMarginResponsive"/>
+        <attr name="clMarginResPerScHeight"/>
+        <attr name="clMarginResPerScWidth"/>
+
+        <attr name="clMarginVertical"/>
+        <attr name="clMarginHorizontal"/>
+        <attr name="clMarginHorizontalPerScHeight"/>
+        <attr name="clMarginVerticalPerScHeight"/>
+        <attr name="clMarginHorizontalPerScWidth"/>
+        <attr name="clMarginVerticalPerScWidth"/>
+        <attr name="clMarginVerticalResponsive"/>
+        <attr name="clMarginHorizontalResponsive"/>
+        <attr name="clMarginVerticalResPerScHeight"/>
+        <attr name="clMarginHorizontalResPerScHeight"/>
+        <attr name="clMarginVerticalResPerScWidth"/>
+        <attr name="clMarginHorizontalResPerScWidth"/>
+
+
+        <attr name="clMarginEndResponsive"/>
+        <attr name="clMarginStartResponsive"/>
+        <attr name="clMarginBottomResponsive"/>
+        <attr name="clMarginTopResponsive"/>
+        <attr name="clMarginEndResPerScHeight"/>
+        <attr name="clMarginStartResPerScHeight"/>
+        <attr name="clMarginBottomResPerScHeight"/>
+        <attr name="clMarginTopResPerScHeight"/>
+        <attr name="clMarginEndResPerScWidth"/>
+        <attr name="clMarginStartResPerScWidth"/>
+        <attr name="clMarginBottomResPerScWidth"/>
+        <attr name="clMarginTopResPerScWidth"/>
+
+        <attr name="clVerticalBias"/>
+        <attr name="clHorizontalBias"/>
+
+        <attr name="clStartToStartParent"/>
+        <attr name="clStartToEndParent"/>
+        <attr name="clEndToEndParent"/>
+        <attr name="clEndToStartParent"/>
+        <attr name="clTopToTopParent"/>
+        <attr name="clTopToBottomParent"/>
+        <attr name="clBottomToBottomParent"/>
+        <attr name="clBottomToTopParent"/>
+        <attr name="clStartToStartOf"/>
+        <attr name="clStartToEndOf"/>
+        <attr name="clEndToEndOf"/>
+        <attr name="clEndToStartOf"/>
+        <attr name="clTopToTopOf"/>
+        <attr name="clTopToBottomOf"/>
+        <attr name="clBottomToBottomOf"/>
+        <attr name="clBottomToTopOf"/>
+
+        <attr name="clHeightResponsive"/>
+        <attr name="clWidthResponsive"/>
+
+        <attr name="clHeightResponsivePercentScreenHeight"/>
+        <attr name="clWidthResponsivePercentScreenWidth"/>
+        <attr name="clHeightResponsivePercentScreenWidth"/>
+        <attr name="clWidthResponsivePercentScreenHeight"/>
+
+
+        <!--        start land scape-->
+
+        <attr name="support_configuration_changed"/>
+
+        <attr name="support_landscape"/>
+
+        <attr name="layout_height_landscape"/>
+        <attr name="layout_width_landscape"/>
+        <attr name="lplPadding"/>
+        <attr name="lplPaddingVertical"/>
+        <attr name="lplPaddingHorizontal"/>
+        <attr name="lplPaddingStart"/>
+        <attr name="lplPaddingTop"/>
+        <attr name="lplPaddingBottom"/>
+        <attr name="lplPaddingEnd"/>
+
+        <attr name="lplMargin"/>
+        <attr name="lplMarginVertical"/>
+        <attr name="lplMarginHorizontal"/>
+        <attr name="lplMarginStart"/>
+        <attr name="lplMarginTop"/>
+        <attr name="lplMarginBottom"/>
+        <attr name="lplMarginEnd"/>
+
+
+        <attr name="lplPaddingPercentScHeight"/>
+        <attr name="lplPaddingPercentScWidth"/>
+        <attr name="lplPaddingResponsive"/>
+        <attr name="lplPaddingResPerScHeight"/>
+        <attr name="lplPaddingResPerScWidth"/>
+
+        <attr name="lplPaddingVerticalPerScHeight"/>
+        <attr name="lplPaddingVerticalPerScWidth"/>
+        <attr name="lplPaddingVerticalResponsive"/>
+        <attr name="lplPaddingVerticalResPerScHeight"/>
+        <attr name="lplPaddingVerticalResPerScWidth"/>
+
+        <attr name="lplPaddingHorizontalPerScHeight"/>
+        <attr name="lplPaddingHorizontalPerScWidth"/>
+        <attr name="lplPaddingHorizontalResponsive"/>
+        <attr name="lplPaddingHorizontalResPerScHeight"/>
+        <attr name="lplPaddingHorizontalResPerScWidth"/>
+
+
+        <attr name="lplPaddingTopPerScHeight"/>
+        <attr name="lplPaddingLeftPerScHeight"/>
+        <attr name="lplPaddingRightPerScHeight"/>
+        <attr name="lplPaddingBottomPerScHeight"/>
+
+        <attr name="lplPaddingTopPerScWidth"/>
+        <attr name="lplPaddingLeftPerScWidth"/>
+        <attr name="lplPaddingRightPerScWidth"/>
+        <attr name="lplPaddingBottomPerScWidth"/>
+
+        <attr name="lplPaddingTopResponsive"/>
+        <attr name="lplPaddingLeftResponsive"/>
+        <attr name="lplPaddingRightResponsive"/>
+        <attr name="lplPaddingBottomResponsive"/>
+
+        <attr name="lplPaddingTopResPerScWidth"/>
+        <attr name="lplPaddingLeftResPerScWidth"/>
+        <attr name="lplPaddingRightResPerScWidth"/>
+        <attr name="lplPaddingBottomResPerScWidth"/>
+
+        <attr name="lplPaddingTopResPerScHeight"/>
+        <attr name="lplPaddingLeftResPerScHeight"/>
+        <attr name="lplPaddingRightResPerScHeight"/>
+        <attr name="lplPaddingBottomResPerScHeight"/>
+
+
+        <attr name="lplMarginPercentScHeight"/>
+        <attr name="lplMarginPercentScWidth"/>
+        <attr name="lplMarginResponsive"/>
+        <attr name="lplMarginResPerScHeight"/>
+        <attr name="lplMarginResPerScWidth"/>
+
+        <attr name="lplMarginVerticalPerScHeight"/>
+        <attr name="lplMarginVerticalPerScWidth"/>
+        <attr name="lplMarginVerticalResponsive"/>
+        <attr name="lplMarginVerticalResPerScHeight"/>
+        <attr name="lplMarginVerticalResPerScWidth"/>
+
+        <attr name="lplMarginHorizontalPerScHeight"/>
+        <attr name="lplMarginHorizontalPerScWidth"/>
+        <attr name="lplMarginHorizontalResponsive"/>
+        <attr name="lplMarginHorizontalResPerScHeight"/>
+        <attr name="lplMarginHorizontalResPerScWidth"/>
+
+        <attr name="lplMarginTopPerScHeight"/>
+        <attr name="lplMarginLeftPerScHeight"/>
+        <attr name="lplMarginRightPerScHeight"/>
+        <attr name="lplMarginBottomPerScHeight"/>
+
+        <attr name="lplMarginTopPerScWidth"/>
+        <attr name="lplMarginLeftPerScWidth"/>
+        <attr name="lplMarginRightPerScWidth"/>
+        <attr name="lplMarginBottomPerScWidth"/>
+
+        <attr name="lplMarginTopResponsive"/>
+        <attr name="lplMarginLeftResponsive"/>
+        <attr name="lplMarginRightResponsive"/>
+        <attr name="lplMarginBottomResponsive"/>
+
+        <attr name="lplMarginTopResPerScWidth"/>
+        <attr name="lplMarginLeftResPerScWidth"/>
+        <attr name="lplMarginRightResPerScWidth"/>
+        <attr name="lplMarginBottomResPerScWidth"/>
+
+        <attr name="lplMarginTopResPerScHeight"/>
+        <attr name="lplMarginLeftResPerScHeight"/>
+        <attr name="lplMarginRightResPerScHeight"/>
+        <attr name="lplMarginBottomResPerScHeight"/>
+
+        <attr name="lplHeightPercentScreenHeight"/>
+        <attr name="lplHeightPercentScreenWidth"/>
+        <attr name="lplWidthPercentScreenWidth"/>
+        <attr name="lplWidthPercentScreenHeight"/>
+
+        <attr name="lplHeightResponsive"/>
+        <attr name="lplWidthResponsive"/>
+
+        <attr name="lplHeightResponsivePercentScreenHeight"/>
+        <attr name="lplWidthResponsivePercentScreenWidth"/>
+        <attr name="lplHeightResponsivePercentScreenWidth"/>
+        <attr name="lplWidthResponsivePercentScreenHeight"/>
+
+
+        <attr name="cllHeightPercent"/>
+        <attr name="cllHeightPercentScreenHeight"/>
+        <attr name="cllHeightPercentScreenWidth"/>
+        <attr name="cllWidthPercent"/>
+        <attr name="cllWidthPercentScreenWidth"/>
+        <attr name="cllWidthPercentScreenHeight"/>
+
+        <attr name="cllFillParent"/>
+        <attr name="cllFillParentHorizontally"/>
+        <attr name="cllFillParentVertically"/>
+
+        <attr name="cllCenterInParent"/>
+        <attr name="cllCenterInParentVertically"/>
+        <attr name="cllCenterInParentTopVertically"/>
+        <attr name="cllCenterInParentBottomVertically"/>
+        <attr name="cllCenterInParentHorizontally"/>
+        <attr name="cllCenterInParentStartHorizontally"/>
+        <attr name="cllCenterInParentEndHorizontally"/>
+
+        <attr name="cllCenterVerticallyOf"/>
+        <attr name="cllCenterHorizontallyOf"/>
+        <attr name="cllCenterInTopVerticallyOf"/>
+        <attr name="cllCenterInBottomVerticallyOf"/>
+        <attr name="cllCenterInStartHorizontallyOf"/>
+        <attr name="cllCenterInEndHorizontallyOf"/>
+
+
+        <attr name="cllMarginEnd"/>
+        <attr name="cllMarginStart"/>
+        <attr name="cllMarginBottom"/>
+        <attr name="cllMarginTop"/>
+        <attr name="cllMarginEndPercentScreenHeight"/>
+        <attr name="cllMarginStartPercentScreenHeight"/>
+        <attr name="cllMarginBottomPercentScreenHeight"/>
+        <attr name="cllMarginTopPercentScreenHeight"/>
+        <attr name="cllMarginEndPercentScreenWidth"/>
+        <attr name="cllMarginStartPercentScreenWidth"/>
+        <attr name="cllMarginBottomPercentScreenWidth"/>
+        <attr name="cllMarginTopPercentScreenWidth"/>
+
+        <attr name="cllMargin"/>
+        <attr name="cllMarginPerScHeight"/>
+        <attr name="cllMarginPerScWidth"/>
+        <attr name="cllMarginResponsive"/>
+        <attr name="cllMarginResPerScHeight"/>
+        <attr name="cllMarginResPerScWidth"/>
+
+        <attr name="cllMarginVertical"/>
+        <attr name="cllMarginHorizontal"/>
+        <attr name="cllMarginHorizontalPerScHeight"/>
+        <attr name="cllMarginVerticalPerScHeight"/>
+        <attr name="cllMarginHorizontalPerScWidth"/>
+        <attr name="cllMarginVerticalPerScWidth"/>
+        <attr name="cllMarginVerticalResponsive"/>
+        <attr name="cllMarginHorizontalResponsive"/>
+        <attr name="cllMarginVerticalResPerScHeight"/>
+        <attr name="cllMarginHorizontalResPerScHeight"/>
+        <attr name="cllMarginVerticalResPerScWidth"/>
+        <attr name="cllMarginHorizontalResPerScWidth"/>
+
+
+        <attr name="cllMarginEndResponsive"/>
+        <attr name="cllMarginStartResponsive"/>
+        <attr name="cllMarginBottomResponsive"/>
+        <attr name="cllMarginTopResponsive"/>
+        <attr name="cllMarginEndResPerScHeight"/>
+        <attr name="cllMarginStartResPerScHeight"/>
+        <attr name="cllMarginBottomResPerScHeight"/>
+        <attr name="cllMarginTopResPerScHeight"/>
+        <attr name="cllMarginEndResPerScWidth"/>
+        <attr name="cllMarginStartResPerScWidth"/>
+        <attr name="cllMarginBottomResPerScWidth"/>
+        <attr name="cllMarginTopResPerScWidth"/>
+
+        <attr name="cllVerticalBias"/>
+        <attr name="cllHorizontalBias"/>
+
+        <attr name="cllStartToStartParent"/>
+        <attr name="cllStartToEndParent"/>
+        <attr name="cllEndToEndParent"/>
+        <attr name="cllEndToStartParent"/>
+        <attr name="cllTopToTopParent"/>
+        <attr name="cllTopToBottomParent"/>
+        <attr name="cllBottomToBottomParent"/>
+        <attr name="cllBottomToTopParent"/>
+        <attr name="cllStartToStartOf"/>
+        <attr name="cllStartToEndOf"/>
+        <attr name="cllEndToEndOf"/>
+        <attr name="cllEndToStartOf"/>
+        <attr name="cllTopToTopOf"/>
+        <attr name="cllTopToBottomOf"/>
+        <attr name="cllBottomToBottomOf"/>
+        <attr name="cllBottomToTopOf"/>
+
+        <attr name="cllHeightResponsive"/>
+        <attr name="cllWidthResponsive"/>
+
+        <attr name="cllHeightResponsivePercentScreenHeight"/>
+        <attr name="cllWidthResponsivePercentScreenWidth"/>
+        <attr name="cllHeightResponsivePercentScreenWidth"/>
+        <attr name="cllWidthResponsivePercentScreenHeight"/>
+    </declare-styleable>
 </resources>
