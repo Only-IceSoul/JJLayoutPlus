@@ -129,6 +129,11 @@ open class JJSearchBarStatic : ConstraintLayout {
         return this
     }
 
+    fun setImageResource(resId:Int): JJSearchBarStatic{
+        mImageView.setImageResource(resId)
+        return this
+    }
+
     //endregion
 
     //region init

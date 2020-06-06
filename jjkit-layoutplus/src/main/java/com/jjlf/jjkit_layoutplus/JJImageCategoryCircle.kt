@@ -119,6 +119,10 @@ class JJImageCategoryCircle : ConstraintLayout {
         mImageView.setOnClickListener(listener)
         return this
     }
+    fun setImageResource(resId:Int): JJImageCategoryCircle{
+        mImageView.setImageResource(resId)
+        return this
+    }
 
     fun setTextSize(size:Float) : JJImageCategoryCircle{
         mTextView.textSize = size
