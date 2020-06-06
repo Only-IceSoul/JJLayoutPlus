@@ -2104,20 +2104,20 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     //region layout params
 
-    private fun lpWidth(w: Int) : JJImageCategoryCircle{
+    fun lpWidth(w: Int) : JJImageCategoryCircle{
         mlpWidth = w
         return this
     }
-    private fun lpHeight(h: Int) : JJImageCategoryCircle{
+    fun lpHeight(h: Int) : JJImageCategoryCircle{
         mlpHeight = h
         return this
     }
-    private fun lpPadding(pad: JJPadding) : JJImageCategoryCircle{
+    fun lpPadding(pad: JJPadding) : JJImageCategoryCircle{
         mlpPadding = pad
         return this
     }
 
-    private fun lpMargin(mar: JJMargin) : JJImageCategoryCircle{
+    fun lpMargin(mar: JJMargin) : JJImageCategoryCircle{
         mlpMargins = mar
         return this
     }
@@ -2126,20 +2126,20 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     //region layout params landscape
 
-    private fun lplWidth(w: Int) : JJImageCategoryCircle{
+    fun lplWidth(w: Int) : JJImageCategoryCircle{
         mlsWidth = w
         return this
     }
-    private fun lplHeight(h: Int) : JJImageCategoryCircle{
+    fun lplHeight(h: Int) : JJImageCategoryCircle{
         mlsHeight = h
         return this
     }
-    private fun lpladding(pad: JJPadding) : JJImageCategoryCircle{
+    fun lpladding(pad: JJPadding) : JJImageCategoryCircle{
         mlsPadding = pad
         return this
     }
 
-    private fun lplMargin(mar: JJMargin) : JJImageCategoryCircle{
+    fun lplMargin(mar: JJMargin) : JJImageCategoryCircle{
         mlsMargins = mar
         return this
     }

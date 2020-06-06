@@ -2084,20 +2084,20 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     //region layout params 
 
-    private fun lpWidth(w: Int) : JJSearchBarStatic{
+    fun lpWidth(w: Int) : JJSearchBarStatic{
         mlpWidth = w
         return this
     }
-    private fun lpHeight(h: Int) : JJSearchBarStatic{
+    fun lpHeight(h: Int) : JJSearchBarStatic{
         mlpHeight = h
         return this
     }
-    private fun lpPadding(pad: JJPadding) : JJSearchBarStatic{
+    fun lpPadding(pad: JJPadding) : JJSearchBarStatic{
         mlpPadding = pad
         return this
     }
 
-    private fun lpMargin(mar: JJMargin) : JJSearchBarStatic{
+    fun lpMargin(mar: JJMargin) : JJSearchBarStatic{
         mlpMargins = mar
         return this
     }
@@ -2106,20 +2106,20 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     //region layout params landscape
 
-    private fun lplWidth(w: Int) : JJSearchBarStatic{
+    fun lplWidth(w: Int) : JJSearchBarStatic{
         mlsWidth = w
         return this
     }
-    private fun lplHeight(h: Int) : JJSearchBarStatic{
+    fun lplHeight(h: Int) : JJSearchBarStatic{
         mlsHeight = h
         return this
     }
-    private fun lpladding(pad: JJPadding) : JJSearchBarStatic{
+    fun lpladding(pad: JJPadding) : JJSearchBarStatic{
         mlsPadding = pad
         return this
     }
 
-    private fun lplMargin(mar: JJMargin) : JJSearchBarStatic{
+    fun lplMargin(mar: JJMargin) : JJSearchBarStatic{
         mlsMargins = mar
         return this
     }
