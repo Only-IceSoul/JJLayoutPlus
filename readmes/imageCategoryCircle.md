@@ -1,4 +1,4 @@
-# Search Bar Static
+# Image Category Circle
 
 <img src="../images/imagecategorycircle.jpg" >
 

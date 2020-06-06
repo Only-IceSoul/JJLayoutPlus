@@ -16,7 +16,7 @@ allprojects {
 2.- Add the dependency
 ```
 dependencies {
-	        implementation 'com.github.Only-IceSoul:JJLayoutPlus:1.0.0'
+	        implementation 'com.github.Only-IceSoul:JJLayoutPlus:TAGVERSION'
 	}
 ```
 
