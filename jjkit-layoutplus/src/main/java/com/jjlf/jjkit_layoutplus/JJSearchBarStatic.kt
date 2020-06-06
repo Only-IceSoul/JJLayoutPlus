@@ -150,12 +150,13 @@ open class JJSearchBarStatic : ConstraintLayout {
     }
 
 
+    @SuppressLint("CustomViewStyleable")
     private fun setupLayout(attrs: AttributeSet){
         val a = context.obtainStyledAttributes(attrs,
-            R.styleable.JJSearchBarStatic, 0, 0)
-        mIgnoreCl = a.getBoolean(R.styleable.JJSearchBarStatic_layout_ignoreCl,false)
-        mConfigurationChanged = a.getBoolean(R.styleable.JJSearchBarStatic_support_configuration_changed,false)
-        mSupportLandScape = a.getBoolean(R.styleable.JJSearchBarStatic_support_landscape,false)
+            R.styleable.jjlayoutplus, 0, 0)
+        mIgnoreCl = a.getBoolean(R.styleable.jjlayoutplus_layout_ignoreCl,false)
+        mConfigurationChanged = a.getBoolean(R.styleable.jjlayoutplus_support_configuration_changed,false)
+        mSupportLandScape = a.getBoolean(R.styleable.jjlayoutplus_support_landscape,false)
 
         setupAndroidBase(attrs)
 
@@ -212,153 +213,153 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     private fun setupSizeLp(a:TypedArray,index:Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_lpHeightPercentScreenWidth -> {
-                mlpHeight = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpHeightPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_lpHeightPercentScreenWidth -> {
+                mlpHeight = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpHeightPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpHeightPercentScreenHeight -> {
-                mlpHeight = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpHeightPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_lpHeightPercentScreenHeight -> {
+                mlpHeight = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpHeightPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpWidthPercentScreenWidth -> {
-                mlpWidth = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpWidthPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_lpWidthPercentScreenWidth -> {
+                mlpWidth = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpWidthPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpWidthPercentScreenHeight -> {
-                mlpWidth = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpWidthPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_lpWidthPercentScreenHeight -> {
+                mlpWidth = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpWidthPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpHeightResponsive -> {
-                mlpHeight =  responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpHeightResponsive)
+            R.styleable.jjlayoutplus_lpHeightResponsive -> {
+                mlpHeight =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpHeightResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpWidthResponsive -> {
-                mlpWidth =  responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpWidthResponsive)
+            R.styleable.jjlayoutplus_lpWidthResponsive -> {
+                mlpWidth =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpWidthResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpHeightResponsivePercentScreenHeight -> {
-                mlpHeight = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lpHeightResponsivePercentScreenHeight)
+            R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenHeight -> {
+                mlpHeight = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenHeight)
             }
-            R.styleable.JJSearchBarStatic_lpWidthResponsivePercentScreenHeight -> {
-                mlpWidth = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lpWidthResponsivePercentScreenHeight)
+            R.styleable.jjlayoutplus_lpWidthResponsivePercentScreenHeight -> {
+                mlpWidth = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpWidthResponsivePercentScreenHeight)
             }
-            R.styleable.JJSearchBarStatic_lpHeightResponsivePercentScreenWidth -> {
-                mlpHeight = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpHeightResponsivePercentScreenWidth)
+            R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenWidth -> {
+                mlpHeight = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenWidth)
             }
-            R.styleable.JJSearchBarStatic_lpWidthResponsivePercentScreenWidth -> {
-                mlpWidth = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpWidthResponsivePercentScreenWidth)
+            R.styleable.jjlayoutplus_lpWidthResponsivePercentScreenWidth -> {
+                mlpWidth = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpWidthResponsivePercentScreenWidth)
             }
         }
     }
     private fun setupMarginLp(a:TypedArray,index: Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_lpMarginTopPerScHeight -> {
-                mlpMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginTopPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginTopPerScHeight -> {
+                mlpMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginTopPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginLeftPerScHeight -> {
-                mlpMargins.left = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpMarginLeftPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginLeftPerScHeight -> {
+                mlpMargins.left = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpMarginLeftPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginRightPerScHeight -> {
-                mlpMargins.right = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginRightPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginRightPerScHeight -> {
+                mlpMargins.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginRightPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginBottomPerScHeight -> {
-                mlpMargins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginBottomPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginBottomPerScHeight -> {
+                mlpMargins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginBottomPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginTopPerScWidth -> {
-                mlpMargins.top = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginTopPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginTopPerScWidth -> {
+                mlpMargins.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginTopPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginLeftPerScWidth -> {
-                mlpMargins.left = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpMarginLeftPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginLeftPerScWidth -> {
+                mlpMargins.left = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpMarginLeftPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginRightPerScWidth->{
-                mlpMargins.right = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginRightPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginRightPerScWidth->{
+                mlpMargins.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginRightPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginBottomPerScWidth -> {
-                mlpMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginBottomPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginBottomPerScWidth -> {
+                mlpMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginBottomPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpMarginTopResponsive -> {
-                mlpMargins.top = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginTopResponsive)
+            R.styleable.jjlayoutplus_lpMarginTopResponsive -> {
+                mlpMargins.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginTopResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpMarginLeftResponsive ->{
-                mlpMargins.left =  responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginLeftResponsive)
+            R.styleable.jjlayoutplus_lpMarginLeftResponsive ->{
+                mlpMargins.left =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginLeftResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpMarginRightResponsive -> {
-                mlpMargins.right =   responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginRightResponsive)
+            R.styleable.jjlayoutplus_lpMarginRightResponsive -> {
+                mlpMargins.right =   responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginRightResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpMarginBottomResponsive -> {
-                mlpMargins.bottom =  responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginBottomResponsive)
+            R.styleable.jjlayoutplus_lpMarginBottomResponsive -> {
+                mlpMargins.bottom =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginBottomResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpMarginTopResPerScWidth -> {
-                mlpMargins.top  = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpMarginTopResPerScWidth)
+            R.styleable.jjlayoutplus_lpMarginTopResPerScWidth -> {
+                mlpMargins.top  = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginTopResPerScWidth)
             }
-            R.styleable.JJSearchBarStatic_lpMarginLeftResPerScWidth -> {
-                mlpMargins.left = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpMarginLeftResPerScWidth)
+            R.styleable.jjlayoutplus_lpMarginLeftResPerScWidth -> {
+                mlpMargins.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginLeftResPerScWidth)
             }
-            R.styleable.JJSearchBarStatic_lpMarginRightResPerScWidth -> {
-                mlpMargins.right =  responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpMarginRightResPerScWidth)
+            R.styleable.jjlayoutplus_lpMarginRightResPerScWidth -> {
+                mlpMargins.right =  responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginRightResPerScWidth)
             }
-            R.styleable.JJSearchBarStatic_lpMarginBottomResPerScWidth -> {
-                mlpMargins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpMarginBottomResPerScWidth)
+            R.styleable.jjlayoutplus_lpMarginBottomResPerScWidth -> {
+                mlpMargins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginBottomResPerScWidth)
             }
-            R.styleable.JJSearchBarStatic_lpMarginTopResPerScHeight ->{
-                mlpMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpMarginTopResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginTopResPerScHeight ->{
+                mlpMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginTopResPerScHeight)
             }
-            R.styleable.JJSearchBarStatic_lpMarginLeftResPerScHeight ->{
-                mlpMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpMarginLeftResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginLeftResPerScHeight ->{
+                mlpMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginLeftResPerScHeight)
             }
-            R.styleable.JJSearchBarStatic_lpMarginRightResPerScHeight ->{
-                mlpMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpMarginRightResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginRightResPerScHeight ->{
+                mlpMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginRightResPerScHeight)
             }
-            R.styleable.JJSearchBarStatic_lpMarginBottomResPerScHeight ->{
-                mlpMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpMarginBottomResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginBottomResPerScHeight ->{
+                mlpMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginBottomResPerScHeight)
             }
-            R.styleable.JJSearchBarStatic_lpMarginPercentScHeight -> {
-                mlpMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginPercentScHeight,0f)))
+            R.styleable.jjlayoutplus_lpMarginPercentScHeight -> {
+                mlpMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginPercentScHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_lpMarginPercentScWidth -> {
-                mlpMargins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpMarginPercentScWidth,0f)))
+            R.styleable.jjlayoutplus_lpMarginPercentScWidth -> {
+                mlpMargins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpMarginPercentScWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_lpMarginResponsive -> {
-                mlpMargins = JJMargin.all(responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_lpMarginResponsive))
+            R.styleable.jjlayoutplus_lpMarginResponsive -> {
+                mlpMargins = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginResponsive))
             }
-            R.styleable.JJSearchBarStatic_lpMarginResPerScHeight -> {
-                mlpMargins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lpMarginResPerScHeight))
+            R.styleable.jjlayoutplus_lpMarginResPerScHeight -> {
+                mlpMargins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginResPerScHeight))
             }
-            R.styleable.JJSearchBarStatic_lpMarginResPerScWidth -> {
-                mlpMargins =  JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lpMarginResPerScWidth))
+            R.styleable.jjlayoutplus_lpMarginResPerScWidth -> {
+                mlpMargins =  JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginResPerScWidth))
             }
-            R.styleable.JJSearchBarStatic_lpMarginVerticalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginVerticalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginVerticalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginVerticalPerScHeight,0f))
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginVerticalPerScWidth ->{
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginVerticalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginVerticalPerScWidth ->{
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginVerticalPerScWidth,0f))
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginVerticalResponsive)
+            R.styleable.jjlayoutplus_lpMarginVerticalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginVerticalResponsive)
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpMarginVerticalResPerScWidth )
+            R.styleable.jjlayoutplus_lpMarginVerticalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpMarginVerticalResPerScWidth )
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lpMarginVerticalResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginVerticalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginVerticalResPerScHeight)
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginHorizontalPerScHeight -> {
-                val mar = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpMarginHorizontalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpMarginHorizontalPerScHeight -> {
+                val mar = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpMarginHorizontalPerScHeight,0f))
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginHorizontalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpMarginHorizontalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpMarginHorizontalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginHorizontalPerScWidth,0f))
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpMarginHorizontalResponsive)
+            R.styleable.jjlayoutplus_lpMarginHorizontalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginHorizontalResponsive)
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpMarginHorizontalResPerScWidth)
+            R.styleable.jjlayoutplus_lpMarginHorizontalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpMarginHorizontalResPerScWidth)
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpMarginHorizontalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lpMarginHorizontalResPerScHeight)
+            R.styleable.jjlayoutplus_lpMarginHorizontalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginHorizontalResPerScHeight)
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
         }
@@ -366,120 +367,120 @@ open class JJSearchBarStatic : ConstraintLayout {
     }
     private fun setupPaddingLp(a:TypedArray,index:Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_lpPaddingTopPerScHeight -> {
-                mlpPadding.top = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingTopPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingTopPerScHeight -> {
+                mlpPadding.top = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpPaddingTopPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingLeftPerScHeight -> {
-                mlpPadding.left = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingLeftPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingLeftPerScHeight -> {
+                mlpPadding.left = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpPaddingLeftPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingRightPerScHeight -> {
-                mlpPadding.right = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingRightPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingRightPerScHeight -> {
+                mlpPadding.right = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpPaddingRightPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingBottomPerScHeight -> {
-                mlpPadding.bottom = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingBottomPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingBottomPerScHeight -> {
+                mlpPadding.bottom = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpPaddingBottomPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingTopPerScWidth -> {
-                mlpPadding.top = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingTopPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingTopPerScWidth -> {
+                mlpPadding.top = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpPaddingTopPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingLeftPerScWidth -> {
-                mlpPadding.left = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingLeftPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingLeftPerScWidth -> {
+                mlpPadding.left = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpPaddingLeftPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingRightPerScWidth -> {
-                mlpPadding.right = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingRightPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingRightPerScWidth -> {
+                mlpPadding.right = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpPaddingRightPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingBottomPerScWidth -> {
-                mlpPadding.bottom = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingBottomPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingBottomPerScWidth -> {
+                mlpPadding.bottom = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpPaddingBottomPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingTopResponsive -> {
-                mlpPadding.top = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingTopResponsive)
+            R.styleable.jjlayoutplus_lpPaddingTopResponsive -> {
+                mlpPadding.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingTopResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpPaddingLeftResponsive -> {
-                mlpPadding.left = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingLeftResponsive)
+            R.styleable.jjlayoutplus_lpPaddingLeftResponsive -> {
+                mlpPadding.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingLeftResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpPaddingRightResponsive -> {
-                mlpPadding.right = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingRightResponsive)
+            R.styleable.jjlayoutplus_lpPaddingRightResponsive -> {
+                mlpPadding.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingRightResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpPaddingBottomResponsive -> {
-                mlpPadding.bottom = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingBottomResponsive)
+            R.styleable.jjlayoutplus_lpPaddingBottomResponsive -> {
+                mlpPadding.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingBottomResponsive)
             }
-            R.styleable.JJSearchBarStatic_lpPaddingTopResPerScWidth -> {
-                mlpPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingTopResPerScWidth )
+            R.styleable.jjlayoutplus_lpPaddingTopResPerScWidth -> {
+                mlpPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingTopResPerScWidth )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingLeftResPerScWidth -> {
-                mlpPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingLeftResPerScWidth )
+            R.styleable.jjlayoutplus_lpPaddingLeftResPerScWidth -> {
+                mlpPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingLeftResPerScWidth )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingRightResPerScWidth -> {
-                mlpPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingRightResPerScWidth )
+            R.styleable.jjlayoutplus_lpPaddingRightResPerScWidth -> {
+                mlpPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingRightResPerScWidth )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingBottomResPerScWidth -> {
-                mlpPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingBottomResPerScWidth )
+            R.styleable.jjlayoutplus_lpPaddingBottomResPerScWidth -> {
+                mlpPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingBottomResPerScWidth )
             }
 
-            R.styleable.JJSearchBarStatic_lpPaddingTopResPerScHeight -> {
-                mlpPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingTopResPerScHeight )
+            R.styleable.jjlayoutplus_lpPaddingTopResPerScHeight -> {
+                mlpPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingTopResPerScHeight )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingLeftResPerScHeight -> {
-                mlpPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingLeftResPerScHeight )
+            R.styleable.jjlayoutplus_lpPaddingLeftResPerScHeight -> {
+                mlpPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingLeftResPerScHeight )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingRightResPerScHeight -> {
-                mlpPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingRightResPerScHeight )
+            R.styleable.jjlayoutplus_lpPaddingRightResPerScHeight -> {
+                mlpPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingRightResPerScHeight )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingBottomResPerScHeight -> {
-                mlpPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingBottomResPerScHeight )
+            R.styleable.jjlayoutplus_lpPaddingBottomResPerScHeight -> {
+                mlpPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingBottomResPerScHeight )
             }
-            R.styleable.JJSearchBarStatic_lpPaddingPercentScHeight -> {
-                mlpPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingPercentScHeight,0f)))
+            R.styleable.jjlayoutplus_lpPaddingPercentScHeight -> {
+                mlpPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingPercentScHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingPercentScWidth -> {
-                mlpPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingPercentScWidth,0f)))
+            R.styleable.jjlayoutplus_lpPaddingPercentScWidth -> {
+                mlpPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpPaddingPercentScWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingResponsive -> {
-                mlpPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingResponsive))
+            R.styleable.jjlayoutplus_lpPaddingResponsive -> {
+                mlpPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingResponsive))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingResPerScHeight -> {
-                mlpPadding = JJPadding.all(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingResPerScHeight))
+            R.styleable.jjlayoutplus_lpPaddingResPerScHeight -> {
+                mlpPadding = JJPadding.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingResPerScHeight))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingResPerScWidth -> {
-                mlpPadding = JJPadding.all(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingResPerScWidth))
+            R.styleable.jjlayoutplus_lpPaddingResPerScWidth -> {
+                mlpPadding = JJPadding.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingResPerScWidth))
             }
-            R.styleable.JJSearchBarStatic_lpPaddingVerticalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingVerticalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingVerticalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingVerticalPerScHeight,0f))
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingVerticalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingVerticalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingVerticalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpPaddingVerticalPerScWidth,0f))
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingVerticalResponsive)
+            R.styleable.jjlayoutplus_lpPaddingVerticalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingVerticalResponsive)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingVerticalResPerScWidth)
+            R.styleable.jjlayoutplus_lpPaddingVerticalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingVerticalResPerScWidth)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingVerticalResPerScHeight)
+            R.styleable.jjlayoutplus_lpPaddingVerticalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingVerticalResPerScHeight)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingHorizontalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingHorizontalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lpPaddingHorizontalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingHorizontalPerScHeight,0f))
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingHorizontalPerScWidth -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lpPaddingHorizontalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lpPaddingHorizontalPerScWidth -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingHorizontalPerScWidth,0f))
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lpPaddingHorizontalResponsive)
+            R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingHorizontalResPerScWidth ->{
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lpPaddingHorizontalResPerScWidth)
+            R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScWidth ->{
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScWidth)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lpPaddingHorizontalResPerScHeight ->{
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lpPaddingHorizontalResPerScHeight)
+            R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScHeight ->{
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScHeight)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
 
@@ -489,43 +490,43 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     private fun setupSizeCl(a:TypedArray,index:Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_clHeightPercent -> {
-                clPercentHeight( a.getFloat(R.styleable.JJSearchBarStatic_clHeightPercent,0f))
+            R.styleable.jjlayoutplus_clHeightPercent -> {
+                clPercentHeight( a.getFloat(R.styleable.jjlayoutplus_clHeightPercent,0f))
             }
-            R.styleable.JJSearchBarStatic_clWidthPercent -> {
-                clPercentWidth( a.getFloat(R.styleable.JJSearchBarStatic_clWidthPercent,0f))
+            R.styleable.jjlayoutplus_clWidthPercent -> {
+                clPercentWidth( a.getFloat(R.styleable.jjlayoutplus_clWidthPercent,0f))
             }
-            R.styleable.JJSearchBarStatic_clHeightPercentScreenWidth -> {
-                clHeight(JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clHeightPercentScreenWidth,0f)))
+            R.styleable.jjlayoutplus_clHeightPercentScreenWidth -> {
+                clHeight(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clHeightPercentScreenWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_clWidthPercentScreenWidth -> {
-                clWidth(JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clWidthPercentScreenWidth,0f)))
-            }
-
-            R.styleable.JJSearchBarStatic_clHeightPercentScreenHeight -> {
-                clHeight(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clHeightPercentScreenHeight,0f)))
-            }
-            R.styleable.JJSearchBarStatic_clWidthPercentScreenHeight -> {
-                clWidth(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clWidthPercentScreenHeight,0f)))
-            }
-            R.styleable.JJSearchBarStatic_clHeightResponsive -> {
-                clHeight(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_clHeightResponsive))
-            }
-            R.styleable.JJSearchBarStatic_clWidthResponsive -> {
-                clWidth(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_clWidthResponsive))
-            }
-            R.styleable.JJSearchBarStatic_clHeightResponsivePercentScreenHeight ->{
-                clHeight(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_clHeightResponsivePercentScreenHeight))
-            }
-            R.styleable.JJSearchBarStatic_clWidthResponsivePercentScreenHeight ->{
-                clWidth(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_clWidthResponsivePercentScreenHeight))
+            R.styleable.jjlayoutplus_clWidthPercentScreenWidth -> {
+                clWidth(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clWidthPercentScreenWidth,0f)))
             }
 
-            R.styleable.JJSearchBarStatic_clHeightResponsivePercentScreenWidth ->{
-                clHeight(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_clHeightResponsivePercentScreenWidth))
+            R.styleable.jjlayoutplus_clHeightPercentScreenHeight -> {
+                clHeight(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clHeightPercentScreenHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_clWidthResponsivePercentScreenWidth ->{
-                clWidth(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_clWidthResponsivePercentScreenWidth))
+            R.styleable.jjlayoutplus_clWidthPercentScreenHeight -> {
+                clWidth(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clWidthPercentScreenHeight,0f)))
+            }
+            R.styleable.jjlayoutplus_clHeightResponsive -> {
+                clHeight(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clHeightResponsive))
+            }
+            R.styleable.jjlayoutplus_clWidthResponsive -> {
+                clWidth(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clWidthResponsive))
+            }
+            R.styleable.jjlayoutplus_clHeightResponsivePercentScreenHeight ->{
+                clHeight(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clHeightResponsivePercentScreenHeight))
+            }
+            R.styleable.jjlayoutplus_clWidthResponsivePercentScreenHeight ->{
+                clWidth(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clWidthResponsivePercentScreenHeight))
+            }
+
+            R.styleable.jjlayoutplus_clHeightResponsivePercentScreenWidth ->{
+                clHeight(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clHeightResponsivePercentScreenWidth))
+            }
+            R.styleable.jjlayoutplus_clWidthResponsivePercentScreenWidth ->{
+                clWidth(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clWidthResponsivePercentScreenWidth))
             }
         }
 
@@ -535,115 +536,115 @@ open class JJSearchBarStatic : ConstraintLayout {
     }
     private fun setupAnchorsCl(a: TypedArray,index:Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_clFillParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clFillParent,false)) clFillParent()
+            R.styleable.jjlayoutplus_clFillParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clFillParent,false)) clFillParent()
             }
-            R.styleable.JJSearchBarStatic_clFillParentHorizontally -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clFillParentHorizontally,false)) clFillParentHorizontally()
+            R.styleable.jjlayoutplus_clFillParentHorizontally -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clFillParentHorizontally,false)) clFillParentHorizontally()
             }
-            R.styleable.JJSearchBarStatic_clFillParentVertically -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clFillParentVertically,false)) clFillParentVertically()
+            R.styleable.jjlayoutplus_clFillParentVertically -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clFillParentVertically,false)) clFillParentVertically()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParent,false)) clCenterInParent()
+            R.styleable.jjlayoutplus_clCenterInParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParent,false)) clCenterInParent()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentHorizontally -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentHorizontally,false)) clCenterInParentHorizontally()
+            R.styleable.jjlayoutplus_clCenterInParentHorizontally -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentHorizontally,false)) clCenterInParentHorizontally()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentVertically -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentVertically,false)) clCenterInParentVertically()
+            R.styleable.jjlayoutplus_clCenterInParentVertically -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentVertically,false)) clCenterInParentVertically()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentTopVertically -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentTopVertically,false))  clCenterInParentTopVertically()
+            R.styleable.jjlayoutplus_clCenterInParentTopVertically -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentTopVertically,false))  clCenterInParentTopVertically()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentBottomVertically -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentBottomVertically,false)) clCenterInParentBottomVertically()
+            R.styleable.jjlayoutplus_clCenterInParentBottomVertically -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentBottomVertically,false)) clCenterInParentBottomVertically()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentStartHorizontally -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentStartHorizontally,false)) clCenterInParentStartHorizontally()
+            R.styleable.jjlayoutplus_clCenterInParentStartHorizontally -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentStartHorizontally,false)) clCenterInParentStartHorizontally()
             }
-            R.styleable.JJSearchBarStatic_clCenterInParentEndHorizontally -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clCenterInParentEndHorizontally,false)) clCenterInParentEndHorizontally()
-            }
-
-            R.styleable.JJSearchBarStatic_clCenterInTopVerticallyOf -> {
-                clCenterInTopVertically(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterInTopVerticallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clCenterInBottomVerticallyOf -> {
-                clCenterInBottomVertically(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterInBottomVerticallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clCenterInStartHorizontallyOf -> {
-                clCenterInStartHorizontally(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterInStartHorizontallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clCenterInEndHorizontallyOf -> {
-                clCenterInEndHorizontally(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterInEndHorizontallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clCenterVerticallyOf -> {
-                clCenterVerticallyOf(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterVerticallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clCenterHorizontallyOf -> {
-                clCenterHorizontallyOf(a.getResourceId(R.styleable.JJSearchBarStatic_clCenterHorizontallyOf,
-                    View.NO_ID))
-            }
-            R.styleable.JJSearchBarStatic_clVerticalBias -> {
-                clVerticalBias(a.getFloat(R.styleable.JJSearchBarStatic_clVerticalBias,0.5f))
-            }
-            R.styleable.JJSearchBarStatic_clHorizontalBias -> {
-                clHorizontalBias( a.getFloat(R.styleable.JJSearchBarStatic_clHorizontalBias,0.5f))
-            }
-            R.styleable.JJSearchBarStatic_clStartToStartParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clStartToStartParent,false)) clStartToStartParent()
-            }
-            R.styleable.JJSearchBarStatic_clStartToEndParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clStartToEndParent,false)) clStartToEndParent()
-            }
-            R.styleable.JJSearchBarStatic_clEndToEndParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clEndToEndParent,false)) clEndToEndParent()
-            }
-            R.styleable.JJSearchBarStatic_clEndToStartParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clEndToStartParent,false)) clEndToStartParent()
-            }
-            R.styleable.JJSearchBarStatic_clTopToTopParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clTopToTopParent,false)) clTopToTopParent()
-            }
-            R.styleable.JJSearchBarStatic_clTopToBottomParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clTopToBottomParent,false)) clTopToBottomParent()
-            }
-            R.styleable.JJSearchBarStatic_clBottomToBottomParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clBottomToBottomParent,false)) clBottomToBottomParent()
-            }
-            R.styleable.JJSearchBarStatic_clBottomToTopParent -> {
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_clBottomToTopParent,false)) clBottomToTopParent()
+            R.styleable.jjlayoutplus_clCenterInParentEndHorizontally -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clCenterInParentEndHorizontally,false)) clCenterInParentEndHorizontally()
             }
 
-            R.styleable.JJSearchBarStatic_clStartToStartOf -> {
-                clStartToStart(a.getResourceId(R.styleable.JJSearchBarStatic_clStartToStartOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterInTopVerticallyOf -> {
+                clCenterInTopVertically(a.getResourceId(R.styleable.jjlayoutplus_clCenterInTopVerticallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clStartToEndOf -> {
-                clStartToEnd(a.getResourceId(R.styleable.JJSearchBarStatic_clStartToEndOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterInBottomVerticallyOf -> {
+                clCenterInBottomVertically(a.getResourceId(R.styleable.jjlayoutplus_clCenterInBottomVerticallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clEndToEndOf -> {
-                clEndToEnd(a.getResourceId(R.styleable.JJSearchBarStatic_clEndToEndOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterInStartHorizontallyOf -> {
+                clCenterInStartHorizontally(a.getResourceId(R.styleable.jjlayoutplus_clCenterInStartHorizontallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clEndToStartOf -> {
-                clEndToStart(a.getResourceId(R.styleable.JJSearchBarStatic_clEndToStartOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterInEndHorizontallyOf -> {
+                clCenterInEndHorizontally(a.getResourceId(R.styleable.jjlayoutplus_clCenterInEndHorizontallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clTopToTopOf -> {
-                clTopToTop(a.getResourceId(R.styleable.JJSearchBarStatic_clTopToTopOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterVerticallyOf -> {
+                clCenterVerticallyOf(a.getResourceId(R.styleable.jjlayoutplus_clCenterVerticallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clTopToBottomOf -> {
-                clTopToBottom(a.getResourceId(R.styleable.JJSearchBarStatic_clTopToBottomOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clCenterHorizontallyOf -> {
+                clCenterHorizontallyOf(a.getResourceId(R.styleable.jjlayoutplus_clCenterHorizontallyOf,
+                    View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_clBottomToBottomOf -> {
-                clBottomToBottom(a.getResourceId(R.styleable.JJSearchBarStatic_clBottomToBottomOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clVerticalBias -> {
+                clVerticalBias(a.getFloat(R.styleable.jjlayoutplus_clVerticalBias,0.5f))
             }
-            R.styleable.JJSearchBarStatic_clBottomToTopOf -> {
-                clBottomToTop(a.getResourceId(R.styleable.JJSearchBarStatic_clBottomToTopOf, View.NO_ID))
+            R.styleable.jjlayoutplus_clHorizontalBias -> {
+                clHorizontalBias( a.getFloat(R.styleable.jjlayoutplus_clHorizontalBias,0.5f))
+            }
+            R.styleable.jjlayoutplus_clStartToStartParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clStartToStartParent,false)) clStartToStartParent()
+            }
+            R.styleable.jjlayoutplus_clStartToEndParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clStartToEndParent,false)) clStartToEndParent()
+            }
+            R.styleable.jjlayoutplus_clEndToEndParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clEndToEndParent,false)) clEndToEndParent()
+            }
+            R.styleable.jjlayoutplus_clEndToStartParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clEndToStartParent,false)) clEndToStartParent()
+            }
+            R.styleable.jjlayoutplus_clTopToTopParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clTopToTopParent,false)) clTopToTopParent()
+            }
+            R.styleable.jjlayoutplus_clTopToBottomParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clTopToBottomParent,false)) clTopToBottomParent()
+            }
+            R.styleable.jjlayoutplus_clBottomToBottomParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clBottomToBottomParent,false)) clBottomToBottomParent()
+            }
+            R.styleable.jjlayoutplus_clBottomToTopParent -> {
+                if(a.getBoolean(R.styleable.jjlayoutplus_clBottomToTopParent,false)) clBottomToTopParent()
+            }
+
+            R.styleable.jjlayoutplus_clStartToStartOf -> {
+                clStartToStart(a.getResourceId(R.styleable.jjlayoutplus_clStartToStartOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clStartToEndOf -> {
+                clStartToEnd(a.getResourceId(R.styleable.jjlayoutplus_clStartToEndOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clEndToEndOf -> {
+                clEndToEnd(a.getResourceId(R.styleable.jjlayoutplus_clEndToEndOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clEndToStartOf -> {
+                clEndToStart(a.getResourceId(R.styleable.jjlayoutplus_clEndToStartOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clTopToTopOf -> {
+                clTopToTop(a.getResourceId(R.styleable.jjlayoutplus_clTopToTopOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clTopToBottomOf -> {
+                clTopToBottom(a.getResourceId(R.styleable.jjlayoutplus_clTopToBottomOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clBottomToBottomOf -> {
+                clBottomToBottom(a.getResourceId(R.styleable.jjlayoutplus_clBottomToBottomOf, View.NO_ID))
+            }
+            R.styleable.jjlayoutplus_clBottomToTopOf -> {
+                clBottomToTop(a.getResourceId(R.styleable.jjlayoutplus_clBottomToTopOf, View.NO_ID))
             }
 
         }
@@ -651,147 +652,147 @@ open class JJSearchBarStatic : ConstraintLayout {
     private fun setupMarginCl(a: TypedArray,index:Int){
         var margins = JJMargin()
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_clMarginEnd ->{
-                margins.right = a.getDimension(R.styleable.JJSearchBarStatic_clMarginEnd,0f).toInt()
+            R.styleable.jjlayoutplus_clMarginEnd ->{
+                margins.right = a.getDimension(R.styleable.jjlayoutplus_clMarginEnd,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_clMarginStart ->{
-                margins.left = a.getDimension(R.styleable.JJSearchBarStatic_clMarginStart,0f).toInt()
+            R.styleable.jjlayoutplus_clMarginStart ->{
+                margins.left = a.getDimension(R.styleable.jjlayoutplus_clMarginStart,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_clMarginTop ->{
-                margins.top = a.getDimension(R.styleable.JJSearchBarStatic_clMarginTop,0f).toInt()
+            R.styleable.jjlayoutplus_clMarginTop ->{
+                margins.top = a.getDimension(R.styleable.jjlayoutplus_clMarginTop,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_clMarginBottom ->{
-                margins.bottom = a.getDimension(R.styleable.JJSearchBarStatic_clMarginBottom,0f).toInt()
-            }
-
-            R.styleable.JJSearchBarStatic_clMarginEndPercentScreenHeight -> {
-                margins.right = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginEndPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_clMarginStartPercentScreenHeight -> {
-                margins.left = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginStartPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_clMarginTopPercentScreenHeight -> {
-                margins.top = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginTopPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_clMarginBottomPercentScreenHeight -> {
-                margins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginBottomPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_clMarginBottom ->{
+                margins.bottom = a.getDimension(R.styleable.jjlayoutplus_clMarginBottom,0f).toInt()
             }
 
-            R.styleable.JJSearchBarStatic_clMarginEndPercentScreenWidth -> {
-                margins.right = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginEndPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_clMarginEndPercentScreenHeight -> {
+                margins.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginStartPercentScreenWidth -> {
-                margins.left = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginStartPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_clMarginStartPercentScreenHeight -> {
+                margins.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginTopPercentScreenWidth -> {
-                margins.top = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginTopPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_clMarginTopPercentScreenHeight -> {
+                margins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginBottomPercentScreenWidth -> {
-                margins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginBottomPercentScreenWidth,0f))
-            }
-            R.styleable.JJSearchBarStatic_clMargin -> {
-                margins = JJMargin.all(a.getDimension(R.styleable.JJSearchBarStatic_clMargin,0f).toInt())
-            }
-            R.styleable.JJSearchBarStatic_clMarginPerScHeight -> {
-                margins = JJMargin.all(JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_clMarginPerScHeight,0f)))
-            }
-            R.styleable.JJSearchBarStatic_clMarginPerScWidth -> {
-                margins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_clMarginPerScWidth,0f)))
-            }
-            R.styleable.JJSearchBarStatic_clMarginResponsive -> {
-                margins = JJMargin.all(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_clMarginResponsive))
-            }
-            R.styleable.JJSearchBarStatic_clMarginResPerScHeight -> {
-                margins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_clMarginResPerScHeight))
-            }
-            R.styleable.JJSearchBarStatic_clMarginResPerScWidth -> {
-                margins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_clMarginResPerScWidth))
-            }
-            R.styleable.JJSearchBarStatic_clMarginEndResponsive -> {
-                margins.right = responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_clMarginEndResponsive)
-            }
-            R.styleable.JJSearchBarStatic_clMarginStartResponsive -> {
-                margins.left = responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_clMarginStartResponsive)
-            }
-            R.styleable.JJSearchBarStatic_clMarginTopResponsive -> {
-                margins.top = responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_clMarginTopResponsive)
-            }
-            R.styleable.JJSearchBarStatic_clMarginBottomResponsive -> {
-                margins.bottom = responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_clMarginBottomResponsive)
+            R.styleable.jjlayoutplus_clMarginBottomPercentScreenHeight -> {
+                margins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenHeight,0f))
             }
 
-            R.styleable.JJSearchBarStatic_clMarginEndResPerScHeight -> {
-                margins.right = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_clMarginEndResPerScHeight)
+            R.styleable.jjlayoutplus_clMarginEndPercentScreenWidth -> {
+                margins.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginStartResPerScHeight -> {
-                margins.left = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_clMarginStartResPerScHeight)
+            R.styleable.jjlayoutplus_clMarginStartPercentScreenWidth -> {
+                margins.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginTopResPerScHeight -> {
-                margins.top = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_clMarginTopResPerScHeight)
+            R.styleable.jjlayoutplus_clMarginTopPercentScreenWidth -> {
+                margins.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_clMarginBottomResPerScHeight -> {
-                margins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_clMarginBottomResPerScHeight)
+            R.styleable.jjlayoutplus_clMarginBottomPercentScreenWidth -> {
+                margins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenWidth,0f))
             }
-
-            R.styleable.JJSearchBarStatic_clMarginEndResPerScWidth -> {
-                margins.right = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_clMarginEndResPerScWidth)
+            R.styleable.jjlayoutplus_clMargin -> {
+                margins = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_clMargin,0f).toInt())
             }
-            R.styleable.JJSearchBarStatic_clMarginStartResPerScWidth -> {
-                margins.left = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_clMarginStartResPerScWidth)
+            R.styleable.jjlayoutplus_clMarginPerScHeight -> {
+                margins = JJMargin.all(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_clMarginTopResPerScWidth -> {
-                margins.top = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_clMarginTopResPerScWidth)
+            R.styleable.jjlayoutplus_clMarginPerScWidth -> {
+                margins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_clMarginBottomResPerScWidth -> {
-                margins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_clMarginBottomResPerScWidth)
+            R.styleable.jjlayoutplus_clMarginResponsive -> {
+                margins = JJMargin.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginResponsive))
             }
-            R.styleable.JJSearchBarStatic_clMarginVertical -> {
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_clMarginVertical,0f).toInt()
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginResPerScHeight -> {
+                margins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginResPerScHeight))
             }
-            R.styleable.JJSearchBarStatic_clMarginVerticalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginVerticalPerScHeight,0f))
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginResPerScWidth -> {
+                margins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginResPerScWidth))
             }
-            R.styleable.JJSearchBarStatic_clMarginVerticalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginVerticalPerScWidth,0f))
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginEndResponsive -> {
+                margins.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginEndResponsive)
             }
-            R.styleable.JJSearchBarStatic_clMarginVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_clMarginVerticalResponsive)
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginStartResponsive -> {
+                margins.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginStartResponsive)
             }
-            R.styleable.JJSearchBarStatic_clMarginVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_clMarginVerticalResPerScHeight)
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginTopResponsive -> {
+                margins.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginTopResponsive)
             }
-            R.styleable.JJSearchBarStatic_clMarginVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_clMarginVerticalResPerScWidth)
-                margins.top = mar ; margins.bottom = mar
+            R.styleable.jjlayoutplus_clMarginBottomResponsive -> {
+                margins.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginBottomResponsive)
             }
 
-            R.styleable.JJSearchBarStatic_clMarginHorizontal -> {
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_clMarginHorizontal,0f).toInt()
+            R.styleable.jjlayoutplus_clMarginEndResPerScHeight -> {
+                margins.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginEndResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_clMarginStartResPerScHeight -> {
+                margins.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginStartResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_clMarginTopResPerScHeight -> {
+                margins.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginTopResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_clMarginBottomResPerScHeight -> {
+                margins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginBottomResPerScHeight)
+            }
+
+            R.styleable.jjlayoutplus_clMarginEndResPerScWidth -> {
+                margins.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginEndResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_clMarginStartResPerScWidth -> {
+                margins.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginStartResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_clMarginTopResPerScWidth -> {
+                margins.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginTopResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_clMarginBottomResPerScWidth -> {
+                margins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginBottomResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_clMarginVertical -> {
+                val mar = a.getDimension(R.styleable.jjlayoutplus_clMarginVertical,0f).toInt()
+                margins.top = mar ; margins.bottom = mar
+            }
+            R.styleable.jjlayoutplus_clMarginVerticalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginVerticalPerScHeight,0f))
+                margins.top = mar ; margins.bottom = mar
+            }
+            R.styleable.jjlayoutplus_clMarginVerticalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginVerticalPerScWidth,0f))
+                margins.top = mar ; margins.bottom = mar
+            }
+            R.styleable.jjlayoutplus_clMarginVerticalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginVerticalResponsive)
+                margins.top = mar ; margins.bottom = mar
+            }
+            R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight)
+                margins.top = mar ; margins.bottom = mar
+            }
+            R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth)
+                margins.top = mar ; margins.bottom = mar
+            }
+
+            R.styleable.jjlayoutplus_clMarginHorizontal -> {
+                val mar = a.getDimension(R.styleable.jjlayoutplus_clMarginHorizontal,0f).toInt()
                 margins.left = mar ; margins.right = mar
             }
-            R.styleable.JJSearchBarStatic_clMarginHorizontalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_clMarginHorizontalPerScHeight,0f))
+            R.styleable.jjlayoutplus_clMarginHorizontalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginHorizontalPerScHeight,0f))
                 margins.left = mar ; margins.right = mar
             }
-            R.styleable.JJSearchBarStatic_clMarginHorizontalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_clMarginHorizontalPerScWidth,0f))
+            R.styleable.jjlayoutplus_clMarginHorizontalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginHorizontalPerScWidth,0f))
                 margins.left = mar ; margins.right = mar
             }
-            R.styleable.JJSearchBarStatic_clMarginHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_clMarginHorizontalResponsive)
+            R.styleable.jjlayoutplus_clMarginHorizontalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginHorizontalResponsive)
                 margins.left = mar ; margins.right = mar
             }
-            R.styleable.JJSearchBarStatic_clMarginHorizontalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_clMarginHorizontalResPerScHeight)
+            R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight)
                 margins.left = mar ; margins.right = mar
             }
-            R.styleable.JJSearchBarStatic_clMarginHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_clMarginHorizontalResPerScWidth)
+            R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth)
                 margins.left = mar ; margins.right = mar
             }
 
@@ -801,295 +802,295 @@ open class JJSearchBarStatic : ConstraintLayout {
 
     private fun setupMarginLpl(a: TypedArray,index:Int) {
         when (a.getIndex(index)) {
-            R.styleable.JJSearchBarStatic_lplMargin -> {
+            R.styleable.jjlayoutplus_lplMargin -> {
                 mlsMargins =
-                    JJMargin.all(a.getDimension(R.styleable.JJSearchBarStatic_lplMargin, 0f).toInt())
+                    JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_lplMargin, 0f).toInt())
             }
-            R.styleable.JJSearchBarStatic_lplMarginVertical -> {
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_lplMarginVertical, 0f).toInt()
+            R.styleable.jjlayoutplus_lplMarginVertical -> {
+                val mar = a.getDimension(R.styleable.jjlayoutplus_lplMarginVertical, 0f).toInt()
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginHorizontal -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontal -> {
                 val mar =
-                    a.getDimension(R.styleable.JJSearchBarStatic_lplMarginHorizontal, 0f).toInt()
+                    a.getDimension(R.styleable.jjlayoutplus_lplMarginHorizontal, 0f).toInt()
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginStart -> {
+            R.styleable.jjlayoutplus_lplMarginStart -> {
                 mlsMargins.left =
-                    a.getDimension(R.styleable.JJSearchBarStatic_lplMarginStart, 0f).toInt()
+                    a.getDimension(R.styleable.jjlayoutplus_lplMarginStart, 0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplMarginEnd -> {
+            R.styleable.jjlayoutplus_lplMarginEnd -> {
                 mlsMargins.right =
-                    a.getDimension(R.styleable.JJSearchBarStatic_lplMarginEnd, 0f).toInt()
+                    a.getDimension(R.styleable.jjlayoutplus_lplMarginEnd, 0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottom -> {
+            R.styleable.jjlayoutplus_lplMarginBottom -> {
                 mlsMargins.bottom =
-                    a.getDimension(R.styleable.JJSearchBarStatic_lplMarginBottom, 0f).toInt()
+                    a.getDimension(R.styleable.jjlayoutplus_lplMarginBottom, 0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplMarginTop -> {
+            R.styleable.jjlayoutplus_lplMarginTop -> {
                 mlsMargins.top =
-                    a.getDimension(R.styleable.JJSearchBarStatic_lplMarginTop, 0f).toInt()
+                    a.getDimension(R.styleable.jjlayoutplus_lplMarginTop, 0f).toInt()
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginLeftPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginLeftPerScHeight -> {
                 mlsMargins.left = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginLeftPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginLeftPerScHeight,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginRightPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginRightPerScHeight -> {
                 mlsMargins.right = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginRightPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginRightPerScHeight,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottomPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginBottomPerScHeight -> {
                 mlsMargins.bottom = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginBottomPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginBottomPerScHeight,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginTopPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginTopPerScHeight -> {
                 mlsMargins.top = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginTopPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginTopPerScHeight,
                         0f
                     )
                 )
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginLeftPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginLeftPerScWidth -> {
                 mlsMargins.left = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginLeftPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginLeftPerScWidth,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginRightPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginRightPerScWidth -> {
                 mlsMargins.right = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginRightPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginRightPerScWidth,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottomPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginBottomPerScWidth -> {
                 mlsMargins.bottom = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginBottomPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginBottomPerScWidth,
                         0f
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginTopPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginTopPerScWidth -> {
                 mlsMargins.top = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginTopPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginTopPerScWidth,
                         0f
                     )
                 )
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginTopResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginTopResponsive -> {
                 mlsMargins.top =
-                    responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_lplMarginTopResponsive)
+                    responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplMarginTopResponsive)
             }
-            R.styleable.JJSearchBarStatic_lplMarginLeftResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginLeftResponsive -> {
                 mlsMargins.left =
-                    responsiveSizeDimension(a, R.styleable.JJSearchBarStatic_lplMarginLeftResponsive)
+                    responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplMarginLeftResponsive)
             }
-            R.styleable.JJSearchBarStatic_lplMarginRightResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginRightResponsive -> {
                 mlsMargins.right = responsiveSizeDimension(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginRightResponsive
+                    R.styleable.jjlayoutplus_lplMarginRightResponsive
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottomResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginBottomResponsive -> {
                 mlsMargins.bottom = responsiveSizeDimension(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginBottomResponsive
+                    R.styleable.jjlayoutplus_lplMarginBottomResponsive
                 )
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginTopResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginTopResPerScWidth -> {
                 mlsMargins.top = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginTopResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginTopResPerScWidth
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginLeftResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginLeftResPerScWidth -> {
                 mlsMargins.left = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginLeftResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginLeftResPerScWidth
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginRightResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginRightResPerScWidth -> {
                 mlsMargins.right = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginRightResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginRightResPerScWidth
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottomResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginBottomResPerScWidth -> {
                 mlsMargins.bottom = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginBottomResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginBottomResPerScWidth
                 )
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginTopResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginTopResPerScHeight -> {
                 mlsMargins.top = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginTopResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginTopResPerScHeight
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginLeftResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginLeftResPerScHeight -> {
                 mlsMargins.left = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginLeftResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginLeftResPerScHeight
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginRightResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginRightResPerScHeight -> {
                 mlsMargins.right = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginRightResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginRightResPerScHeight
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginBottomResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginBottomResPerScHeight -> {
                 mlsMargins.bottom = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginBottomResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginBottomResPerScHeight
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginPercentScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginPercentScHeight -> {
                 mlsMargins = JJMargin.all(
                     JJScreen.percentHeight(
                         a.getFloat(
-                            R.styleable.JJSearchBarStatic_lplMarginPercentScHeight,
+                            R.styleable.jjlayoutplus_lplMarginPercentScHeight,
                             0f
                         )
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginPercentScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginPercentScWidth -> {
                 mlsMargins = JJMargin.all(
                     JJScreen.percentWidth(
                         a.getFloat(
-                            R.styleable.JJSearchBarStatic_lplMarginPercentScWidth,
+                            R.styleable.jjlayoutplus_lplMarginPercentScWidth,
                             0f
                         )
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginResponsive -> {
                 mlsMargins = JJMargin.all(
                     responsiveSizeDimension(
                         a,
-                        R.styleable.JJSearchBarStatic_lplMarginResponsive
+                        R.styleable.jjlayoutplus_lplMarginResponsive
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginResPerScHeight -> {
                 mlsMargins = JJMargin.all(
                     responsiveSizePercentScreenHeight(
                         a,
-                        R.styleable.JJSearchBarStatic_lplMarginResPerScHeight
+                        R.styleable.jjlayoutplus_lplMarginResPerScHeight
                     )
                 )
             }
-            R.styleable.JJSearchBarStatic_lplMarginResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginResPerScWidth -> {
                 mlsMargins = JJMargin.all(
                     responsiveSizePercentScreenWidth(
                         a,
-                        R.styleable.JJSearchBarStatic_lplMarginResPerScWidth
+                        R.styleable.jjlayoutplus_lplMarginResPerScWidth
                     )
                 )
             }
 
-            R.styleable.JJSearchBarStatic_lplMarginVerticalPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginVerticalPerScHeight -> {
                 val mar = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginVerticalPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginVerticalPerScHeight,
                         0f
                     )
                 )
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginVerticalPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginVerticalPerScWidth -> {
                 val mar = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginVerticalPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginVerticalPerScWidth,
                         0f
                     )
                 )
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginVerticalResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginVerticalResponsive -> {
                 val mar = responsiveSizeDimension(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginVerticalResponsive
+                    R.styleable.jjlayoutplus_lplMarginVerticalResponsive
                 )
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginVerticalResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginVerticalResPerScWidth -> {
                 val mar = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginVerticalResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginVerticalResPerScWidth
                 )
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginVerticalResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginVerticalResPerScHeight -> {
                 val mar = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginVerticalResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginVerticalResPerScHeight
                 )
                 mlsMargins.top = mar; mlsMargins.bottom = mar
             }
 
 
-            R.styleable.JJSearchBarStatic_lplMarginHorizontalPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontalPerScHeight -> {
                 val mar = JJScreen.percentHeight(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginHorizontalPerScHeight,
+                        R.styleable.jjlayoutplus_lplMarginHorizontalPerScHeight,
                         0f
                     )
                 )
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginHorizontalPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontalPerScWidth -> {
                 val mar = JJScreen.percentWidth(
                     a.getFloat(
-                        R.styleable.JJSearchBarStatic_lplMarginHorizontalPerScWidth,
+                        R.styleable.jjlayoutplus_lplMarginHorizontalPerScWidth,
                         0f
                     )
                 )
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginHorizontalResponsive -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontalResponsive -> {
                 val mar = responsiveSizeDimension(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginHorizontalResponsive
+                    R.styleable.jjlayoutplus_lplMarginHorizontalResponsive
                 )
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginHorizontalResPerScWidth -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontalResPerScWidth -> {
                 val mar = responsiveSizePercentScreenWidth(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginHorizontalResPerScWidth
+                    R.styleable.jjlayoutplus_lplMarginHorizontalResPerScWidth
                 )
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplMarginHorizontalResPerScHeight -> {
+            R.styleable.jjlayoutplus_lplMarginHorizontalResPerScHeight -> {
                 val mar = responsiveSizePercentScreenHeight(
                     a,
-                    R.styleable.JJSearchBarStatic_lplMarginHorizontalResPerScHeight
+                    R.styleable.jjlayoutplus_lplMarginHorizontalResPerScHeight
                 )
                 mlsMargins.left = mar; mlsMargins.right = mar
             }
@@ -1098,191 +1099,191 @@ open class JJSearchBarStatic : ConstraintLayout {
     }
     private fun setupPaddingLpl(a: TypedArray,index: Int){
         when(a.getIndex(index)){
-            R.styleable.JJSearchBarStatic_lplPadding -> {
-                mlsPadding = JJPadding.all( a.getDimension(R.styleable.JJSearchBarStatic_lplPadding,0f).toInt())
+            R.styleable.jjlayoutplus_lplPadding -> {
+                mlsPadding = JJPadding.all( a.getDimension(R.styleable.jjlayoutplus_lplPadding,0f).toInt())
             }
-            R.styleable.JJSearchBarStatic_lplPaddingVertical -> {
-               val mar = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingVertical,0f).toInt()
+            R.styleable.jjlayoutplus_lplPaddingVertical -> {
+               val mar = a.getDimension(R.styleable.jjlayoutplus_lplPaddingVertical,0f).toInt()
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontal -> {
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingHorizontal,0f).toInt()
+            R.styleable.jjlayoutplus_lplPaddingHorizontal -> {
+                val mar = a.getDimension(R.styleable.jjlayoutplus_lplPaddingHorizontal,0f).toInt()
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingStart -> {
-                mlsPadding.left = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingStart,0f).toInt()
+            R.styleable.jjlayoutplus_lplPaddingStart -> {
+                mlsPadding.left = a.getDimension(R.styleable.jjlayoutplus_lplPaddingStart,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplPaddingEnd -> {
-                mlsPadding.right = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingEnd,0f).toInt()
+            R.styleable.jjlayoutplus_lplPaddingEnd -> {
+                mlsPadding.right = a.getDimension(R.styleable.jjlayoutplus_lplPaddingEnd,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplPaddingTop -> {
-                mlsPadding.top = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingTop,0f).toInt()
+            R.styleable.jjlayoutplus_lplPaddingTop -> {
+                mlsPadding.top = a.getDimension(R.styleable.jjlayoutplus_lplPaddingTop,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_lplPaddingBottom -> {
-                mlsPadding.bottom = a.getDimension(R.styleable.JJSearchBarStatic_lplPaddingBottom,0f).toInt()
-            }
-
-            R.styleable.JJSearchBarStatic_lplPaddingTopPerScHeight -> {
-                mlsPadding.top = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingTopPerScHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingLeftPerScHeight -> {
-                mlsPadding.left = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingLeftPerScHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingRightPerScHeight -> {
-                mlsPadding.right = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingRightPerScHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingBottomPerScHeight -> {
-                mlsPadding.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingBottomPerScHeight,0f))
+            R.styleable.jjlayoutplus_lplPaddingBottom -> {
+                mlsPadding.bottom = a.getDimension(R.styleable.jjlayoutplus_lplPaddingBottom,0f).toInt()
             }
 
-            R.styleable.JJSearchBarStatic_lplPaddingTopPerScWidth -> {
-                mlsPadding.top = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingTopPerScWidth,0f))
+            R.styleable.jjlayoutplus_lplPaddingTopPerScHeight -> {
+                mlsPadding.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingTopPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingLeftPerScWidth -> {
-                mlsPadding.left = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingLeftPerScWidth,0f))
+            R.styleable.jjlayoutplus_lplPaddingLeftPerScHeight -> {
+                mlsPadding.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingLeftPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingRightPerScWidth -> {
-                mlsPadding.right = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingRightPerScWidth,0f))
+            R.styleable.jjlayoutplus_lplPaddingRightPerScHeight -> {
+                mlsPadding.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingRightPerScHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingBottomPerScWidth -> {
-                mlsPadding.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingBottomPerScWidth,0f))
-            }
-
-            R.styleable.JJSearchBarStatic_lplPaddingTopResponsive -> {
-                mlsPadding.top = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingTopResponsive)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingLeftResponsive -> {
-                mlsPadding.left = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingLeftResponsive)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingRightResponsive -> {
-                mlsPadding.right = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingRightResponsive)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingBottomResponsive -> {
-                mlsPadding.bottom = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingBottomResponsive)
+            R.styleable.jjlayoutplus_lplPaddingBottomPerScHeight -> {
+                mlsPadding.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingBottomPerScHeight,0f))
             }
 
-            R.styleable.JJSearchBarStatic_lplPaddingTopResPerScWidth -> {
-                mlsPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingTopResPerScWidth)
+            R.styleable.jjlayoutplus_lplPaddingTopPerScWidth -> {
+                mlsPadding.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingTopPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingLeftResPerScWidth -> {
-                mlsPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingLeftResPerScWidth)
+            R.styleable.jjlayoutplus_lplPaddingLeftPerScWidth -> {
+                mlsPadding.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingLeftPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingRightResPerScWidth -> {
-                mlsPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingRightResPerScWidth)
+            R.styleable.jjlayoutplus_lplPaddingRightPerScWidth -> {
+                mlsPadding.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingRightPerScWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lplPaddingBottomResPerScWidth -> {
-                mlsPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingBottomResPerScWidth)
-            }
-
-            R.styleable.JJSearchBarStatic_lplPaddingTopResPerScHeight -> {
-                mlsPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingTopResPerScHeight)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingLeftResPerScHeight -> {
-                mlsPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingLeftResPerScHeight)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingRightResPerScHeight -> {
-                mlsPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingRightResPerScHeight)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingBottomResPerScHeight -> {
-                mlsPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingBottomResPerScHeight)
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingPercentScHeight->{
-                mlsPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingPercentScHeight,0f)))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingPercentScWidth->{
-                mlsPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingPercentScWidth,0f)))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingResponsive->{
-                mlsPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingResponsive))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingResPerScHeight->{
-                mlsPadding = JJPadding.all(responsiveSizePercentScreenHeight(a, R.styleable.JJSearchBarStatic_lplPaddingResPerScHeight))
-            }
-            R.styleable.JJSearchBarStatic_lplPaddingResPerScWidth->{
-                mlsPadding = JJPadding.all(responsiveSizePercentScreenWidth(a, R.styleable.JJSearchBarStatic_lplPaddingResPerScWidth))
+            R.styleable.jjlayoutplus_lplPaddingBottomPerScWidth -> {
+                mlsPadding.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingBottomPerScWidth,0f))
             }
 
-            R.styleable.JJSearchBarStatic_lplPaddingVerticalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingVerticalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lplPaddingTopResponsive -> {
+                mlsPadding.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingTopResponsive)
+            }
+            R.styleable.jjlayoutplus_lplPaddingLeftResponsive -> {
+                mlsPadding.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingLeftResponsive)
+            }
+            R.styleable.jjlayoutplus_lplPaddingRightResponsive -> {
+                mlsPadding.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingRightResponsive)
+            }
+            R.styleable.jjlayoutplus_lplPaddingBottomResponsive -> {
+                mlsPadding.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingBottomResponsive)
+            }
+
+            R.styleable.jjlayoutplus_lplPaddingTopResPerScWidth -> {
+                mlsPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingTopResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_lplPaddingLeftResPerScWidth -> {
+                mlsPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingLeftResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_lplPaddingRightResPerScWidth -> {
+                mlsPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingRightResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_lplPaddingBottomResPerScWidth -> {
+                mlsPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingBottomResPerScWidth)
+            }
+
+            R.styleable.jjlayoutplus_lplPaddingTopResPerScHeight -> {
+                mlsPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingTopResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_lplPaddingLeftResPerScHeight -> {
+                mlsPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingLeftResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_lplPaddingRightResPerScHeight -> {
+                mlsPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingRightResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_lplPaddingBottomResPerScHeight -> {
+                mlsPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingBottomResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_lplPaddingPercentScHeight->{
+                mlsPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingPercentScHeight,0f)))
+            }
+            R.styleable.jjlayoutplus_lplPaddingPercentScWidth->{
+                mlsPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingPercentScWidth,0f)))
+            }
+            R.styleable.jjlayoutplus_lplPaddingResponsive->{
+                mlsPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingResponsive))
+            }
+            R.styleable.jjlayoutplus_lplPaddingResPerScHeight->{
+                mlsPadding = JJPadding.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingResPerScHeight))
+            }
+            R.styleable.jjlayoutplus_lplPaddingResPerScWidth->{
+                mlsPadding = JJPadding.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingResPerScWidth))
+            }
+
+            R.styleable.jjlayoutplus_lplPaddingVerticalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingVerticalPerScHeight,0f))
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingVerticalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingVerticalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lplPaddingVerticalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingVerticalPerScWidth,0f))
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingVerticalResponsive)
+            R.styleable.jjlayoutplus_lplPaddingVerticalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingVerticalResponsive)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingVerticalResPerScWidth)
+            R.styleable.jjlayoutplus_lplPaddingVerticalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingVerticalResPerScWidth)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingVerticalResPerScHeight)
+            R.styleable.jjlayoutplus_lplPaddingVerticalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingVerticalResPerScHeight)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
 
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontalPerScHeight -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingHorizontalPerScHeight,0f))
+            R.styleable.jjlayoutplus_lplPaddingHorizontalPerScHeight -> {
+                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingHorizontalPerScHeight,0f))
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontalPerScWidth -> {
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_lplPaddingHorizontalPerScWidth,0f))
+            R.styleable.jjlayoutplus_lplPaddingHorizontalPerScWidth -> {
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingHorizontalPerScWidth,0f))
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplPaddingHorizontalResponsive)
+            R.styleable.jjlayoutplus_lplPaddingHorizontalResponsive -> {
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResponsive)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplPaddingHorizontalResPerScWidth)
+            R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScWidth -> {
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScWidth)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
-            R.styleable.JJSearchBarStatic_lplPaddingHorizontalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplPaddingHorizontalResPerScHeight)
+            R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScHeight -> {
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScHeight)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
         }
     }
     private fun setupSizeLpl(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
-            R.styleable.JJSearchBarStatic_layout_height_landscape -> {
-                mlsHeight = a.getLayoutDimension(R.styleable.JJSearchBarStatic_layout_height_landscape,0)
+            R.styleable.jjlayoutplus_layout_height_landscape -> {
+                mlsHeight = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_height_landscape,0)
             }
-            R.styleable.JJSearchBarStatic_layout_width_landscape -> {
-                mlsWidth = a.getLayoutDimension(R.styleable.JJSearchBarStatic_layout_width_landscape,0)
+            R.styleable.jjlayoutplus_layout_width_landscape -> {
+                mlsWidth = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_width_landscape,0)
             }
-            R.styleable.JJSearchBarStatic_lplHeightPercentScreenWidth -> {
-                mlsHeight = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lplHeightPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_lplHeightPercentScreenWidth -> {
+                mlsHeight = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lplHeightPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_lplWidthPercentScreenWidth -> {
-                mlsWidth = JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_lplWidthPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_lplWidthPercentScreenWidth -> {
+                mlsWidth = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lplWidthPercentScreenWidth,0f))
             }
 
-            R.styleable.JJSearchBarStatic_lplHeightPercentScreenHeight -> {
-                mlsHeight = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lplHeightPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_lplHeightPercentScreenHeight -> {
+                mlsHeight = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lplHeightPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lplWidthPercentScreenHeight -> {
-                mlsWidth = JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_lplWidthPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_lplWidthPercentScreenHeight -> {
+                mlsWidth = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lplWidthPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_lplHeightResponsive -> {
-                mlsHeight = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplHeightResponsive)
+            R.styleable.jjlayoutplus_lplHeightResponsive -> {
+                mlsHeight = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplHeightResponsive)
             }
-            R.styleable.JJSearchBarStatic_lplWidthResponsive -> {
-                mlsWidth = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_lplWidthResponsive)
+            R.styleable.jjlayoutplus_lplWidthResponsive -> {
+                mlsWidth = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplWidthResponsive)
             }
-            R.styleable.JJSearchBarStatic_lplHeightResponsivePercentScreenHeight -> {
-                mlsHeight = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplHeightResponsivePercentScreenHeight)
+            R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenHeight -> {
+                mlsHeight = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenHeight)
             }
-            R.styleable.JJSearchBarStatic_lplWidthResponsivePercentScreenHeight -> {
-                mlsWidth = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_lplWidthResponsivePercentScreenHeight)
+            R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenHeight -> {
+                mlsWidth = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenHeight)
             }
-            R.styleable.JJSearchBarStatic_lplHeightResponsivePercentScreenWidth -> {
-                mlsHeight = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplHeightResponsivePercentScreenWidth)
+            R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenWidth -> {
+                mlsHeight = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenWidth)
             }
-            R.styleable.JJSearchBarStatic_lplWidthResponsivePercentScreenWidth -> {
-                mlsWidth = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_lplWidthResponsivePercentScreenWidth)
+            R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenWidth -> {
+                mlsWidth = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenWidth)
             }
 
         }
@@ -1291,149 +1292,149 @@ open class JJSearchBarStatic : ConstraintLayout {
     private fun setupMarginCll(a: TypedArray,index:Int){
         var lsMargins = JJMargin()
         when (a.getIndex(index)) {
-            R.styleable.JJSearchBarStatic_cllMarginEnd -> {
-                lsMargins.right = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginEnd,0f).toInt()
+            R.styleable.jjlayoutplus_cllMarginEnd -> {
+                lsMargins.right = a.getDimension(R.styleable.jjlayoutplus_cllMarginEnd,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_cllMarginStart -> {
-                lsMargins.left = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginStart,0f).toInt()
+            R.styleable.jjlayoutplus_cllMarginStart -> {
+                lsMargins.left = a.getDimension(R.styleable.jjlayoutplus_cllMarginStart,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_cllMarginTop -> {
-                lsMargins.top = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginTop,0f).toInt()
+            R.styleable.jjlayoutplus_cllMarginTop -> {
+                lsMargins.top = a.getDimension(R.styleable.jjlayoutplus_cllMarginTop,0f).toInt()
             }
-            R.styleable.JJSearchBarStatic_cllMarginBottom -> {
-                lsMargins.bottom = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginBottom,0f).toInt()
-            }
-
-            R.styleable.JJSearchBarStatic_cllMarginEndPercentScreenHeight -> {
-                lsMargins.right = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginEndPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginStartPercentScreenHeight -> {
-                lsMargins.left = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginStartPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginTopPercentScreenHeight -> {
-                lsMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginTopPercentScreenHeight,0f))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginBottomPercentScreenHeight -> {
-                lsMargins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginBottomPercentScreenHeight,0f))
+            R.styleable.jjlayoutplus_cllMarginBottom -> {
+                lsMargins.bottom = a.getDimension(R.styleable.jjlayoutplus_cllMarginBottom,0f).toInt()
             }
 
-            R.styleable.JJSearchBarStatic_cllMarginEndPercentScreenWidth -> {
-                lsMargins.right = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginEndPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_cllMarginEndPercentScreenHeight -> {
+                lsMargins.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginStartPercentScreenWidth -> {
-                lsMargins.left = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginStartPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_cllMarginStartPercentScreenHeight -> {
+                lsMargins.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginTopPercentScreenWidth -> {
-                lsMargins.top = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginTopPercentScreenWidth,0f))
+            R.styleable.jjlayoutplus_cllMarginTopPercentScreenHeight -> {
+                lsMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenHeight,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginBottomPercentScreenWidth -> {
-                lsMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginBottomPercentScreenWidth,0f))
-            }
-
-            R.styleable.JJSearchBarStatic_cllMargin -> {
-                lsMargins = JJMargin.all(a.getDimension(R.styleable.JJSearchBarStatic_cllMargin,0f).toInt())
-            }
-            R.styleable.JJSearchBarStatic_cllMarginPerScHeight -> {
-                lsMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginPerScHeight,0f)))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginPerScWidth -> {
-                lsMargins = JJMargin.all(JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginPerScWidth,0f)))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginResponsive -> {
-                lsMargins = JJMargin.all(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginResponsive))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginResPerScHeight -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginResPerScHeight))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginResPerScWidth -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginResPerScWidth))
-            }
-            R.styleable.JJSearchBarStatic_cllMarginEndResponsive ->{
-                lsMargins.right = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginEndResponsive)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginStartResponsive ->{
-                lsMargins.left = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginStartResponsive)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginTopResponsive ->{
-                lsMargins.top = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginTopResponsive)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginBottomResponsive ->{
-                lsMargins.bottom = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginBottomResponsive)
+            R.styleable.jjlayoutplus_cllMarginBottomPercentScreenHeight -> {
+                lsMargins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenHeight,0f))
             }
 
-            R.styleable.JJSearchBarStatic_cllMarginEndResPerScHeight ->{
-                lsMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginEndResPerScHeight)
+            R.styleable.jjlayoutplus_cllMarginEndPercentScreenWidth -> {
+                lsMargins.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginStartResPerScHeight ->{
-                lsMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginStartResPerScHeight)
+            R.styleable.jjlayoutplus_cllMarginStartPercentScreenWidth -> {
+                lsMargins.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginTopResPerScHeight ->{
-                lsMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginTopResPerScHeight)
+            R.styleable.jjlayoutplus_cllMarginTopPercentScreenWidth -> {
+                lsMargins.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenWidth,0f))
             }
-            R.styleable.JJSearchBarStatic_cllMarginBottomResPerScHeight ->{
-                lsMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginBottomResPerScHeight)
-            }
-
-            R.styleable.JJSearchBarStatic_cllMarginEndResPerScWidth ->{
-                lsMargins.right = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginEndResPerScWidth)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginStartResPerScWidth ->{
-                lsMargins.left = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginStartResPerScWidth)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginTopResPerScWidth ->{
-                lsMargins.top = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginTopResPerScWidth)
-            }
-            R.styleable.JJSearchBarStatic_cllMarginBottomResPerScWidth ->{
-                lsMargins.bottom = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginBottomResPerScWidth)
+            R.styleable.jjlayoutplus_cllMarginBottomPercentScreenWidth -> {
+                lsMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenWidth,0f))
             }
 
-            R.styleable.JJSearchBarStatic_cllMarginVertical->{
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginVertical,0f).toInt()
+            R.styleable.jjlayoutplus_cllMargin -> {
+                lsMargins = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_cllMargin,0f).toInt())
+            }
+            R.styleable.jjlayoutplus_cllMarginPerScHeight -> {
+                lsMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScHeight,0f)))
+            }
+            R.styleable.jjlayoutplus_cllMarginPerScWidth -> {
+                lsMargins = JJMargin.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScWidth,0f)))
+            }
+            R.styleable.jjlayoutplus_cllMarginResponsive -> {
+                lsMargins = JJMargin.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginResponsive))
+            }
+            R.styleable.jjlayoutplus_cllMarginResPerScHeight -> {
+                lsMargins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginResPerScHeight))
+            }
+            R.styleable.jjlayoutplus_cllMarginResPerScWidth -> {
+                lsMargins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginResPerScWidth))
+            }
+            R.styleable.jjlayoutplus_cllMarginEndResponsive ->{
+                lsMargins.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginEndResponsive)
+            }
+            R.styleable.jjlayoutplus_cllMarginStartResponsive ->{
+                lsMargins.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginStartResponsive)
+            }
+            R.styleable.jjlayoutplus_cllMarginTopResponsive ->{
+                lsMargins.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginTopResponsive)
+            }
+            R.styleable.jjlayoutplus_cllMarginBottomResponsive ->{
+                lsMargins.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginBottomResponsive)
+            }
+
+            R.styleable.jjlayoutplus_cllMarginEndResPerScHeight ->{
+                lsMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginEndResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_cllMarginStartResPerScHeight ->{
+                lsMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginStartResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_cllMarginTopResPerScHeight ->{
+                lsMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginTopResPerScHeight)
+            }
+            R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight ->{
+                lsMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight)
+            }
+
+            R.styleable.jjlayoutplus_cllMarginEndResPerScWidth ->{
+                lsMargins.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginEndResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_cllMarginStartResPerScWidth ->{
+                lsMargins.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginStartResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_cllMarginTopResPerScWidth ->{
+                lsMargins.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginTopResPerScWidth)
+            }
+            R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth ->{
+                lsMargins.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth)
+            }
+
+            R.styleable.jjlayoutplus_cllMarginVertical->{
+                val mar = a.getDimension(R.styleable.jjlayoutplus_cllMarginVertical,0f).toInt()
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginVerticalPerScHeight->{
-                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginVerticalPerScHeight,0f))
+            R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight->{
+                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight,0f))
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginVerticalPerScWidth->{
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginVerticalPerScWidth,0f))
+            R.styleable.jjlayoutplus_cllMarginVerticalPerScWidth->{
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScWidth,0f))
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginVerticalResponsive->{
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginVerticalResponsive)
+            R.styleable.jjlayoutplus_cllMarginVerticalResponsive->{
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginVerticalResponsive)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginVerticalResPerScHeight->{
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginVerticalResPerScHeight)
+            R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight->{
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginVerticalResPerScWidth->{
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginVerticalResPerScWidth)
+            R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth->{
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
 
-            R.styleable.JJSearchBarStatic_cllMarginHorizontal->{
-                val mar = a.getDimension(R.styleable.JJSearchBarStatic_cllMarginHorizontal,0f).toInt()
+            R.styleable.jjlayoutplus_cllMarginHorizontal->{
+                val mar = a.getDimension(R.styleable.jjlayoutplus_cllMarginHorizontal,0f).toInt()
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginHorizontalPerScHeight->{
-                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginHorizontalPerScHeight,0f))
+            R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight->{
+                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight,0f))
                 lsMargins.left = mar ; lsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginHorizontalPerScWidth->{
-                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.JJSearchBarStatic_cllMarginHorizontalPerScWidth,0f))
+            R.styleable.jjlayoutplus_cllMarginHorizontalPerScWidth->{
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScWidth,0f))
                 lsMargins.left = mar ; lsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginHorizontalResponsive->{
-                val mar = responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllMarginHorizontalResponsive)
+            R.styleable.jjlayoutplus_cllMarginHorizontalResponsive->{
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginHorizontalResponsive)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginHorizontalResPerScHeight->{
-                val mar = responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllMarginHorizontalResPerScHeight)
+            R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight->{
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
-            R.styleable.JJSearchBarStatic_cllMarginHorizontalResPerScWidth->{
-                val mar = responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllMarginHorizontalResPerScWidth)
+            R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth->{
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
         }
@@ -1441,165 +1442,165 @@ open class JJSearchBarStatic : ConstraintLayout {
     }
     private fun setupSizeCll(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
-            R.styleable.JJSearchBarStatic_layout_height_landscape->{
-                val value = a.getLayoutDimension(R.styleable.JJSearchBarStatic_layout_height_landscape,0)
+            R.styleable.jjlayoutplus_layout_height_landscape->{
+                val value = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_height_landscape,0)
                 if(value > 0 || value == -2 ) cllHeight(value)
             }
-            R.styleable.JJSearchBarStatic_layout_width_landscape->{
-                val value = a.getLayoutDimension(R.styleable.JJSearchBarStatic_layout_width_landscape,0)
+            R.styleable.jjlayoutplus_layout_width_landscape->{
+                val value = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_width_landscape,0)
                 if(value > 0 || value == -2 ) cllWidth(value)
             }
-            R.styleable.JJSearchBarStatic_cllHeightPercent -> {
-                cllPercentHeight( a.getFloat(R.styleable.JJSearchBarStatic_cllHeightPercent,0f))
+            R.styleable.jjlayoutplus_cllHeightPercent -> {
+                cllPercentHeight( a.getFloat(R.styleable.jjlayoutplus_cllHeightPercent,0f))
             }
-            R.styleable.JJSearchBarStatic_cllWidthPercent -> {
-                cllPercentWidth( a.getFloat(R.styleable.JJSearchBarStatic_cllWidthPercent,0f))
+            R.styleable.jjlayoutplus_cllWidthPercent -> {
+                cllPercentWidth( a.getFloat(R.styleable.jjlayoutplus_cllWidthPercent,0f))
             }
-            R.styleable.JJSearchBarStatic_cllHeightPercentScreenWidth -> {
-                cllHeight(JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_cllHeightPercentScreenWidth,0f)))
+            R.styleable.jjlayoutplus_cllHeightPercentScreenWidth -> {
+                cllHeight(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_cllHeightPercentScreenWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_cllWidthPercentScreenWidth -> {
-                cllWidth(JJScreen.percentWidth( a.getFloat(R.styleable.JJSearchBarStatic_cllWidthPercentScreenWidth,0f)))
+            R.styleable.jjlayoutplus_cllWidthPercentScreenWidth -> {
+                cllWidth(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_cllWidthPercentScreenWidth,0f)))
             }
-            R.styleable.JJSearchBarStatic_cllHeightPercentScreenHeight -> {
-                cllHeight(JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_cllHeightPercentScreenHeight,0f)))
+            R.styleable.jjlayoutplus_cllHeightPercentScreenHeight -> {
+                cllHeight(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_cllHeightPercentScreenHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_cllWidthPercentScreenHeight -> {
-                cllWidth(JJScreen.percentHeight( a.getFloat(R.styleable.JJSearchBarStatic_cllWidthPercentScreenHeight,0f)))
+            R.styleable.jjlayoutplus_cllWidthPercentScreenHeight -> {
+                cllWidth(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_cllWidthPercentScreenHeight,0f)))
             }
-            R.styleable.JJSearchBarStatic_cllHeightResponsive -> {
-                cllHeight(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllHeightResponsive))
+            R.styleable.jjlayoutplus_cllHeightResponsive -> {
+                cllHeight(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllHeightResponsive))
             }
-            R.styleable.JJSearchBarStatic_cllWidthResponsive -> {
-                cllWidth(responsiveSizeDimension(a,R.styleable.JJSearchBarStatic_cllWidthResponsive))
+            R.styleable.jjlayoutplus_cllWidthResponsive -> {
+                cllWidth(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllWidthResponsive))
             }
 
-            R.styleable.JJSearchBarStatic_cllHeightResponsivePercentScreenHeight -> {
-                cllHeight(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllHeightResponsivePercentScreenHeight))
+            R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenHeight -> {
+                cllHeight(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenHeight))
             }
-            R.styleable.JJSearchBarStatic_cllWidthResponsivePercentScreenHeight -> {
-                cllWidth(responsiveSizePercentScreenHeight(a,R.styleable.JJSearchBarStatic_cllWidthResponsivePercentScreenHeight))
+            R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenHeight -> {
+                cllWidth(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenHeight))
             }
-            R.styleable.JJSearchBarStatic_cllWidthResponsivePercentScreenWidth -> {
-                cllHeight(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllWidthResponsivePercentScreenWidth))
+            R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenWidth -> {
+                cllHeight(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenWidth))
             }
-            R.styleable.JJSearchBarStatic_cllHeightResponsivePercentScreenWidth -> {
-                cllWidth(responsiveSizePercentScreenWidth(a,R.styleable.JJSearchBarStatic_cllHeightResponsivePercentScreenWidth))
+            R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenWidth -> {
+                cllWidth(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenWidth))
             }
         }
 
     }
     private fun setupAnchorsCll(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
-            R.styleable.JJSearchBarStatic_cllFillParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllFillParent,false)) cllFillParent()
+            R.styleable.jjlayoutplus_cllFillParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllFillParent,false)) cllFillParent()
             }
-            R.styleable.JJSearchBarStatic_cllFillParentHorizontally ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllFillParentHorizontally,false)) cllFillParentHorizontally()
+            R.styleable.jjlayoutplus_cllFillParentHorizontally ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllFillParentHorizontally,false)) cllFillParentHorizontally()
             }
-            R.styleable.JJSearchBarStatic_cllFillParentVertically ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllFillParentVertically,false)) cllFillParentVertically()
+            R.styleable.jjlayoutplus_cllFillParentVertically ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllFillParentVertically,false)) cllFillParentVertically()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParent,false)) cllCenterInParent()
+            R.styleable.jjlayoutplus_cllCenterInParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParent,false)) cllCenterInParent()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentHorizontally ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentHorizontally,false)) cllCenterInParentHorizontally()
+            R.styleable.jjlayoutplus_cllCenterInParentHorizontally ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentHorizontally,false)) cllCenterInParentHorizontally()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentVertically ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentVertically,false)) cllCenterInParentVertically()
+            R.styleable.jjlayoutplus_cllCenterInParentVertically ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentVertically,false)) cllCenterInParentVertically()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentTopVertically ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentTopVertically,false)) cllCenterInParentTopVertically()
+            R.styleable.jjlayoutplus_cllCenterInParentTopVertically ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentTopVertically,false)) cllCenterInParentTopVertically()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentBottomVertically ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentBottomVertically,false)) cllCenterInParentBottomVertically()
+            R.styleable.jjlayoutplus_cllCenterInParentBottomVertically ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentBottomVertically,false)) cllCenterInParentBottomVertically()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentStartHorizontally ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentStartHorizontally,false)) cllCenterInParentStartHorizontally()
+            R.styleable.jjlayoutplus_cllCenterInParentStartHorizontally ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentStartHorizontally,false)) cllCenterInParentStartHorizontally()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInParentEndHorizontally ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllCenterInParentEndHorizontally,false)) cllCenterInParentEndHorizontally()
+            R.styleable.jjlayoutplus_cllCenterInParentEndHorizontally ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentEndHorizontally,false)) cllCenterInParentEndHorizontally()
             }
-            R.styleable.JJSearchBarStatic_cllCenterInTopVerticallyOf ->{
-                cllCenterInTopVertically(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterInTopVerticallyOf,
+            R.styleable.jjlayoutplus_cllCenterInTopVerticallyOf ->{
+                cllCenterInTopVertically(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInTopVerticallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllCenterInBottomVerticallyOf ->{
-                cllCenterInBottomVertically(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterInBottomVerticallyOf,
+            R.styleable.jjlayoutplus_cllCenterInBottomVerticallyOf ->{
+                cllCenterInBottomVertically(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInBottomVerticallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllCenterInStartHorizontallyOf ->{
-                cllCenterInStartHorizontally(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterInStartHorizontallyOf,
+            R.styleable.jjlayoutplus_cllCenterInStartHorizontallyOf ->{
+                cllCenterInStartHorizontally(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInStartHorizontallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllCenterInEndHorizontallyOf ->{
-                cllCenterInEndHorizontally(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterInEndHorizontallyOf,
+            R.styleable.jjlayoutplus_cllCenterInEndHorizontallyOf ->{
+                cllCenterInEndHorizontally(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInEndHorizontallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllCenterVerticallyOf ->{
-                cllCenterVerticallyOf(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterVerticallyOf,
+            R.styleable.jjlayoutplus_cllCenterVerticallyOf ->{
+                cllCenterVerticallyOf(a.getResourceId(R.styleable.jjlayoutplus_cllCenterVerticallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllCenterHorizontallyOf ->{
-                cllCenterHorizontallyOf(a.getResourceId(R.styleable.JJSearchBarStatic_cllCenterHorizontallyOf,
+            R.styleable.jjlayoutplus_cllCenterHorizontallyOf ->{
+                cllCenterHorizontallyOf(a.getResourceId(R.styleable.jjlayoutplus_cllCenterHorizontallyOf,
                     View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllVerticalBias -> {
-                cllVerticalBias(a.getFloat(R.styleable.JJSearchBarStatic_cllVerticalBias,0.5f))
+            R.styleable.jjlayoutplus_cllVerticalBias -> {
+                cllVerticalBias(a.getFloat(R.styleable.jjlayoutplus_cllVerticalBias,0.5f))
             }
-            R.styleable.JJSearchBarStatic_cllHorizontalBias -> {
-                cllHorizontalBias(a.getFloat(R.styleable.JJSearchBarStatic_cllHorizontalBias,0.5f))
+            R.styleable.jjlayoutplus_cllHorizontalBias -> {
+                cllHorizontalBias(a.getFloat(R.styleable.jjlayoutplus_cllHorizontalBias,0.5f))
             }
 
-            R.styleable.JJSearchBarStatic_cllStartToStartParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllStartToStartParent,false)) cllStartToStartParent()
+            R.styleable.jjlayoutplus_cllStartToStartParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllStartToStartParent,false)) cllStartToStartParent()
             }
-            R.styleable.JJSearchBarStatic_cllStartToEndParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllStartToEndParent,false)) cllStartToEndParent()
+            R.styleable.jjlayoutplus_cllStartToEndParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllStartToEndParent,false)) cllStartToEndParent()
             }
-            R.styleable.JJSearchBarStatic_cllEndToEndParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllEndToEndParent,false)) cllEndToEndParent()
+            R.styleable.jjlayoutplus_cllEndToEndParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllEndToEndParent,false)) cllEndToEndParent()
             }
-            R.styleable.JJSearchBarStatic_cllEndToStartParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllEndToStartParent,false)) cllEndToStartParent()
+            R.styleable.jjlayoutplus_cllEndToStartParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllEndToStartParent,false)) cllEndToStartParent()
             }
-            R.styleable.JJSearchBarStatic_cllTopToTopParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllTopToTopParent,false)) cllTopToTopParent()
+            R.styleable.jjlayoutplus_cllTopToTopParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllTopToTopParent,false)) cllTopToTopParent()
             }
-            R.styleable.JJSearchBarStatic_cllTopToBottomParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllTopToBottomParent,false)) cllTopToBottomParent()
+            R.styleable.jjlayoutplus_cllTopToBottomParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllTopToBottomParent,false)) cllTopToBottomParent()
             }
-            R.styleable.JJSearchBarStatic_cllBottomToBottomParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllBottomToBottomParent,false)) cllBottomToBottomParent()
+            R.styleable.jjlayoutplus_cllBottomToBottomParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllBottomToBottomParent,false)) cllBottomToBottomParent()
             }
-            R.styleable.JJSearchBarStatic_cllBottomToTopParent ->{
-                if(a.getBoolean(R.styleable.JJSearchBarStatic_cllBottomToTopParent,false)) cllBottomToTopParent()
+            R.styleable.jjlayoutplus_cllBottomToTopParent ->{
+                if(a.getBoolean(R.styleable.jjlayoutplus_cllBottomToTopParent,false)) cllBottomToTopParent()
             }
 
-            R.styleable.JJSearchBarStatic_cllStartToStartOf -> {
-                cllStartToStart(a.getResourceId(R.styleable.JJSearchBarStatic_cllStartToStartOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllStartToStartOf -> {
+                cllStartToStart(a.getResourceId(R.styleable.jjlayoutplus_cllStartToStartOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllStartToEndOf -> {
-                cllStartToEnd(a.getResourceId(R.styleable.JJSearchBarStatic_cllStartToEndOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllStartToEndOf -> {
+                cllStartToEnd(a.getResourceId(R.styleable.jjlayoutplus_cllStartToEndOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllEndToEndOf -> {
-                cllEndToEnd(a.getResourceId(R.styleable.JJSearchBarStatic_cllEndToEndOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllEndToEndOf -> {
+                cllEndToEnd(a.getResourceId(R.styleable.jjlayoutplus_cllEndToEndOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllEndToStartOf -> {
-                cllEndToStart(a.getResourceId(R.styleable.JJSearchBarStatic_cllEndToStartOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllEndToStartOf -> {
+                cllEndToStart(a.getResourceId(R.styleable.jjlayoutplus_cllEndToStartOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllTopToTopOf -> {
-                cllTopToTop(a.getResourceId(R.styleable.JJSearchBarStatic_cllTopToTopOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllTopToTopOf -> {
+                cllTopToTop(a.getResourceId(R.styleable.jjlayoutplus_cllTopToTopOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllTopToBottomOf -> {
-                cllTopToBottom(a.getResourceId(R.styleable.JJSearchBarStatic_cllTopToBottomOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllTopToBottomOf -> {
+                cllTopToBottom(a.getResourceId(R.styleable.jjlayoutplus_cllTopToBottomOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllBottomToBottomOf -> {
-                cllBottomToBottom(a.getResourceId(R.styleable.JJSearchBarStatic_cllBottomToBottomOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllBottomToBottomOf -> {
+                cllBottomToBottom(a.getResourceId(R.styleable.jjlayoutplus_cllBottomToBottomOf, View.NO_ID))
             }
-            R.styleable.JJSearchBarStatic_cllBottomToTopOf -> {
-                cllBottomToTop(a.getResourceId(R.styleable.JJSearchBarStatic_cllBottomToTopOf, View.NO_ID))
+            R.styleable.jjlayoutplus_cllBottomToTopOf -> {
+                cllBottomToTop(a.getResourceId(R.styleable.jjlayoutplus_cllBottomToTopOf, View.NO_ID))
             }
 
         }
