@@ -26,6 +26,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.updateMarginsRelative
 import com.google.android.material.appbar.AppBarLayout
 import com.jjlf.jjkit_layoutplus.utils.JJColorDrawablePlus
+import com.jjlf.jjkit_layoutplus.utils.JJRippleDrawablePlus
 import com.jjlf.jjkit_layoututils.JJLayout
 import com.jjlf.jjkit_layoututils.JJMargin
 import com.jjlf.jjkit_layoututils.JJPadding
@@ -82,8 +83,10 @@ open class JJSearchBarStatic : ConstraintLayout {
         val onSurface = ba.getColor(1,Color.parseColor("#A9B0B6"))
         ba.recycle()
 
-        mSearchBar.background = JJColorDrawablePlus().setFillColor(surface)
-            .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
+
+        val radius = JJScreen.percentHeight(0.065f).toFloat() / 2f
+
+        mSearchBar.background = JJRippleDrawablePlus.roundRect(surface,radius)
         mImageView.background = null
         mImageView.imageTintList = ColorStateList.valueOf(onSurface)
         mTextView.background = null

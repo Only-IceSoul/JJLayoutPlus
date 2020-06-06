@@ -105,7 +105,15 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
+    fun setText(s:String): JJImageCategoryCircle {
+        mTextView.text = s
+        return this
+    }
 
+    fun setText(resId:Int): JJImageCategoryCircle {
+        mTextView.setText(resId)
+        return this
+    }
 
     fun setOnImageClickListener(listener: (view: View) -> Unit): JJImageCategoryCircle{
         mImageView.setOnClickListener(listener)

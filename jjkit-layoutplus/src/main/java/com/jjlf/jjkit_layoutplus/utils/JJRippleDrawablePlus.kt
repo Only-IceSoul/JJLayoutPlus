@@ -16,7 +16,7 @@ class JJRippleDrawablePlus(color: ColorStateList,
 ) : RippleDrawable(color, content, mask) {
 
     companion object{
-        fun roundRect(colorBg: Int, radius: Float = 0f, colorPressed: Int = 0 , colorRipple: Int = Color.parseColor("#80CCCCCC"), strokeW: Float = 0f, colorStroke: Int = Color.BLACK): RippleDrawable {
+        fun roundRect(colorBg: Int, radius: Float = 0f, colorPressed: Int = -1 , colorRipple: Int = -1, strokeW: Float = 0f, colorStroke: Int = Color.BLACK): RippleDrawable {
 
             val colorRip = if(colorRipple == -1) Color.parseColor("#80CCCCCC") else colorRipple
             val colorPre = if(colorPressed == -1 )  Color.parseColor("#80CCCCCC") else colorPressed
