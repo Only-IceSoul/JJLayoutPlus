@@ -148,6 +148,10 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
+    fun getImageView(): AppCompatImageView{
+        return mImageView
+    }
+
     //region init
 
     constructor(context: Context) : super(context) {
