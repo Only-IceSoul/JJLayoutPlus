@@ -26,6 +26,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.updateMarginsRelative
 import com.google.android.material.appbar.AppBarLayout
@@ -77,13 +78,12 @@ class JJImageCategoryCircle : ConstraintLayout {
             .clDisposeView()
 
         val attrsArray = intArrayOf(
-            R.attr.colorSurface,
-            R.attr.colorOnSurface
+            R.attr.colorSurface
         )
         val ba = context.obtainStyledAttributes(attrs,
             attrsArray, 0, 0)
         val surface = ba.getColor(0,Color.parseColor("#F62F42"))
-        val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
+//        val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
         ba.recycle()
 
         val bg = JJColorDrawablePlus().setFillColor(surface)
@@ -100,7 +100,6 @@ class JJImageCategoryCircle : ConstraintLayout {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             mImageView.foreground = sd
         }
-        mImageView.imageTintList = ColorStateList.valueOf(onSurface)
         mTextView.background = null
 
     }

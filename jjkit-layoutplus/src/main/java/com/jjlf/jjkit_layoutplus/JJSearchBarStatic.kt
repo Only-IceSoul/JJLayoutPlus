@@ -74,13 +74,12 @@ open class JJSearchBarStatic : ConstraintLayout {
             .clDisposeView()
 
         val attrsArray = intArrayOf(
-            R.attr.colorSurface,
-            R.attr.colorOnSurface
+            R.attr.colorSurface
         )
         val ba = context.obtainStyledAttributes(attrs,
             attrsArray, 0, 0)
         val surface = ba.getColor(0,Color.parseColor("#F6F8F7"))
-        val onSurface = ba.getColor(1,Color.parseColor("#A9B0B6"))
+//        val onSurface = ba.getColor(1,Color.parseColor("#A9B0B6"))
         ba.recycle()
 
 
@@ -88,7 +87,6 @@ open class JJSearchBarStatic : ConstraintLayout {
 
         mSearchBar.background = JJRippleDrawablePlus.roundRect(surface,radius)
         mImageView.background = null
-        mImageView.imageTintList = ColorStateList.valueOf(onSurface)
         mTextView.background = null
 
     }

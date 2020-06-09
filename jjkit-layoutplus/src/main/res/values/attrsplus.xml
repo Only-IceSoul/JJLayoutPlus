@@ -452,7 +452,7 @@
         <attr name="android:gravity" />
         <attr name="srcCompat" />
         <attr name="colorSurface" />
-        <attr name="colorOnSurface"/>
+        <attr name="tint"/>
 
     </declare-styleable>
     <declare-styleable name="JJImageCategoryCircle" parent="jjlayoutplus" >
@@ -464,6 +464,6 @@
         <attr name="android:textStyle" />
         <attr name="srcCompat" />
         <attr name="colorSurface" />
-        <attr name="colorOnSurface"/>
+        <attr name="tint"/>
     </declare-styleable>
 </resources>
