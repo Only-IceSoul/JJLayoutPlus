@@ -168,6 +168,8 @@ class JJCategoryViewCircle : ConstraintLayout {
         setupViews(context,attrs)
     }
 
+    private var mClMargin = JJMargin()
+    private var mCllMargin = JJMargin()
 
     @SuppressLint("CustomViewStyleable")
     private fun setupLayout(attrs: AttributeSet?){
@@ -203,6 +205,9 @@ class JJCategoryViewCircle : ConstraintLayout {
             //endregion
         }
         a.recycle()
+
+        clMargins(mClMargin)
+        cllMargins(mCllMargin)
 
     }
     private fun setupAndroidBase(attrs: AttributeSet?){
@@ -675,154 +680,152 @@ class JJCategoryViewCircle : ConstraintLayout {
         }
     }
     private fun setupMarginCl(a: TypedArray, index:Int){
-        var margins = JJMargin()
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_clMarginEnd ->{
-                margins.right = a.getDimension(R.styleable.jjlayoutplus_clMarginEnd,0f).toInt()
+                mClMargin.right = a.getDimension(R.styleable.jjlayoutplus_clMarginEnd,0f).toInt()
             }
             R.styleable.jjlayoutplus_clMarginStart ->{
-                margins.left = a.getDimension(R.styleable.jjlayoutplus_clMarginStart,0f).toInt()
+                mClMargin.left = a.getDimension(R.styleable.jjlayoutplus_clMarginStart,0f).toInt()
             }
             R.styleable.jjlayoutplus_clMarginTop ->{
-                margins.top = a.getDimension(R.styleable.jjlayoutplus_clMarginTop,0f).toInt()
+                mClMargin.top = a.getDimension(R.styleable.jjlayoutplus_clMarginTop,0f).toInt()
             }
             R.styleable.jjlayoutplus_clMarginBottom ->{
-                margins.bottom = a.getDimension(R.styleable.jjlayoutplus_clMarginBottom,0f).toInt()
+                mClMargin.bottom = a.getDimension(R.styleable.jjlayoutplus_clMarginBottom,0f).toInt()
             }
 
             R.styleable.jjlayoutplus_clMarginEndPercentScreenHeight -> {
-                margins.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenHeight,0f))
+                mClMargin.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_clMarginStartPercentScreenHeight -> {
-                margins.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenHeight,0f))
+                mClMargin.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_clMarginTopPercentScreenHeight -> {
-                margins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenHeight,0f))
+                mClMargin.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_clMarginBottomPercentScreenHeight -> {
-                margins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenHeight,0f))
+                mClMargin.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenHeight,0f))
             }
 
             R.styleable.jjlayoutplus_clMarginEndPercentScreenWidth -> {
-                margins.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenWidth,0f))
+                mClMargin.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginEndPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_clMarginStartPercentScreenWidth -> {
-                margins.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenWidth,0f))
+                mClMargin.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginStartPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_clMarginTopPercentScreenWidth -> {
-                margins.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenWidth,0f))
+                mClMargin.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginTopPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_clMarginBottomPercentScreenWidth -> {
-                margins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenWidth,0f))
+                mClMargin.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginBottomPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_clMargin -> {
-                margins = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_clMargin,0f).toInt())
+                mClMargin = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_clMargin,0f).toInt())
             }
             R.styleable.jjlayoutplus_clMarginPerScHeight -> {
-                margins = JJMargin.all(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScHeight,0f)))
+                mClMargin = JJMargin.all(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScHeight,0f)))
             }
             R.styleable.jjlayoutplus_clMarginPerScWidth -> {
-                margins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScWidth,0f)))
+                mClMargin = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScWidth,0f)))
             }
             R.styleable.jjlayoutplus_clMarginResponsive -> {
-                margins = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginResponsive))
+                mClMargin = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginResponsive))
             }
             R.styleable.jjlayoutplus_clMarginResPerScHeight -> {
-                margins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginResPerScHeight))
+                mClMargin = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginResPerScHeight))
             }
             R.styleable.jjlayoutplus_clMarginResPerScWidth -> {
-                margins = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginResPerScWidth))
+                mClMargin = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginResPerScWidth))
             }
             R.styleable.jjlayoutplus_clMarginEndResponsive -> {
-                margins.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginEndResponsive)
+                mClMargin.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginEndResponsive)
             }
             R.styleable.jjlayoutplus_clMarginStartResponsive -> {
-                margins.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginStartResponsive)
+                mClMargin.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginStartResponsive)
             }
             R.styleable.jjlayoutplus_clMarginTopResponsive -> {
-                margins.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginTopResponsive)
+                mClMargin.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginTopResponsive)
             }
             R.styleable.jjlayoutplus_clMarginBottomResponsive -> {
-                margins.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginBottomResponsive)
+                mClMargin.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginBottomResponsive)
             }
 
             R.styleable.jjlayoutplus_clMarginEndResPerScHeight -> {
-                margins.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginEndResPerScHeight)
+                mClMargin.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginEndResPerScHeight)
             }
             R.styleable.jjlayoutplus_clMarginStartResPerScHeight -> {
-                margins.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginStartResPerScHeight)
+                mClMargin.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginStartResPerScHeight)
             }
             R.styleable.jjlayoutplus_clMarginTopResPerScHeight -> {
-                margins.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginTopResPerScHeight)
+                mClMargin.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginTopResPerScHeight)
             }
             R.styleable.jjlayoutplus_clMarginBottomResPerScHeight -> {
-                margins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginBottomResPerScHeight)
+                mClMargin.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginBottomResPerScHeight)
             }
 
             R.styleable.jjlayoutplus_clMarginEndResPerScWidth -> {
-                margins.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginEndResPerScWidth)
+                mClMargin.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginEndResPerScWidth)
             }
             R.styleable.jjlayoutplus_clMarginStartResPerScWidth -> {
-                margins.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginStartResPerScWidth)
+                mClMargin.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginStartResPerScWidth)
             }
             R.styleable.jjlayoutplus_clMarginTopResPerScWidth -> {
-                margins.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginTopResPerScWidth)
+                mClMargin.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginTopResPerScWidth)
             }
             R.styleable.jjlayoutplus_clMarginBottomResPerScWidth -> {
-                margins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginBottomResPerScWidth)
+                mClMargin.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginBottomResPerScWidth)
             }
             R.styleable.jjlayoutplus_clMarginVertical -> {
                 val mar = a.getDimension(R.styleable.jjlayoutplus_clMarginVertical,0f).toInt()
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalPerScHeight -> {
                 val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginVerticalPerScHeight,0f))
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalPerScWidth -> {
                 val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginVerticalPerScWidth,0f))
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResponsive -> {
                 val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginVerticalResponsive)
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight -> {
                 val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight)
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth -> {
                 val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth)
-                margins.top = mar ; margins.bottom = mar
+                mClMargin.top = mar ; mClMargin.bottom = mar
             }
 
             R.styleable.jjlayoutplus_clMarginHorizontal -> {
                 val mar = a.getDimension(R.styleable.jjlayoutplus_clMarginHorizontal,0f).toInt()
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalPerScHeight -> {
                 val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clMarginHorizontalPerScHeight,0f))
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalPerScWidth -> {
                 val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_clMarginHorizontalPerScWidth,0f))
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResponsive -> {
                 val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginHorizontalResponsive)
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight -> {
                 val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight)
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth -> {
                 val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth)
-                margins.left = mar ; margins.right = mar
+                mClMargin.left = mar ; mClMargin.right = mar
             }
 
         }
-        clMargins(margins)
     }
 
     private fun setupMarginLpl(a: TypedArray, index:Int) {
@@ -1315,155 +1318,153 @@ class JJCategoryViewCircle : ConstraintLayout {
     }
 
     private fun setupMarginCll(a: TypedArray, index:Int){
-        var lsMargins = JJMargin()
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_cllMarginEnd -> {
-                lsMargins.right = a.getDimension(R.styleable.jjlayoutplus_cllMarginEnd,0f).toInt()
+                mCllMargin.right = a.getDimension(R.styleable.jjlayoutplus_cllMarginEnd,0f).toInt()
             }
             R.styleable.jjlayoutplus_cllMarginStart -> {
-                lsMargins.left = a.getDimension(R.styleable.jjlayoutplus_cllMarginStart,0f).toInt()
+                mCllMargin.left = a.getDimension(R.styleable.jjlayoutplus_cllMarginStart,0f).toInt()
             }
             R.styleable.jjlayoutplus_cllMarginTop -> {
-                lsMargins.top = a.getDimension(R.styleable.jjlayoutplus_cllMarginTop,0f).toInt()
+                mCllMargin.top = a.getDimension(R.styleable.jjlayoutplus_cllMarginTop,0f).toInt()
             }
             R.styleable.jjlayoutplus_cllMarginBottom -> {
-                lsMargins.bottom = a.getDimension(R.styleable.jjlayoutplus_cllMarginBottom,0f).toInt()
+                mCllMargin.bottom = a.getDimension(R.styleable.jjlayoutplus_cllMarginBottom,0f).toInt()
             }
 
             R.styleable.jjlayoutplus_cllMarginEndPercentScreenHeight -> {
-                lsMargins.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenHeight,0f))
+                mCllMargin.right = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_cllMarginStartPercentScreenHeight -> {
-                lsMargins.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenHeight,0f))
+                mCllMargin.left = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_cllMarginTopPercentScreenHeight -> {
-                lsMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenHeight,0f))
+                mCllMargin.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_cllMarginBottomPercentScreenHeight -> {
-                lsMargins.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenHeight,0f))
+                mCllMargin.bottom = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenHeight,0f))
             }
 
             R.styleable.jjlayoutplus_cllMarginEndPercentScreenWidth -> {
-                lsMargins.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenWidth,0f))
+                mCllMargin.right = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginEndPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_cllMarginStartPercentScreenWidth -> {
-                lsMargins.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenWidth,0f))
+                mCllMargin.left = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginStartPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_cllMarginTopPercentScreenWidth -> {
-                lsMargins.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenWidth,0f))
+                mCllMargin.top = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginTopPercentScreenWidth,0f))
             }
             R.styleable.jjlayoutplus_cllMarginBottomPercentScreenWidth -> {
-                lsMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenWidth,0f))
+                mCllMargin.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginBottomPercentScreenWidth,0f))
             }
 
             R.styleable.jjlayoutplus_cllMargin -> {
-                lsMargins = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_cllMargin,0f).toInt())
+                mCllMargin = JJMargin.all(a.getDimension(R.styleable.jjlayoutplus_cllMargin,0f).toInt())
             }
             R.styleable.jjlayoutplus_cllMarginPerScHeight -> {
-                lsMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScHeight,0f)))
+                mCllMargin = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScHeight,0f)))
             }
             R.styleable.jjlayoutplus_cllMarginPerScWidth -> {
-                lsMargins = JJMargin.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScWidth,0f)))
+                mCllMargin = JJMargin.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScWidth,0f)))
             }
             R.styleable.jjlayoutplus_cllMarginResponsive -> {
-                lsMargins = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginResponsive))
+                mCllMargin = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginResponsive))
             }
             R.styleable.jjlayoutplus_cllMarginResPerScHeight -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginResPerScHeight))
+                mCllMargin = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginResPerScHeight))
             }
             R.styleable.jjlayoutplus_cllMarginResPerScWidth -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginResPerScWidth))
+                mCllMargin = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginResPerScWidth))
             }
             R.styleable.jjlayoutplus_cllMarginEndResponsive ->{
-                lsMargins.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginEndResponsive)
+                mCllMargin.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginEndResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginStartResponsive ->{
-                lsMargins.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginStartResponsive)
+                mCllMargin.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginStartResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginTopResponsive ->{
-                lsMargins.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginTopResponsive)
+                mCllMargin.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginTopResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResponsive ->{
-                lsMargins.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginBottomResponsive)
+                mCllMargin.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginBottomResponsive)
             }
 
             R.styleable.jjlayoutplus_cllMarginEndResPerScHeight ->{
-                lsMargins.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginEndResPerScHeight)
+                mCllMargin.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginEndResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginStartResPerScHeight ->{
-                lsMargins.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginStartResPerScHeight)
+                mCllMargin.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginStartResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginTopResPerScHeight ->{
-                lsMargins.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginTopResPerScHeight)
+                mCllMargin.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginTopResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight ->{
-                lsMargins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight)
+                mCllMargin.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight)
             }
 
             R.styleable.jjlayoutplus_cllMarginEndResPerScWidth ->{
-                lsMargins.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginEndResPerScWidth)
+                mCllMargin.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginEndResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginStartResPerScWidth ->{
-                lsMargins.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginStartResPerScWidth)
+                mCllMargin.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginStartResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginTopResPerScWidth ->{
-                lsMargins.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginTopResPerScWidth)
+                mCllMargin.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginTopResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth ->{
-                lsMargins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth)
+                mCllMargin.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth)
             }
 
             R.styleable.jjlayoutplus_cllMarginVertical->{
                 val mar = a.getDimension(R.styleable.jjlayoutplus_cllMarginVertical,0f).toInt()
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight->{
                 val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight,0f))
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalPerScWidth->{
                 val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScWidth,0f))
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResponsive->{
                 val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginVerticalResponsive)
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight->{
                 val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight)
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth->{
                 val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth)
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
 
             R.styleable.jjlayoutplus_cllMarginHorizontal->{
                 val mar = a.getDimension(R.styleable.jjlayoutplus_cllMarginHorizontal,0f).toInt()
-                lsMargins.top = mar ; lsMargins.bottom = mar
+                mCllMargin.top = mar ; mCllMargin.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight->{
                 val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight,0f))
-                lsMargins.left = mar ; lsMargins.right = mar
+                mCllMargin.left = mar ; mCllMargin.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalPerScWidth->{
                 val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScWidth,0f))
-                lsMargins.left = mar ; lsMargins.right = mar
+                mCllMargin.left = mar ; mCllMargin.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResponsive->{
                 val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginHorizontalResponsive)
-                lsMargins.left = mar ; lsMargins.right = mar
+                mCllMargin.left = mar ; mCllMargin.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight->{
                 val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight)
-                lsMargins.left = mar ; lsMargins.right = mar
+                mCllMargin.left = mar ; mCllMargin.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth->{
                 val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth)
-                lsMargins.left = mar ; lsMargins.right = mar
+                mCllMargin.left = mar ; mCllMargin.right = mar
             }
         }
-        cllMargins(lsMargins)
     }
     private fun setupSizeCll(a: TypedArray, index:Int){
         when (a.getIndex(index)) {
