@@ -45,7 +45,7 @@ class JJCategoryViewCircle : ConstraintLayout {
     private lateinit var mTextView : AppCompatTextView
     private fun setupViews(context: Context,attrs: AttributeSet?){
 
-        val ct = ContextThemeWrapper(context,-1)
+        val ct = ContextThemeWrapper(context,R.style.BlankTheme)
         ct.theme.applyStyle(R.style.textSize12,false)
         ct.theme.applyStyle(R.style.textCategory,false)
 

@@ -8,13 +8,6 @@
     <style name="textCategory">
         <item name="android:text">Category</item>
     </style>
-    <style name="shapesCategoryIcon">
-        <item name="srcCompat">@drawable/ic_category</item>
-    </style>
-    <style name="alignmentStartCenter">
-        <item name="android:textAlignment">gravity</item>
-        <item name="android:gravity">center_vertical|start</item>
-    </style>
     <style name="InputTypeText">
         <item name="android:inputType">text</item>
     </style>
@@ -27,6 +20,7 @@
     <style name="textSize12">
         <item name="android:textSize">14sp</item>
     </style>
+    <style name="BlankTheme"/>
 
 
 

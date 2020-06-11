@@ -42,7 +42,7 @@ open class JJSearchBarViewStatic : ConstraintLayout {
     private fun setupViews(context: Context,attrs: AttributeSet?){
 
         mSearchBar = ConstraintLayout(context)
-        val ct = ContextThemeWrapper(context,-1)
+        val ct = ContextThemeWrapper(context,R.style.BlankTheme)
         ct.theme.applyStyle(R.style.textSearchThreePoint,false)
         ct.theme.applyStyle(R.style.textSize14,false)
         mImageView = AppCompatImageView(context)

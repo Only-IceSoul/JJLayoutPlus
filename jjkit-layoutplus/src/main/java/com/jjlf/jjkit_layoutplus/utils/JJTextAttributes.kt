@@ -17,6 +17,7 @@ import android.view.View.TEXT_ALIGNMENT_TEXT_START
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import org.w3c.dom.Text
+import java.util.*
 import kotlin.math.min
 
 class JJTextAttributes {
@@ -213,7 +214,7 @@ class JJTextAttributes {
             v.transformationMethod = object: TransformationMethod {
                 override fun onFocusChanged(view: View?, sourceText: CharSequence?, focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {}
                 override fun getTransformation(source: CharSequence?, view: View?): CharSequence? {
-                    return source?.toString()?.toUpperCase(v.context.resources.configuration.locale)
+                    return source?.toString()?.toUpperCase(Locale.getDefault())
                 }
             }
         }

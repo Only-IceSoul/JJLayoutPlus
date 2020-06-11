@@ -51,7 +51,7 @@ class JJSearchBarView : ConstraintLayout {
     private fun setupViews(context: Context, attrs: AttributeSet?){
 
         val t = context.obtainStyledAttributes(attrs,R.styleable.JJSearchBarView,0,0)
-        val ce = ContextThemeWrapper(context,-1)
+        val ce = ContextThemeWrapper(context,R.style.BlankTheme)
         ce.theme.applyStyle(R.style.textSize16,false)
         ce.theme.applyStyle(R.style.InputTypeText,false)
 
