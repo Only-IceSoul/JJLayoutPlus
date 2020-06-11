@@ -205,6 +205,8 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         clMargins(mClMargin)
         cllMargins(mCllMargin)
 
+        if(id == View.NO_ID) id = View.generateViewId()
+
     }
     private fun setupAndroidBase(attrs: AttributeSet?){
         val attrsArray = intArrayOf(
@@ -224,8 +226,6 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         mlpHeight = attrHeight
         mlpWidth = attrWidth
 
-        val attrId = ba.getResourceId(0, View.NO_ID)
-        if(attrId == View.NO_ID) id = View.generateViewId()
 
         ba.recycle()
 

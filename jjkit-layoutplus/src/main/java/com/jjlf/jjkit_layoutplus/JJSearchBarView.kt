@@ -48,6 +48,7 @@ class JJSearchBarView : ConstraintLayout {
     //context wrapper iniciador de default atributes , pero sobre escrito por attributeset
     //contextWrapper  no afecta al theme general, cada theme de cada view es independiente
     //style va junto con el attribute set pero es sobre escrito si hay attr solos definidos por usuario
+    //style sobre escribe los atributos default del theme tb de material design
     private fun setupViews(context: Context, attrs: AttributeSet?){
 
         val t = context.obtainStyledAttributes(attrs,R.styleable.JJSearchBarView,0,0)
@@ -269,6 +270,8 @@ class JJSearchBarView : ConstraintLayout {
 
         clMargins(mClMargin)
         cllMargins(mCllMargin)
+
+        if(id == View.NO_ID) id = View.generateViewId()
     }
     private fun setupAndroidBase(attrs: AttributeSet?){
         val attrsArray = intArrayOf(
@@ -287,9 +290,6 @@ class JJSearchBarView : ConstraintLayout {
 
         mlpHeight = attrHeight
         mlpWidth = attrWidth
-
-        val attrId = ba.getResourceId(0, View.NO_ID)
-        if(attrId == View.NO_ID) id = View.generateViewId()
 
         ba.recycle()
 
