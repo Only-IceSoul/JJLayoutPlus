@@ -42,8 +42,9 @@ open class JJSearchBarViewStatic : ConstraintLayout {
     private fun setupViews(context: Context,attrs: AttributeSet?){
 
         mSearchBar = ConstraintLayout(context)
-        val ct = ContextThemeWrapper(context,R.style.textSearch)
-        ct.theme.applyStyle(R.style.textSize14,true)
+        val ct = ContextThemeWrapper(context,-1)
+        ct.theme.applyStyle(R.style.textSearchThreePoint,false)
+        ct.theme.applyStyle(R.style.textSize14,false)
         mImageView = AppCompatImageView(context)
         mTextView = AppCompatTextView(ct,attrs)
         mSearchBar.id = View.generateViewId()
@@ -155,15 +156,11 @@ open class JJSearchBarViewStatic : ConstraintLayout {
     private lateinit var mTextView : AppCompatTextView
 
 
-    constructor(context: Context) : super(context) {
-        this.id = View.generateViewId()
-        setupInitConstraint()
-        setupViews(context,null)
-    }
+    constructor(context: Context) : this(context,null)
 
     private var mSupportLandScape = false
     private var mIgnoreCl = false
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs){
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs){
         setupInitConstraint()
         setupLayout(attrs)
         setupViews(context,attrs)
@@ -171,7 +168,7 @@ open class JJSearchBarViewStatic : ConstraintLayout {
 
 
     @SuppressLint("CustomViewStyleable")
-    private fun setupLayout(attrs: AttributeSet){
+    private fun setupLayout(attrs: AttributeSet?){
         val a = context.obtainStyledAttributes(attrs,
             R.styleable.jjlayoutplus, 0, 0)
         mIgnoreCl = a.getBoolean(R.styleable.jjlayoutplus_layout_ignoreCl,false)
@@ -206,7 +203,7 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         a.recycle()
 
     }
-    private fun setupAndroidBase(attrs: AttributeSet){
+    private fun setupAndroidBase(attrs: AttributeSet?){
         val attrsArray = intArrayOf(
             android.R.attr.id,
             android.R.attr.layout_width, // 1
@@ -1632,6 +1629,8 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
+        mConstraintSet.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
+        mConstraintSetLandScape.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
     }
     private fun responsiveSizeDimension(a: TypedArray,style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,

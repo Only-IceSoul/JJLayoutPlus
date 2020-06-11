@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="textSearch">
+    <style name="textSearchThreePoint">
         <item name="android:text">Search..</item>
     </style>
 
@@ -27,4 +27,7 @@
     <style name="textSize12">
         <item name="android:textSize">14sp</item>
     </style>
+
+
+
 </resources>

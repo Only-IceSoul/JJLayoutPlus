@@ -403,7 +403,12 @@
         <attr name="android:textColorHint" />
         <attr name="android:textCursorDrawable" />
         <attr name="android:inputType" />
-        <attr name="styleColorControlActivated" />
+    </declare-styleable>
+
+    <declare-styleable name="JJProgressViewFS" parent="jjlayoutplus">
+        <attr name="progressSize" format="dimension"/>
+        <attr name="colorOnSurface" format="color" />
+
     </declare-styleable>
 
 </resources>

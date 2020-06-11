@@ -39,12 +39,16 @@ import com.jjlf.jjkit_layoututils.JJScreen
 @SuppressLint("ResourceType")
 class JJCategoryViewCircle : ConstraintLayout {
 
+    //region custom
     private lateinit var mLinearLayout : LinearLayout
     private lateinit var mImageView: AppCompatImageView
     private lateinit var mTextView : AppCompatTextView
     private fun setupViews(context: Context,attrs: AttributeSet?){
-        val ct = ContextThemeWrapper(context, R.style.textSize12)
-        ct.theme.applyStyle(R.style.textCategory,true)
+
+        val ct = ContextThemeWrapper(context,-1)
+        ct.theme.applyStyle(R.style.textSize12,false)
+        ct.theme.applyStyle(R.style.textCategory,false)
+
         mImageView = AppCompatImageView(context)
         mTextView = AppCompatTextView(ct,attrs)
         mLinearLayout = LinearLayout(context)
@@ -148,17 +152,17 @@ class JJCategoryViewCircle : ConstraintLayout {
         return mImageView
     }
 
+
+    //endregion
+
+
     //region init
 
-    constructor(context: Context) : super(context) {
-        this.id = View.generateViewId()
-        setupInitConstraint()
-        setupViews(context,null)
-    }
+    constructor(context: Context) : this(context,null)
 
     private var mSupportLandScape = false
     private var mIgnoreCl = false
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs){
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs){
         setupInitConstraint()
         setupLayout(attrs)
         setupViews(context,attrs)
@@ -166,7 +170,7 @@ class JJCategoryViewCircle : ConstraintLayout {
 
 
     @SuppressLint("CustomViewStyleable")
-    private fun setupLayout(attrs: AttributeSet){
+    private fun setupLayout(attrs: AttributeSet?){
         val a = context.obtainStyledAttributes(attrs,
             R.styleable.jjlayoutplus, 0, 0)
         mIgnoreCl = a.getBoolean(R.styleable.jjlayoutplus_layout_ignoreCl,false)
@@ -201,7 +205,7 @@ class JJCategoryViewCircle : ConstraintLayout {
         a.recycle()
 
     }
-    private fun setupAndroidBase(attrs: AttributeSet){
+    private fun setupAndroidBase(attrs: AttributeSet?){
         val attrsArray = intArrayOf(
             android.R.attr.id,
             android.R.attr.layout_width, // 1
@@ -1639,6 +1643,8 @@ class JJCategoryViewCircle : ConstraintLayout {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
+        mConstraintSet.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
+        mConstraintSetLandScape.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
     }
 
     private fun responsiveSizeDimension(a: TypedArray, style:Int) : Int {

@@ -42,21 +42,22 @@ class JJSearchBarView : ConstraintLayout {
     private lateinit var mImageView: AppCompatImageView
     private lateinit var mEditText : AppCompatEditText
 
-    //attributo style sobreescribe el contextwrapper
-    //style es sobre escrito si hay attr solos definidos
-    //edit text gravity contextWrapper no funciona e inicia con vertical center y start
-    //contextWrapper customiza a las bien, no afecta al theme general
+    //elevation 0 default
+    //attribute theme viene con el context el context theme wrapper sobreescribe este atributo si force
+    //theme no sirve textalignment y gravity
+    //context wrapper iniciador de default atributes , pero sobre escrito por attributeset
+    //contextWrapper  no afecta al theme general, cada theme de cada view es independiente
+    //style va junto con el attribute set pero es sobre escrito si hay attr solos definidos por usuario
     private fun setupViews(context: Context, attrs: AttributeSet?){
-        mSearchBar = ConstraintLayout(context)
-        mImageView = AppCompatImageView(context)
 
         val t = context.obtainStyledAttributes(attrs,R.styleable.JJSearchBarView,0,0)
+        val ce = ContextThemeWrapper(context,-1)
+        ce.theme.applyStyle(R.style.textSize16,false)
+        ce.theme.applyStyle(R.style.InputTypeText,false)
 
-        val styleControl = t.getResourceId(R.styleable.JJSearchBarView_styleColorControlActivated,-1)
-        val ce = ContextThemeWrapper(context,R.style.textSize16)
-        ce.theme.applyStyle(R.style.InputTypeText,true)
-        if(styleControl != -1) ce.theme.applyStyle(styleControl,true)
         mEditText = AppCompatEditText(ce,attrs)
+        mSearchBar = ConstraintLayout(context)
+        mImageView = AppCompatImageView(context)
         mSearchBar.id = View.generateViewId()
         mImageView.id = View.generateViewId()
         mEditText.id = View.generateViewId()
@@ -218,15 +219,11 @@ class JJSearchBarView : ConstraintLayout {
 
     //region init
 
-    constructor(context: Context) : super(context) {
-        this.id = View.generateViewId()
-        setupInitConstraint()
-        setupViews(context,null)
-    }
+    constructor(context: Context) : this(context,null)
 
     private var mSupportLandScape = false
     private var mIgnoreCl = false
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs){
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs){
         setupInitConstraint()
         setupLayout(attrs)
         setupViews(context,attrs)
@@ -234,7 +231,7 @@ class JJSearchBarView : ConstraintLayout {
 
 
     @SuppressLint("CustomViewStyleable")
-    private fun setupLayout(attrs: AttributeSet){
+    private fun setupLayout(attrs: AttributeSet?){
         val a = context.obtainStyledAttributes(attrs,
             R.styleable.jjlayoutplus, 0, 0)
         mIgnoreCl = a.getBoolean(R.styleable.jjlayoutplus_layout_ignoreCl,false)
@@ -269,7 +266,7 @@ class JJSearchBarView : ConstraintLayout {
         a.recycle()
 
     }
-    private fun setupAndroidBase(attrs: AttributeSet){
+    private fun setupAndroidBase(attrs: AttributeSet?){
         val attrsArray = intArrayOf(
             android.R.attr.id,
             android.R.attr.layout_width, // 1
@@ -1707,6 +1704,8 @@ class JJSearchBarView : ConstraintLayout {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
+        mConstraintSet.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
+        mConstraintSetLandScape.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
     }
     private fun responsiveSizeDimension(a: TypedArray, style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,
