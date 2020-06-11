@@ -7,13 +7,12 @@ import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.StateListDrawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.view.animation.Interpolator
 import android.widget.LinearLayout
@@ -26,132 +25,135 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.updateMarginsRelative
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.widget.ImageViewCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.jjlf.jjkit_layoutplus.utils.JJColorDrawablePlus
+import com.jjlf.jjkit_layoutplus.utils.JJRippleDrawablePlus
 import com.jjlf.jjkit_layoututils.JJLayout
-
 import com.jjlf.jjkit_layoututils.JJMargin
 import com.jjlf.jjkit_layoututils.JJPadding
 import com.jjlf.jjkit_layoututils.JJScreen
 
-
 @SuppressLint("ResourceType")
-class JJImageCategoryCircle : ConstraintLayout {
+open class JJSearchBarViewStatic : ConstraintLayout {
 
-    private lateinit var mLinearLayout : LinearLayout
-    private lateinit var mImageView: AppCompatImageView
-    private lateinit var mTextView : AppCompatTextView
+    //region custom
     private fun setupViews(context: Context,attrs: AttributeSet?){
-        val ci = ContextThemeWrapper(context, R.style.JJImageCategoryCircleImage)
-        val ct = ContextThemeWrapper(context, R.style.JJImageCategoryCircleText)
-        mImageView = AppCompatImageView(ci,attrs)
+
+        mSearchBar = ConstraintLayout(context)
+        val ct = ContextThemeWrapper(context,R.style.textSearch)
+        ct.theme.applyStyle(R.style.textSize14,true)
+        mImageView = AppCompatImageView(context)
         mTextView = AppCompatTextView(ct,attrs)
-        mLinearLayout = LinearLayout(context)
-        mLinearLayout.id = View.generateViewId()
+        mSearchBar.id = View.generateViewId()
         mImageView.id = View.generateViewId()
         mTextView.id = View.generateViewId()
-        addViews(mLinearLayout)
 
+        addView(mSearchBar)
+        mSearchBar.addView(mImageView)
+        mSearchBar.addView(mTextView)
+        val marginHorizontal = JJScreen.percentWidth(0.04f)
 
-        mLinearLayout.orientation = LinearLayout.VERTICAL
-
-        val sizeImg = JJScreen.percentHeight(0.075f)
-        val padImg = JJScreen.percentHeight(0.016f)
-        mImageView.setPaddingRelative(padImg,padImg,padImg,padImg)
-        val lpI =  LinearLayout.LayoutParams(sizeImg,sizeImg)
-        lpI.gravity = Gravity.CENTER_HORIZONTAL
-        mImageView.layoutParams = lpI
-        val lpT = LinearLayout.LayoutParams(ConstraintSet.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        lpT.topMargin = JJScreen.percentHeight(0.008f)
-        lpT.gravity = Gravity.CENTER_HORIZONTAL
-        mTextView.layoutParams = lpT
-        mLinearLayout.addView(mImageView)
-        mLinearLayout.addView(mTextView)
-
-        JJLayout.clSetView(mLinearLayout)
-            .clWidth(ConstraintSet.WRAP_CONTENT)
-            .clHeight(ConstraintSet.WRAP_CONTENT)
+        JJLayout.clSetView(mSearchBar)
             .clCenterInParent()
+            .clPercentWidth(0.8f)
+            .clHeight(JJScreen.percentHeight(0.065f))
+            .clMinWidth(JJScreen.percentWidth(0.8f))
+
+            .clSetView(mImageView)
+            .clHeight(JJScreen.percentHeight(0.04f))
+            .clWidth(JJScreen.percentHeight(0.04f))
+            .clCenterInParentVertically()
+            .clStartToStarParent(JJScreen.percentHeight(0.033f))
+
+            .clSetView(mTextView)
+            .clWidth(0)
+            .clHeight(0)
+            .clStartToEndOf(mImageView.id,marginHorizontal)
+            .clEndToEndParent(marginHorizontal)
+            .clFillParentVertically()
+
             .clDisposeView()
 
-        val attrsArray = intArrayOf(
-            R.attr.colorSurface
-        )
-        val ba = context.obtainStyledAttributes(attrs,
-            attrsArray, 0, 0)
-        val surface = ba.getColor(0,Color.parseColor("#F62F42"))
-//        val onSurface = ba.getColor(1,Color.parseColor("#FFFFFF"))
-        ba.recycle()
+        if(mImageView.drawable == null) mImageView.setImageResource(R.drawable.ic_search)
 
-        val bg = JJColorDrawablePlus().setFillColor(surface)
-            .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
-        val pre = JJColorDrawablePlus()
-            .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
-        pre.alpha = (0.7f * 255f).toInt()
+        val t = context.obtainStyledAttributes(attrs,R.styleable.JJSearchBarViewStatic,0,0)
+        val surface = t.getColor(R.styleable.JJSearchBarViewStatic_colorSurface,Color.parseColor("#F6F8F7"))
+        val onSurface = t.getColor(R.styleable.JJSearchBarViewStatic_colorOnSurface,Color.parseColor("#A9B0B6"))
+        t.recycle()
 
-        val sd = StateListDrawable()
-        sd.addState(intArrayOf(android.R.attr.state_pressed),pre)
-        sd.addState(intArrayOf(-android.R.attr.state_pressed),null)
-//        val onSurPre =  (color and 0x00ffffff) or (opacity << 24)
-        mImageView.background = bg
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            mImageView.foreground = sd
-        }
+        val radius = JJScreen.percentHeight(0.065f).toFloat() / 2f
+        mSearchBar.background = JJRippleDrawablePlus.roundRect(surface,radius)
+        mImageView.background = null
+        setColorOnSurface(onSurface)
         mTextView.background = null
 
     }
 
 
-    fun setText(s:String): JJImageCategoryCircle {
-        mTextView.text = s
+    fun setOnSearchClickListener(listener: (view: View) -> Unit): JJSearchBarViewStatic{
+        mSearchBar.setOnClickListener(listener)
         return this
     }
 
-    fun setText(resId:Int): JJImageCategoryCircle {
+    fun setText(resId: Int): JJSearchBarViewStatic{
         mTextView.setText(resId)
         return this
     }
 
-    fun setOnImageClickListener(listener: (view: View) -> Unit): JJImageCategoryCircle{
-        mImageView.setOnClickListener(listener)
-        return this
-    }
-    fun setImageResource(resId:Int): JJImageCategoryCircle{
-        mImageView.setImageResource(resId)
+    fun setText(s: String): JJSearchBarViewStatic{
+        mTextView.text = s
         return this
     }
 
-    fun setTextSize(size:Float) : JJImageCategoryCircle{
+    fun setTextSize(size:Float) : JJSearchBarViewStatic{
         mTextView.textSize = size
         return this
     }
-    fun setTextColor(color:Int) : JJImageCategoryCircle{
+    fun setTextColor(color:Int) : JJSearchBarViewStatic{
         mTextView.setTextColor(color)
         return this
     }
-    fun setTypeFace(typeface: Typeface) : JJImageCategoryCircle{
+    fun setTypeFace(typeface: Typeface) : JJSearchBarViewStatic{
         mTextView.typeface = typeface
         return this
     }
-
-    fun setColorSurface(color: Int): JJImageCategoryCircle{
-        val dr = (mImageView.background as JJColorDrawablePlus).setFillColor(color)
-        dr.invalidateSelf()
+     fun setTextViewAlignment(alignment:Int) : JJSearchBarViewStatic{
+        mTextView.textAlignment = alignment
         return this
     }
-    fun setColorOnSurface(color: Int): JJImageCategoryCircle{
-        mImageView.imageTintList = ColorStateList.valueOf(color)
+    fun setTextGravity(gravity: Int): JJSearchBarViewStatic{
+        mTextView.gravity = gravity
+        return this
+    }
+    fun setColorSurface(color: Int): JJSearchBarViewStatic{
+       val dr = (mSearchBar.background as RippleDrawable).findDrawableByLayerId(0) as? GradientDrawable
+        dr?.color = ColorStateList.valueOf(color)
+        dr?.invalidateSelf()
+        return this
+    }
+    fun setColorOnSurface(color: Int): JJSearchBarViewStatic {
+        ImageViewCompat.setImageTintList(mImageView, ColorStateList.valueOf(color))
+        return this
+    }
+
+    fun setImageResource(resId:Int): JJSearchBarViewStatic{
+        mImageView.setImageResource(resId)
         return this
     }
 
     fun getImageView(): AppCompatImageView{
         return mImageView
     }
+    //endregion
 
     //region init
+
+    private lateinit var mSearchBar: ConstraintLayout
+    private lateinit var mImageView: AppCompatImageView
+    private lateinit var mTextView : AppCompatTextView
+
 
     constructor(context: Context) : super(context) {
         this.id = View.generateViewId()
@@ -229,7 +231,7 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     }
 
-    private fun setupSizeLp(a: TypedArray, index:Int){
+    private fun setupSizeLp(a:TypedArray,index:Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_lpHeightPercentScreenWidth -> {
                 mlpHeight = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpHeightPercentScreenWidth,0f))
@@ -244,10 +246,10 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpWidth = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpWidthPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_lpHeightResponsive -> {
-                mlpHeight =  responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpHeightResponsive)
+                mlpHeight =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpHeightResponsive)
             }
             R.styleable.jjlayoutplus_lpWidthResponsive -> {
-                mlpWidth =  responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpWidthResponsive)
+                mlpWidth =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpWidthResponsive)
             }
             R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenHeight -> {
                 mlpHeight = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpHeightResponsivePercentScreenHeight)
@@ -263,7 +265,7 @@ class JJImageCategoryCircle : ConstraintLayout {
             }
         }
     }
-    private fun setupMarginLp(a: TypedArray, index: Int){
+    private fun setupMarginLp(a:TypedArray,index: Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_lpMarginTopPerScHeight -> {
                 mlpMargins.top = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginTopPerScHeight,0f))
@@ -290,16 +292,16 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpMargins.bottom = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpMarginBottomPerScWidth,0f))
             }
             R.styleable.jjlayoutplus_lpMarginTopResponsive -> {
-                mlpMargins.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginTopResponsive)
+                mlpMargins.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginTopResponsive)
             }
             R.styleable.jjlayoutplus_lpMarginLeftResponsive ->{
-                mlpMargins.left =  responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginLeftResponsive)
+                mlpMargins.left =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginLeftResponsive)
             }
             R.styleable.jjlayoutplus_lpMarginRightResponsive -> {
-                mlpMargins.right =   responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginRightResponsive)
+                mlpMargins.right =   responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginRightResponsive)
             }
             R.styleable.jjlayoutplus_lpMarginBottomResponsive -> {
-                mlpMargins.bottom =  responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginBottomResponsive)
+                mlpMargins.bottom =  responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginBottomResponsive)
             }
             R.styleable.jjlayoutplus_lpMarginTopResPerScWidth -> {
                 mlpMargins.top  = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginTopResPerScWidth)
@@ -314,16 +316,16 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpMargins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginBottomResPerScWidth)
             }
             R.styleable.jjlayoutplus_lpMarginTopResPerScHeight ->{
-                mlpMargins.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginTopResPerScHeight)
+                mlpMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginTopResPerScHeight)
             }
             R.styleable.jjlayoutplus_lpMarginLeftResPerScHeight ->{
-                mlpMargins.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginLeftResPerScHeight)
+                mlpMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginLeftResPerScHeight)
             }
             R.styleable.jjlayoutplus_lpMarginRightResPerScHeight ->{
-                mlpMargins.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginRightResPerScHeight)
+                mlpMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginRightResPerScHeight)
             }
             R.styleable.jjlayoutplus_lpMarginBottomResPerScHeight ->{
-                mlpMargins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpMarginBottomResPerScHeight)
+                mlpMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpMarginBottomResPerScHeight)
             }
             R.styleable.jjlayoutplus_lpMarginPercentScHeight -> {
                 mlpMargins = JJMargin.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpMarginPercentScHeight,0f)))
@@ -349,11 +351,11 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_lpMarginVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginVerticalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginVerticalResponsive)
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_lpMarginVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginVerticalResPerScWidth )
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpMarginVerticalResPerScWidth )
                 mlpMargins.top = mar ; mlpMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_lpMarginVerticalResPerScHeight -> {
@@ -369,11 +371,11 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
             R.styleable.jjlayoutplus_lpMarginHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpMarginHorizontalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpMarginHorizontalResponsive)
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
             R.styleable.jjlayoutplus_lpMarginHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpMarginHorizontalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpMarginHorizontalResPerScWidth)
                 mlpMargins.left = mar ; mlpMargins.right = mar
             }
             R.styleable.jjlayoutplus_lpMarginHorizontalResPerScHeight -> {
@@ -383,7 +385,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         }
 
     }
-    private fun setupPaddingLp(a: TypedArray, index:Int){
+    private fun setupPaddingLp(a:TypedArray,index:Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_lpPaddingTopPerScHeight -> {
                 mlpPadding.top = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lpPaddingTopPerScHeight,0f))
@@ -410,41 +412,41 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpPadding.bottom = JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_lpPaddingBottomPerScWidth,0f))
             }
             R.styleable.jjlayoutplus_lpPaddingTopResponsive -> {
-                mlpPadding.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingTopResponsive)
+                mlpPadding.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingTopResponsive)
             }
             R.styleable.jjlayoutplus_lpPaddingLeftResponsive -> {
-                mlpPadding.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingLeftResponsive)
+                mlpPadding.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingLeftResponsive)
             }
             R.styleable.jjlayoutplus_lpPaddingRightResponsive -> {
-                mlpPadding.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingRightResponsive)
+                mlpPadding.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingRightResponsive)
             }
             R.styleable.jjlayoutplus_lpPaddingBottomResponsive -> {
-                mlpPadding.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingBottomResponsive)
+                mlpPadding.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingBottomResponsive)
             }
             R.styleable.jjlayoutplus_lpPaddingTopResPerScWidth -> {
-                mlpPadding.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingTopResPerScWidth )
+                mlpPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingTopResPerScWidth )
             }
             R.styleable.jjlayoutplus_lpPaddingLeftResPerScWidth -> {
-                mlpPadding.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingLeftResPerScWidth )
+                mlpPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingLeftResPerScWidth )
             }
             R.styleable.jjlayoutplus_lpPaddingRightResPerScWidth -> {
-                mlpPadding.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingRightResPerScWidth )
+                mlpPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingRightResPerScWidth )
             }
             R.styleable.jjlayoutplus_lpPaddingBottomResPerScWidth -> {
-                mlpPadding.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingBottomResPerScWidth )
+                mlpPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingBottomResPerScWidth )
             }
 
             R.styleable.jjlayoutplus_lpPaddingTopResPerScHeight -> {
-                mlpPadding.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingTopResPerScHeight )
+                mlpPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingTopResPerScHeight )
             }
             R.styleable.jjlayoutplus_lpPaddingLeftResPerScHeight -> {
-                mlpPadding.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingLeftResPerScHeight )
+                mlpPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingLeftResPerScHeight )
             }
             R.styleable.jjlayoutplus_lpPaddingRightResPerScHeight -> {
-                mlpPadding.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingRightResPerScHeight )
+                mlpPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingRightResPerScHeight )
             }
             R.styleable.jjlayoutplus_lpPaddingBottomResPerScHeight -> {
-                mlpPadding.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingBottomResPerScHeight )
+                mlpPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingBottomResPerScHeight )
             }
             R.styleable.jjlayoutplus_lpPaddingPercentScHeight -> {
                 mlpPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingPercentScHeight,0f)))
@@ -453,13 +455,13 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpPaddingPercentScWidth,0f)))
             }
             R.styleable.jjlayoutplus_lpPaddingResponsive -> {
-                mlpPadding = JJPadding.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingResponsive))
+                mlpPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingResponsive))
             }
             R.styleable.jjlayoutplus_lpPaddingResPerScHeight -> {
-                mlpPadding = JJPadding.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingResPerScHeight))
+                mlpPadding = JJPadding.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingResPerScHeight))
             }
             R.styleable.jjlayoutplus_lpPaddingResPerScWidth -> {
-                mlpPadding = JJPadding.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingResPerScWidth))
+                mlpPadding = JJPadding.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingResPerScWidth))
             }
             R.styleable.jjlayoutplus_lpPaddingVerticalPerScHeight -> {
                 val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingVerticalPerScHeight,0f))
@@ -470,15 +472,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lpPaddingVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingVerticalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingVerticalResponsive)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lpPaddingVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingVerticalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingVerticalResPerScWidth)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lpPaddingVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingVerticalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingVerticalResPerScHeight)
                 mlpPadding.top = mar ; mlpPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalPerScHeight -> {
@@ -490,15 +492,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScWidth ->{
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScWidth)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScHeight ->{
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lpPaddingHorizontalResPerScHeight)
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
 
@@ -506,7 +508,7 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     }
 
-    private fun setupSizeCl(a: TypedArray, index:Int){
+    private fun setupSizeCl(a:TypedArray,index:Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_clHeightPercent -> {
                 clPercentHeight( a.getFloat(R.styleable.jjlayoutplus_clHeightPercent,0f))
@@ -528,23 +530,23 @@ class JJImageCategoryCircle : ConstraintLayout {
                 clWidth(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_clWidthPercentScreenHeight,0f)))
             }
             R.styleable.jjlayoutplus_clHeightResponsive -> {
-                clHeight(responsiveSizeDimension(a, R.styleable.jjlayoutplus_clHeightResponsive))
+                clHeight(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clHeightResponsive))
             }
             R.styleable.jjlayoutplus_clWidthResponsive -> {
-                clWidth(responsiveSizeDimension(a, R.styleable.jjlayoutplus_clWidthResponsive))
+                clWidth(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clWidthResponsive))
             }
             R.styleable.jjlayoutplus_clHeightResponsivePercentScreenHeight ->{
-                clHeight(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clHeightResponsivePercentScreenHeight))
+                clHeight(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clHeightResponsivePercentScreenHeight))
             }
             R.styleable.jjlayoutplus_clWidthResponsivePercentScreenHeight ->{
-                clWidth(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clWidthResponsivePercentScreenHeight))
+                clWidth(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clWidthResponsivePercentScreenHeight))
             }
 
             R.styleable.jjlayoutplus_clHeightResponsivePercentScreenWidth ->{
-                clHeight(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clHeightResponsivePercentScreenWidth))
+                clHeight(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clHeightResponsivePercentScreenWidth))
             }
             R.styleable.jjlayoutplus_clWidthResponsivePercentScreenWidth ->{
-                clWidth(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clWidthResponsivePercentScreenWidth))
+                clWidth(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clWidthResponsivePercentScreenWidth))
             }
         }
 
@@ -552,7 +554,7 @@ class JJImageCategoryCircle : ConstraintLayout {
 
 
     }
-    private fun setupAnchorsCl(a: TypedArray, index:Int){
+    private fun setupAnchorsCl(a: TypedArray,index:Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_clFillParent -> {
                 if(a.getBoolean(R.styleable.jjlayoutplus_clFillParent,false)) clFillParent()
@@ -586,33 +588,27 @@ class JJImageCategoryCircle : ConstraintLayout {
             }
 
             R.styleable.jjlayoutplus_clCenterInTopVerticallyOf -> {
-                clCenterInTopVertically(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterInTopVerticallyOf,
+                clCenterInTopVertically(a.getResourceId(R.styleable.jjlayoutplus_clCenterInTopVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clCenterInBottomVerticallyOf -> {
-                clCenterInBottomVertically(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterInBottomVerticallyOf,
+                clCenterInBottomVertically(a.getResourceId(R.styleable.jjlayoutplus_clCenterInBottomVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clCenterInStartHorizontallyOf -> {
-                clCenterInStartHorizontally(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterInStartHorizontallyOf,
+                clCenterInStartHorizontally(a.getResourceId(R.styleable.jjlayoutplus_clCenterInStartHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clCenterInEndHorizontallyOf -> {
-                clCenterInEndHorizontally(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterInEndHorizontallyOf,
+                clCenterInEndHorizontally(a.getResourceId(R.styleable.jjlayoutplus_clCenterInEndHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clCenterVerticallyOf -> {
-                clCenterVerticallyOf(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterVerticallyOf,
+                clCenterVerticallyOf(a.getResourceId(R.styleable.jjlayoutplus_clCenterVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clCenterHorizontallyOf -> {
-                clCenterHorizontallyOf(a.getResourceId(
-                    R.styleable.jjlayoutplus_clCenterHorizontallyOf,
+                clCenterHorizontallyOf(a.getResourceId(R.styleable.jjlayoutplus_clCenterHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_clVerticalBias -> {
@@ -673,7 +669,7 @@ class JJImageCategoryCircle : ConstraintLayout {
 
         }
     }
-    private fun setupMarginCl(a: TypedArray, index:Int){
+    private fun setupMarginCl(a: TypedArray,index:Int){
         var margins = JJMargin()
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_clMarginEnd ->{
@@ -724,13 +720,13 @@ class JJImageCategoryCircle : ConstraintLayout {
                 margins = JJMargin.all(JJScreen.percentWidth( a.getFloat(R.styleable.jjlayoutplus_clMarginPerScWidth,0f)))
             }
             R.styleable.jjlayoutplus_clMarginResponsive -> {
-                margins = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginResponsive))
+                margins = JJMargin.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginResponsive))
             }
             R.styleable.jjlayoutplus_clMarginResPerScHeight -> {
-                margins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginResPerScHeight))
+                margins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginResPerScHeight))
             }
             R.styleable.jjlayoutplus_clMarginResPerScWidth -> {
-                margins = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginResPerScWidth))
+                margins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginResPerScWidth))
             }
             R.styleable.jjlayoutplus_clMarginEndResponsive -> {
                 margins.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginEndResponsive)
@@ -783,15 +779,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 margins.top = mar ; margins.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginVerticalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginVerticalResponsive)
                 margins.top = mar ; margins.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginVerticalResPerScHeight)
                 margins.top = mar ; margins.bottom = mar
             }
             R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginVerticalResPerScWidth)
                 margins.top = mar ; margins.bottom = mar
             }
 
@@ -808,15 +804,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 margins.left = mar ; margins.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_clMarginHorizontalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_clMarginHorizontalResponsive)
                 margins.left = mar ; margins.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_clMarginHorizontalResPerScHeight)
                 margins.left = mar ; margins.right = mar
             }
             R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_clMarginHorizontalResPerScWidth)
                 margins.left = mar ; margins.right = mar
             }
 
@@ -824,7 +820,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         clMargins(margins)
     }
 
-    private fun setupMarginLpl(a: TypedArray, index:Int) {
+    private fun setupMarginLpl(a: TypedArray,index:Int) {
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_lplMargin -> {
                 mlsMargins =
@@ -1121,13 +1117,13 @@ class JJImageCategoryCircle : ConstraintLayout {
 
         }
     }
-    private fun setupPaddingLpl(a: TypedArray, index: Int){
+    private fun setupPaddingLpl(a: TypedArray,index: Int){
         when(a.getIndex(index)){
             R.styleable.jjlayoutplus_lplPadding -> {
                 mlsPadding = JJPadding.all( a.getDimension(R.styleable.jjlayoutplus_lplPadding,0f).toInt())
             }
             R.styleable.jjlayoutplus_lplPaddingVertical -> {
-                val mar = a.getDimension(R.styleable.jjlayoutplus_lplPaddingVertical,0f).toInt()
+               val mar = a.getDimension(R.styleable.jjlayoutplus_lplPaddingVertical,0f).toInt()
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lplPaddingHorizontal -> {
@@ -1174,42 +1170,42 @@ class JJImageCategoryCircle : ConstraintLayout {
             }
 
             R.styleable.jjlayoutplus_lplPaddingTopResponsive -> {
-                mlsPadding.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingTopResponsive)
+                mlsPadding.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingTopResponsive)
             }
             R.styleable.jjlayoutplus_lplPaddingLeftResponsive -> {
-                mlsPadding.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingLeftResponsive)
+                mlsPadding.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingLeftResponsive)
             }
             R.styleable.jjlayoutplus_lplPaddingRightResponsive -> {
-                mlsPadding.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingRightResponsive)
+                mlsPadding.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingRightResponsive)
             }
             R.styleable.jjlayoutplus_lplPaddingBottomResponsive -> {
-                mlsPadding.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingBottomResponsive)
+                mlsPadding.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingBottomResponsive)
             }
 
             R.styleable.jjlayoutplus_lplPaddingTopResPerScWidth -> {
-                mlsPadding.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingTopResPerScWidth)
+                mlsPadding.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingTopResPerScWidth)
             }
             R.styleable.jjlayoutplus_lplPaddingLeftResPerScWidth -> {
-                mlsPadding.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingLeftResPerScWidth)
+                mlsPadding.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingLeftResPerScWidth)
             }
             R.styleable.jjlayoutplus_lplPaddingRightResPerScWidth -> {
-                mlsPadding.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingRightResPerScWidth)
+                mlsPadding.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingRightResPerScWidth)
             }
             R.styleable.jjlayoutplus_lplPaddingBottomResPerScWidth -> {
-                mlsPadding.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingBottomResPerScWidth)
+                mlsPadding.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingBottomResPerScWidth)
             }
 
             R.styleable.jjlayoutplus_lplPaddingTopResPerScHeight -> {
-                mlsPadding.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingTopResPerScHeight)
+                mlsPadding.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingTopResPerScHeight)
             }
             R.styleable.jjlayoutplus_lplPaddingLeftResPerScHeight -> {
-                mlsPadding.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingLeftResPerScHeight)
+                mlsPadding.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingLeftResPerScHeight)
             }
             R.styleable.jjlayoutplus_lplPaddingRightResPerScHeight -> {
-                mlsPadding.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingRightResPerScHeight)
+                mlsPadding.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingRightResPerScHeight)
             }
             R.styleable.jjlayoutplus_lplPaddingBottomResPerScHeight -> {
-                mlsPadding.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingBottomResPerScHeight)
+                mlsPadding.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingBottomResPerScHeight)
             }
             R.styleable.jjlayoutplus_lplPaddingPercentScHeight->{
                 mlsPadding = JJPadding.all(JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lplPaddingPercentScHeight,0f)))
@@ -1218,7 +1214,7 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlsPadding = JJPadding.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lplPaddingPercentScWidth,0f)))
             }
             R.styleable.jjlayoutplus_lplPaddingResponsive->{
-                mlsPadding = JJPadding.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingResponsive))
+                mlsPadding = JJPadding.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingResponsive))
             }
             R.styleable.jjlayoutplus_lplPaddingResPerScHeight->{
                 mlsPadding = JJPadding.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingResPerScHeight))
@@ -1236,15 +1232,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lplPaddingVerticalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingVerticalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingVerticalResponsive)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lplPaddingVerticalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingVerticalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingVerticalResPerScWidth)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
             R.styleable.jjlayoutplus_lplPaddingVerticalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingVerticalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingVerticalResPerScHeight)
                 mlsPadding.top = mar ; mlsPadding.bottom = mar
             }
 
@@ -1257,20 +1253,20 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
             R.styleable.jjlayoutplus_lplPaddingHorizontalResponsive -> {
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplPaddingHorizontalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResponsive)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
             R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScWidth -> {
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScWidth)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
             R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScHeight -> {
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplPaddingHorizontalResPerScHeight)
                 mlsPadding.left = mar ; mlsPadding.right = mar
             }
         }
     }
-    private fun setupSizeLpl(a: TypedArray, index:Int){
+    private fun setupSizeLpl(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_layout_height_landscape -> {
                 mlsHeight = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_height_landscape,0)
@@ -1292,28 +1288,28 @@ class JJImageCategoryCircle : ConstraintLayout {
                 mlsWidth = JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_lplWidthPercentScreenHeight,0f))
             }
             R.styleable.jjlayoutplus_lplHeightResponsive -> {
-                mlsHeight = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplHeightResponsive)
+                mlsHeight = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplHeightResponsive)
             }
             R.styleable.jjlayoutplus_lplWidthResponsive -> {
-                mlsWidth = responsiveSizeDimension(a, R.styleable.jjlayoutplus_lplWidthResponsive)
+                mlsWidth = responsiveSizeDimension(a,R.styleable.jjlayoutplus_lplWidthResponsive)
             }
             R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenHeight -> {
-                mlsHeight = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenHeight)
+                mlsHeight = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenHeight)
             }
             R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenHeight -> {
-                mlsWidth = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenHeight)
+                mlsWidth = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenHeight)
             }
             R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenWidth -> {
-                mlsHeight = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenWidth)
+                mlsHeight = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplHeightResponsivePercentScreenWidth)
             }
             R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenWidth -> {
-                mlsWidth = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenWidth)
+                mlsWidth = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_lplWidthResponsivePercentScreenWidth)
             }
 
         }
     }
 
-    private fun setupMarginCll(a: TypedArray, index:Int){
+    private fun setupMarginCll(a: TypedArray,index:Int){
         var lsMargins = JJMargin()
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_cllMarginEnd -> {
@@ -1365,51 +1361,51 @@ class JJImageCategoryCircle : ConstraintLayout {
                 lsMargins = JJMargin.all(JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_cllMarginPerScWidth,0f)))
             }
             R.styleable.jjlayoutplus_cllMarginResponsive -> {
-                lsMargins = JJMargin.all(responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginResponsive))
+                lsMargins = JJMargin.all(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginResponsive))
             }
             R.styleable.jjlayoutplus_cllMarginResPerScHeight -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginResPerScHeight))
+                lsMargins = JJMargin.all(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginResPerScHeight))
             }
             R.styleable.jjlayoutplus_cllMarginResPerScWidth -> {
-                lsMargins = JJMargin.all(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginResPerScWidth))
+                lsMargins = JJMargin.all(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginResPerScWidth))
             }
             R.styleable.jjlayoutplus_cllMarginEndResponsive ->{
-                lsMargins.right = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginEndResponsive)
+                lsMargins.right = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginEndResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginStartResponsive ->{
-                lsMargins.left = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginStartResponsive)
+                lsMargins.left = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginStartResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginTopResponsive ->{
-                lsMargins.top = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginTopResponsive)
+                lsMargins.top = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginTopResponsive)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResponsive ->{
-                lsMargins.bottom = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginBottomResponsive)
+                lsMargins.bottom = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginBottomResponsive)
             }
 
             R.styleable.jjlayoutplus_cllMarginEndResPerScHeight ->{
-                lsMargins.right = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginEndResPerScHeight)
+                lsMargins.right = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginEndResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginStartResPerScHeight ->{
-                lsMargins.left = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginStartResPerScHeight)
+                lsMargins.left = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginStartResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginTopResPerScHeight ->{
-                lsMargins.top = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginTopResPerScHeight)
+                lsMargins.top = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginTopResPerScHeight)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight ->{
-                lsMargins.bottom = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight)
+                lsMargins.bottom = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginBottomResPerScHeight)
             }
 
             R.styleable.jjlayoutplus_cllMarginEndResPerScWidth ->{
-                lsMargins.right = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginEndResPerScWidth)
+                lsMargins.right = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginEndResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginStartResPerScWidth ->{
-                lsMargins.left = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginStartResPerScWidth)
+                lsMargins.left = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginStartResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginTopResPerScWidth ->{
-                lsMargins.top = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginTopResPerScWidth)
+                lsMargins.top = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginTopResPerScWidth)
             }
             R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth ->{
-                lsMargins.bottom = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth)
+                lsMargins.bottom = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginBottomResPerScWidth)
             }
 
             R.styleable.jjlayoutplus_cllMarginVertical->{
@@ -1417,7 +1413,7 @@ class JJImageCategoryCircle : ConstraintLayout {
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight->{
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight,0f))
+                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginVerticalPerScHeight,0f))
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalPerScWidth->{
@@ -1425,15 +1421,15 @@ class JJImageCategoryCircle : ConstraintLayout {
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResponsive->{
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginVerticalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginVerticalResponsive)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight->{
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginVerticalResPerScHeight)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth->{
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginVerticalResPerScWidth)
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
 
@@ -1442,7 +1438,7 @@ class JJImageCategoryCircle : ConstraintLayout {
                 lsMargins.top = mar ; lsMargins.bottom = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight->{
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight,0f))
+                val mar =JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_cllMarginHorizontalPerScHeight,0f))
                 lsMargins.left = mar ; lsMargins.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalPerScWidth->{
@@ -1450,21 +1446,21 @@ class JJImageCategoryCircle : ConstraintLayout {
                 lsMargins.left = mar ; lsMargins.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResponsive->{
-                val mar = responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllMarginHorizontalResponsive)
+                val mar = responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllMarginHorizontalResponsive)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight->{
-                val mar = responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight)
+                val mar = responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllMarginHorizontalResPerScHeight)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
             R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth->{
-                val mar = responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth)
+                val mar = responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllMarginHorizontalResPerScWidth)
                 lsMargins.left = mar ; lsMargins.right = mar
             }
         }
         cllMargins(lsMargins)
     }
-    private fun setupSizeCll(a: TypedArray, index:Int){
+    private fun setupSizeCll(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_layout_height_landscape->{
                 val value = a.getLayoutDimension(R.styleable.jjlayoutplus_layout_height_landscape,0)
@@ -1493,28 +1489,28 @@ class JJImageCategoryCircle : ConstraintLayout {
                 cllWidth(JJScreen.percentHeight( a.getFloat(R.styleable.jjlayoutplus_cllWidthPercentScreenHeight,0f)))
             }
             R.styleable.jjlayoutplus_cllHeightResponsive -> {
-                cllHeight(responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllHeightResponsive))
+                cllHeight(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllHeightResponsive))
             }
             R.styleable.jjlayoutplus_cllWidthResponsive -> {
-                cllWidth(responsiveSizeDimension(a, R.styleable.jjlayoutplus_cllWidthResponsive))
+                cllWidth(responsiveSizeDimension(a,R.styleable.jjlayoutplus_cllWidthResponsive))
             }
 
             R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenHeight -> {
-                cllHeight(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenHeight))
+                cllHeight(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenHeight))
             }
             R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenHeight -> {
-                cllWidth(responsiveSizePercentScreenHeight(a, R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenHeight))
+                cllWidth(responsiveSizePercentScreenHeight(a,R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenHeight))
             }
             R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenWidth -> {
-                cllHeight(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenWidth))
+                cllHeight(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllWidthResponsivePercentScreenWidth))
             }
             R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenWidth -> {
-                cllWidth(responsiveSizePercentScreenWidth(a, R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenWidth))
+                cllWidth(responsiveSizePercentScreenWidth(a,R.styleable.jjlayoutplus_cllHeightResponsivePercentScreenWidth))
             }
         }
 
     }
-    private fun setupAnchorsCll(a: TypedArray, index:Int){
+    private fun setupAnchorsCll(a: TypedArray,index:Int){
         when (a.getIndex(index)) {
             R.styleable.jjlayoutplus_cllFillParent ->{
                 if(a.getBoolean(R.styleable.jjlayoutplus_cllFillParent,false)) cllFillParent()
@@ -1547,33 +1543,27 @@ class JJImageCategoryCircle : ConstraintLayout {
                 if(a.getBoolean(R.styleable.jjlayoutplus_cllCenterInParentEndHorizontally,false)) cllCenterInParentEndHorizontally()
             }
             R.styleable.jjlayoutplus_cllCenterInTopVerticallyOf ->{
-                cllCenterInTopVertically(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterInTopVerticallyOf,
+                cllCenterInTopVertically(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInTopVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllCenterInBottomVerticallyOf ->{
-                cllCenterInBottomVertically(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterInBottomVerticallyOf,
+                cllCenterInBottomVertically(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInBottomVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllCenterInStartHorizontallyOf ->{
-                cllCenterInStartHorizontally(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterInStartHorizontallyOf,
+                cllCenterInStartHorizontally(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInStartHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllCenterInEndHorizontallyOf ->{
-                cllCenterInEndHorizontally(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterInEndHorizontallyOf,
+                cllCenterInEndHorizontally(a.getResourceId(R.styleable.jjlayoutplus_cllCenterInEndHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllCenterVerticallyOf ->{
-                cllCenterVerticallyOf(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterVerticallyOf,
+                cllCenterVerticallyOf(a.getResourceId(R.styleable.jjlayoutplus_cllCenterVerticallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllCenterHorizontallyOf ->{
-                cllCenterHorizontallyOf(a.getResourceId(
-                    R.styleable.jjlayoutplus_cllCenterHorizontallyOf,
+                cllCenterHorizontallyOf(a.getResourceId(R.styleable.jjlayoutplus_cllCenterHorizontallyOf,
                     View.NO_ID))
             }
             R.styleable.jjlayoutplus_cllVerticalBias -> {
@@ -1643,8 +1633,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
     }
-
-    private fun responsiveSizeDimension(a: TypedArray, style:Int) : Int {
+    private fun responsiveSizeDimension(a: TypedArray,style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,
             View.NO_ID))
         val re = JJScreen.responsiveSize(t.getDimension(0, 0f).toInt(),
@@ -1654,7 +1643,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         t.recycle()
         return re
     }
-    private fun responsiveSizePercentScreenWidth(a: TypedArray, style:Int) : Int {
+    private fun responsiveSizePercentScreenWidth(a: TypedArray,style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,
             View.NO_ID))
         val re = JJScreen.responsiveSizePercentScreenWidth(t.getFloat(0, 0f),
@@ -1664,7 +1653,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         t.recycle()
         return re
     }
-    private fun responsiveSizePercentScreenHeight(a: TypedArray, style:Int) : Int {
+    private fun responsiveSizePercentScreenHeight(a: TypedArray,style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,
             View.NO_ID))
         val re = JJScreen.responsiveSizePercentScreenHeight(t.getFloat(0, 0f),
@@ -1707,7 +1696,7 @@ class JJImageCategoryCircle : ConstraintLayout {
             else -> {
                 layoutParams.height = mlpHeight
                 layoutParams.width = mlpWidth
-                val margin = layoutParams as? ViewGroup.MarginLayoutParams
+                val margin = layoutParams as? MarginLayoutParams
                 margin?.topMargin = mlpMargins.top
                 margin?.marginStart =  mlpMargins.left
                 margin?.marginEnd =  mlpMargins.right
@@ -1741,14 +1730,13 @@ class JJImageCategoryCircle : ConstraintLayout {
             else -> {
                 layoutParams.height = mlsHeight
                 layoutParams.width = mlsWidth
-                val margin = layoutParams as? ViewGroup.MarginLayoutParams
+                val margin = layoutParams as? MarginLayoutParams
                 margin?.topMargin = mlsMargins.top
                 margin?.marginStart = mlsMargins.left
                 margin?.marginEnd = mlsMargins.right
                 margin?.bottomMargin = mlsMargins.bottom
             }
         }
-
         setPaddingRelative(mlsPadding.left,mlsPadding.top,mlsPadding.right,mlsPadding.bottom)
     }
     override fun onConfigurationChanged(newConfig: Configuration?) {
@@ -1766,17 +1754,17 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     //region method set get
 
-    fun setSupportLandScape(support:Boolean) : JJImageCategoryCircle {
+    fun setSupportLandScape(support:Boolean) : JJSearchBarViewStatic {
         mSupportLandScape = support
         return this
     }
 
-    fun setSupportConfigurationChanged(support:Boolean) : JJImageCategoryCircle {
+    fun setSupportConfigurationChanged(support:Boolean) : JJSearchBarViewStatic {
         mConfigurationChanged = support
         return this
     }
 
-    fun addViews(vararg views: View): JJImageCategoryCircle {
+    fun addViews(vararg views: View): JJSearchBarViewStatic {
         for (v in views) {
             addView(v)
         }
@@ -1786,7 +1774,7 @@ class JJImageCategoryCircle : ConstraintLayout {
 
 
     private var mIdentifier = 0
-    fun setIdentifier(value: Int): JJImageCategoryCircle {
+    fun setIdentifier(value: Int): JJSearchBarViewStatic {
         mIdentifier = value
         return this
     }
@@ -1796,7 +1784,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
     private var mState = 0
-    fun setState(state: Int): JJImageCategoryCircle {
+    fun setState(state: Int): JJSearchBarViewStatic {
         mState = state
         return this
     }
@@ -1806,7 +1794,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
     private var mAttribute = ""
-    fun setAttribute(string:String): JJImageCategoryCircle {
+    fun setAttribute(string:String): JJSearchBarViewStatic {
         mAttribute = string
         return this
     }
@@ -1815,101 +1803,101 @@ class JJImageCategoryCircle : ConstraintLayout {
         return mAttribute
     }
 
-    fun setPadding(padding: JJPadding): JJImageCategoryCircle {
+    fun setPadding(padding: JJPadding): JJSearchBarViewStatic {
         mlpPadding = padding
         setPaddingRelative(padding.left,padding.top,padding.right,padding.bottom)
         return this
     }
 
-    fun setOnClickListenerR(listener: (view: View) -> Unit): JJImageCategoryCircle {
+    fun setOnClickListenerR(listener: (view: View) -> Unit): JJSearchBarViewStatic {
         setOnClickListener(listener)
         return this
     }
 
-    fun setOnFocusChangeListenerR(listener: View.OnFocusChangeListener): JJImageCategoryCircle {
+    fun setOnFocusChangeListenerR(listener: OnFocusChangeListener): JJSearchBarViewStatic {
         onFocusChangeListener = listener
         return this
     }
 
 
-    fun setIsFocusable(boolean: Boolean): JJImageCategoryCircle {
+    fun setIsFocusable(boolean: Boolean): JJSearchBarViewStatic {
         isFocusable = boolean
         return this
     }
 
-    fun setOnTouchListenerR(listener: View.OnTouchListener): JJImageCategoryCircle {
+    fun setOnTouchListenerR(listener: OnTouchListener): JJSearchBarViewStatic {
         setOnTouchListener(listener)
         return this
     }
 
-    fun setFitsSystemWindowsR(boolean: Boolean): JJImageCategoryCircle {
+    fun setFitsSystemWindowsR(boolean: Boolean): JJSearchBarViewStatic {
         fitsSystemWindows = boolean
         return this
     }
 
-    fun setBackgroundColorR(color: Int): JJImageCategoryCircle {
+    fun setBackgroundColorR(color: Int): JJSearchBarViewStatic {
         setBackgroundColor(color)
         return this
     }
 
-    fun setBackgroundR(drawable: Drawable?): JJImageCategoryCircle {
+    fun setBackgroundR(drawable: Drawable?): JJSearchBarViewStatic {
         background = drawable
         return this
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun setOutlineProviderR(provider: ViewOutlineProvider): JJImageCategoryCircle {
+    fun setOutlineProviderR(provider: ViewOutlineProvider): JJSearchBarViewStatic {
         outlineProvider = provider
         return this
     }
 
-    fun setFullScreen(): JJImageCategoryCircle {
+    fun setFullScreen(): JJSearchBarViewStatic {
         systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         return this
     }
 
-    fun setIsFocusableInTouchMode(boolean: Boolean): JJImageCategoryCircle {
+    fun setIsFocusableInTouchMode(boolean: Boolean): JJSearchBarViewStatic {
         isFocusableInTouchMode = boolean
         return this
     }
 
 
 
-    fun setVisibilityR(type: Int): JJImageCategoryCircle {
+    fun setVisibilityR(type: Int): JJSearchBarViewStatic {
         visibility = type
         return this
     }
 
-    fun setMinHeightR(h:Int): JJImageCategoryCircle {
+    fun setMinHeightR(h:Int): JJSearchBarViewStatic {
         minHeight = h
         return this
     }
 
-    fun setMinWidthR(w:Int): JJImageCategoryCircle {
+    fun setMinWidthR(w:Int): JJSearchBarViewStatic {
         minWidth = w
         return this
     }
 
-    fun setMinimumHeightR(h:Int): JJImageCategoryCircle {
+    fun setMinimumHeightR(h:Int): JJSearchBarViewStatic {
         minimumHeight = h
         return this
     }
 
-    fun setMinimumWidthR(w:Int): JJImageCategoryCircle {
+    fun setMinimumWidthR(w:Int): JJSearchBarViewStatic {
         minimumWidth = w
         return this
     }
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun setClipToOutlineR(boolean: Boolean) : JJImageCategoryCircle {
+    fun setClipToOutlineR(boolean: Boolean) : JJSearchBarViewStatic {
         clipToOutline = boolean
         return this
     }
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    fun setClipBoundsR(bounds: Rect) : JJImageCategoryCircle {
+    fun setClipBoundsR(bounds: Rect) : JJSearchBarViewStatic {
         clipBounds = bounds
         return this
     }
@@ -1923,7 +1911,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun setClipChildrenToPath(path: Path): JJImageCategoryCircle {
+    fun setClipChildrenToPath(path: Path): JJSearchBarViewStatic {
         mPathClipChildren = path
         mIsPathClosureClipChildren = false
         mIsClipInPathChildren = true
@@ -1932,7 +1920,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun setClipAllToPath(path: Path): JJImageCategoryCircle {
+    fun setClipAllToPath(path: Path): JJSearchBarViewStatic {
         mPathClipAll = path
         mIsPathClosureClipAll = false
         mIsClipInPathAll = true
@@ -1942,7 +1930,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun setClipOutChildrenToPath(path: Path): JJImageCategoryCircle {
+    fun setClipOutChildrenToPath(path: Path): JJSearchBarViewStatic {
         mPathClipChildren = path
         mIsPathClosureClipChildren = false
         mIsClipOutPathChildren = true
@@ -1952,7 +1940,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun setClipOutAllToPath(path: Path): JJImageCategoryCircle {
+    fun setClipOutAllToPath(path: Path): JJSearchBarViewStatic {
         mPathClipAll = path
         mIsPathClosureClipAll = false
         mIsClipOutPathAll = true
@@ -1961,7 +1949,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun setClipChildrenToPath(closure:(RectF, Path)->Unit): JJImageCategoryCircle {
+    fun setClipChildrenToPath(closure:(RectF, Path)->Unit): JJSearchBarViewStatic {
         mIsClipInPathChildren = true
         mIsPathClosureClipChildren = true
         mIsClipOutPathChildren = false
@@ -1970,7 +1958,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun setClipAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJImageCategoryCircle {
+    fun setClipAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJSearchBarViewStatic {
         mIsClipInPathAll = true
         mIsPathClosureClipAll = true
         mIsClipOutPathAll = false
@@ -1979,7 +1967,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun setClipOutChildrenToPath(closure:(RectF, Path)->Unit): JJImageCategoryCircle {
+    fun setClipOutChildrenToPath(closure:(RectF, Path)->Unit): JJSearchBarViewStatic {
         mIsClipInPathChildren = false
         mIsPathClosureClipChildren = true
         mIsClipOutPathChildren = true
@@ -1988,7 +1976,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun setClipOutAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJImageCategoryCircle {
+    fun setClipOutAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJSearchBarViewStatic {
         mIsClipInPathAll = false
         mIsPathClosureClipAll = true
         mIsClipOutPathAll = true
@@ -1997,7 +1985,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun disposeClipPathChildren(): JJImageCategoryCircle {
+    fun disposeClipPathChildren(): JJSearchBarViewStatic {
         mIsClipOutPathChildren = false
         mIsPathClosureClipChildren = false
         mIsClipChildrenEnabled = false
@@ -2005,7 +1993,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         mClosurePathClipChildren = null
         return  this
     }
-    fun disposeClipPathAll(): JJImageCategoryCircle {
+    fun disposeClipPathAll(): JJSearchBarViewStatic {
         mIsClipOutPathAll = false
         mIsPathClosureClipAll = false
         mIsClipAllEnabled = false
@@ -2106,22 +2094,22 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     //endregion
 
-    //region layout params
+    //region layout params 
 
-    fun lpWidth(w: Int) : JJImageCategoryCircle{
+    fun lpWidth(w: Int) : JJSearchBarViewStatic{
         mlpWidth = w
         return this
     }
-    fun lpHeight(h: Int) : JJImageCategoryCircle{
+    fun lpHeight(h: Int) : JJSearchBarViewStatic{
         mlpHeight = h
         return this
     }
-    fun lpPadding(pad: JJPadding) : JJImageCategoryCircle{
+    fun lpPadding(pad: JJPadding) : JJSearchBarViewStatic{
         mlpPadding = pad
         return this
     }
 
-    fun lpMargin(mar: JJMargin) : JJImageCategoryCircle{
+    fun lpMargin(mar: JJMargin) : JJSearchBarViewStatic{
         mlpMargins = mar
         return this
     }
@@ -2130,25 +2118,25 @@ class JJImageCategoryCircle : ConstraintLayout {
 
     //region layout params landscape
 
-    fun lplWidth(w: Int) : JJImageCategoryCircle{
+    fun lplWidth(w: Int) : JJSearchBarViewStatic{
         mlsWidth = w
         return this
     }
-    fun lplHeight(h: Int) : JJImageCategoryCircle{
+    fun lplHeight(h: Int) : JJSearchBarViewStatic{
         mlsHeight = h
         return this
     }
-    fun lplPadding(pad: JJPadding) : JJImageCategoryCircle{
+    fun lplPadding(pad: JJPadding) : JJSearchBarViewStatic{
         mlsPadding = pad
         return this
     }
 
-    fun lplMargin(mar: JJMargin) : JJImageCategoryCircle{
+    fun lplMargin(mar: JJMargin) : JJSearchBarViewStatic{
         mlsMargins = mar
         return this
     }
 
-    //endregion
+    //endregion 
 
     //region CoordinatorLayout params
 
@@ -2157,7 +2145,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         layoutParams = a
     }
 
-    fun colGravity(gravity: Int): JJImageCategoryCircle {
+    fun colGravity(gravity: Int): JJSearchBarViewStatic {
         setupCol()
         (layoutParams as?  CoordinatorLayout.LayoutParams)?.gravity = gravity
         return this
@@ -2176,13 +2164,13 @@ class JJImageCategoryCircle : ConstraintLayout {
         layoutParams = a
     }
 
-    fun ablScrollFlags(flags: Int) : JJImageCategoryCircle {
+    fun ablScrollFlags(flags: Int) : JJSearchBarViewStatic {
         setupAblp()
         (layoutParams as? AppBarLayout.LayoutParams)?.scrollFlags = flags
         return this
     }
 
-    fun ablScrollInterpolator(interpolator: Interpolator) : JJImageCategoryCircle {
+    fun ablScrollInterpolator(interpolator: Interpolator) : JJSearchBarViewStatic {
         setupAblp()
         (layoutParams as? AppBarLayout.LayoutParams)?.scrollInterpolator = interpolator
         return this
@@ -2197,143 +2185,143 @@ class JJImageCategoryCircle : ConstraintLayout {
         layoutParams = a
     }
 
-    fun rlAbove(viewId: Int): JJImageCategoryCircle {
+    fun rlAbove(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ABOVE,viewId)
         return this
     }
 
-    fun rlBelow(viewId: Int): JJImageCategoryCircle {
+    fun rlBelow(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.BELOW,viewId)
         return this
     }
 
-    fun rlAlignParentBottom(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentBottom(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,data)
         return this
     }
 
-    fun rlAlignParentTop(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentTop(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_TOP,data)
         return this
     }
 
-    fun rlAlignParentStart(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentStart(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_START,data)
         return this
     }
 
-    fun rlAlignParentEnd(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentEnd(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_END,data)
         return this
     }
 
-    fun rlAlignParentLeft(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentLeft(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_LEFT,data)
         return this
     }
 
-    fun rlAlignParentRight(value : Boolean = true): JJImageCategoryCircle {
+    fun rlAlignParentRight(value : Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,data)
         return this
     }
 
-    fun rlAlignEnd(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignEnd(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_END,viewId)
         return this
     }
 
-    fun rlAlignStart(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignStart(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_START,viewId)
         return this
     }
 
-    fun rlAlignTop(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignTop(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_TOP,viewId)
         return this
     }
 
-    fun rlAlignBottom(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignBottom(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BOTTOM,viewId)
         return this
     }
 
 
-    fun rlAlignLeft(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignLeft(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_LEFT,viewId)
         return this
     }
 
-    fun rlAlignRight(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignRight(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_RIGHT,viewId)
         return this
     }
 
-    fun rlRightToLeft(viewId: Int): JJImageCategoryCircle {
+    fun rlRightToLeft(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.LEFT_OF,viewId)
         return this
     }
 
-    fun rlLeftToRight(viewId: Int): JJImageCategoryCircle {
+    fun rlLeftToRight(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.RIGHT_OF,viewId)
         return this
     }
 
-    fun rlStartToEnd(viewId: Int): JJImageCategoryCircle {
+    fun rlStartToEnd(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.END_OF,viewId)
         return this
     }
 
-    fun rlEndToStart(viewId: Int): JJImageCategoryCircle {
+    fun rlEndToStart(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.START_OF,viewId)
         return this
     }
 
-    fun rlCenterInParent(value:Boolean = true): JJImageCategoryCircle {
+    fun rlCenterInParent(value:Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_IN_PARENT,data)
         return this
     }
 
-    fun rlCenterInParentVertically(value:Boolean = true): JJImageCategoryCircle {
+    fun rlCenterInParentVertically(value:Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_VERTICAL,data)
         return this
     }
 
-    fun rlCenterInParentHorizontally(value:Boolean = true): JJImageCategoryCircle {
+    fun rlCenterInParentHorizontally(value:Boolean = true): JJSearchBarViewStatic {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_HORIZONTAL,data)
         return this
     }
 
-    fun rlAlignBaseline(viewId: Int): JJImageCategoryCircle {
+    fun rlAlignBaseline(viewId: Int): JJSearchBarViewStatic {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BASELINE,viewId)
         return this
@@ -2347,53 +2335,53 @@ class JJImageCategoryCircle : ConstraintLayout {
         val a = layoutParams as? LinearLayout.LayoutParams
         layoutParams = a
     }
-    fun llWeight(w: Float): JJImageCategoryCircle {
+    fun llWeight(w: Float): JJSearchBarViewStatic {
         setupLlp()
         (layoutParams as? LinearLayout.LayoutParams)?.weight = w
         return this
     }
-    fun llGravity(gravity: Int): JJImageCategoryCircle {
+    fun llGravity(gravity: Int): JJSearchBarViewStatic {
         setupLlp()
         (layoutParams as? LinearLayout.LayoutParams)?.gravity = gravity
         return this
     }
 
     //endregion
-
+    
 
     //region MotionLayout Params
 
     private var mMotionConstraintSet: ConstraintSet? = null
 
 
-    fun mlVisibilityMode(visibility: Int): JJImageCategoryCircle {
+    fun mlVisibilityMode(visibility: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun mlVerticalBias(float: Float): JJImageCategoryCircle {
+    fun mlVerticalBias(float: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setVerticalBias(id,float)
         return this
     }
-    fun mlHorizontalBias(float: Float): JJImageCategoryCircle {
+    fun mlHorizontalBias(float: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setHorizontalBias(id,float)
         return this
     }
 
-    fun mlCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJImageCategoryCircle {
+    fun mlCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mMotionConstraintSet?.setHorizontalBias(viewId,0.5f)
         return this
     }
-    fun mlCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJImageCategoryCircle {
+    fun mlCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mMotionConstraintSet?.setVerticalBias(viewId,0.5f)
         return this
     }
 
-    fun mlMargins(margins: JJMargin) : JJImageCategoryCircle {
+    fun mlMargins(margins: JJMargin) : JJSearchBarViewStatic {
         mMotionConstraintSet?.setMargin(id, ConstraintSet.TOP,margins.top)
         mMotionConstraintSet?.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mMotionConstraintSet?.setMargin(id, ConstraintSet.END,margins.right)
@@ -2402,211 +2390,211 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun mlFloatCustomAttribute(attrName: String, value: Float): JJImageCategoryCircle {
+    fun mlFloatCustomAttribute(attrName: String, value: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun mlIntCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun mlIntCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.setIntValue(id,attrName,value)
         return this
     }
 
-    fun mlColorCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun mlColorCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.setColorValue(id,attrName,value)
         return this
     }
 
-    fun mlStringCustomAttribute(attrName: String, value: String): JJImageCategoryCircle {
+    fun mlStringCustomAttribute(attrName: String, value: String): JJSearchBarViewStatic {
         mMotionConstraintSet?.setStringValue(id,attrName,value)
         return this
     }
 
-    fun mlRotation(float: Float): JJImageCategoryCircle {
+    fun mlRotation(float: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setRotation(id,float)
         return this
     }
 
-    fun mlRotationX(float: Float): JJImageCategoryCircle {
+    fun mlRotationX(float: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setRotationX(id,float)
         return this
     }
 
-    fun mlRotationY(float: Float): JJImageCategoryCircle {
+    fun mlRotationY(float: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setRotationY(id,float)
         return this
     }
 
-    fun mlTranslation(x: Float,y: Float): JJImageCategoryCircle {
+    fun mlTranslation(x: Float,y: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTranslation(id,x,y)
         return this
     }
-    fun mlTranslationX(x: Float): JJImageCategoryCircle {
+    fun mlTranslationX(x: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTranslationX(id,x)
         return this
     }
 
-    fun mlTranslationY(y: Float): JJImageCategoryCircle {
+    fun mlTranslationY(y: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTranslationY(id,y)
         return this
     }
 
-    fun mlTranslationZ(z: Float): JJImageCategoryCircle {
+    fun mlTranslationZ(z: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTranslationZ(id,z)
         return this
     }
 
-    fun mlTransformPivot(x: Float, y: Float): JJImageCategoryCircle {
+    fun mlTransformPivot(x: Float, y: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTransformPivot(id,x,y)
         return this
     }
 
-    fun mlTransformPivotX(x: Float): JJImageCategoryCircle {
+    fun mlTransformPivotX(x: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTransformPivotX(id,x)
         return this
     }
 
-    fun mlTransformPivotY(y: Float): JJImageCategoryCircle {
+    fun mlTransformPivotY(y: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setTransformPivotY(id,y)
         return this
     }
 
-    fun mlScaleX(x: Float): JJImageCategoryCircle {
+    fun mlScaleX(x: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setScaleX(id,x)
         return this
     }
 
-    fun mlScaleY(y: Float): JJImageCategoryCircle {
+    fun mlScaleY(y: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setScaleY(id,y)
         return this
     }
 
-    fun mlDimensionRatio(ratio: String): JJImageCategoryCircle {
+    fun mlDimensionRatio(ratio: String): JJSearchBarViewStatic {
         mMotionConstraintSet?.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun mlAlpha(alpha: Float): JJImageCategoryCircle {
+    fun mlAlpha(alpha: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setAlpha(id,alpha)
         return this
     }
 
 
 
-    fun mlTopToTop(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlTopToTop(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun mlTopToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlTopToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun mlTopToBottomOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlTopToBottomOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun mlTopToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlTopToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun mlBottomToTopOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlBottomToTopOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
 
         return this
     }
 
-    fun mlBottomToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlBottomToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
 
         return this
     }
 
-    fun mlBottomToBottomOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlBottomToBottomOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
 
         return this
     }
 
-    fun mlBottomToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlBottomToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
 
         return this
     }
 
-    fun mlStartToStartOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlStartToStartOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
 
         return this
     }
 
-    fun mlStartToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlStartToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
 
         return this
     }
 
-    fun mlStartToEndOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlStartToEndOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlStartToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlStartToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlEndToEndOf(viewId: Int, margin: Int= 0): JJImageCategoryCircle {
+    fun mlEndToEndOf(viewId: Int, margin: Int= 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlEndToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlEndToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
 
         return this
     }
 
 
-    fun mlEndToStartOf(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun mlEndToStartOf(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun mlEndToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun mlEndToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun mlWidth(width: Int): JJImageCategoryCircle {
+    fun mlWidth(width: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainWidth(id, width)
         return this
     }
 
-    fun mlHeight(height: Int): JJImageCategoryCircle {
+    fun mlHeight(height: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainHeight(id, height)
         return this
     }
 
-    fun mlPercentWidth(width: Float): JJImageCategoryCircle {
+    fun mlPercentWidth(width: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainPercentWidth(id, width)
         return this
     }
 
-    fun mlPercentHeight(height: Float): JJImageCategoryCircle {
+    fun mlPercentHeight(height: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainPercentHeight(id, height)
         return this
     }
 
-    fun mlCenterInParent(): JJImageCategoryCircle {
+    fun mlCenterInParent(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -2617,7 +2605,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJImageCategoryCircle {
+    fun mlCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -2627,7 +2615,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParentVertically(): JJImageCategoryCircle {
+    fun mlCenterInParentVertically(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2635,21 +2623,21 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParentHorizontally(): JJImageCategoryCircle {
+    fun mlCenterInParentHorizontally(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun mlCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mMotionConstraintSet?.setVerticalBias(id, bias)
         return this
     }
 
-    fun mlCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJImageCategoryCircle {
+    fun mlCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mMotionConstraintSet?.setHorizontalBias(id, bias)
@@ -2657,7 +2645,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun mlCenterInParentTopVertically(): JJImageCategoryCircle {
+    fun mlCenterInParentTopVertically(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2665,28 +2653,28 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun mlCenterInParentBottomVertically(): JJImageCategoryCircle {
+    fun mlCenterInParentBottomVertically(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentStartHorizontally(): JJImageCategoryCircle {
+    fun mlCenterInParentStartHorizontally(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentEndHorizontally(): JJImageCategoryCircle {
+    fun mlCenterInParentEndHorizontally(): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInTopVerticallyOf(viewId: Int): JJImageCategoryCircle {
+    fun mlCenterInTopVerticallyOf(viewId: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2694,39 +2682,39 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun mlCenterInBottomVerticallyOf(viewId: Int): JJImageCategoryCircle {
+    fun mlCenterInBottomVerticallyOf(viewId: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInStartHorizontallyOf(viewId: Int): JJImageCategoryCircle {
+    fun mlCenterInStartHorizontallyOf(viewId: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, viewId, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, viewId, ConstraintSet.START, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInEndHorizontallyOf(viewId: Int): JJImageCategoryCircle {
+    fun mlCenterInEndHorizontallyOf(viewId: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, viewId, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, viewId, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun mlCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun mlCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun mlCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun mlFillParent(): JJImageCategoryCircle {
+    fun mlFillParent(): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -2736,7 +2724,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun mlFillParent(margin: JJMargin): JJImageCategoryCircle {
+    fun mlFillParent(margin: JJMargin): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -2746,55 +2734,55 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun mlFillParentHorizontally(): JJImageCategoryCircle {
+    fun mlFillParentHorizontally(): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun mlFillParentVertically(): JJImageCategoryCircle {
+    fun mlFillParentVertically(): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun mlFillParentHorizontally(startMargin: Int, endMargin: Int): JJImageCategoryCircle {
+    fun mlFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun mlFillParentVertically(topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun mlFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun mlVisibility(visibility: Int): JJImageCategoryCircle {
+    fun mlVisibility(visibility: Int): JJSearchBarViewStatic {
         mMotionConstraintSet?.setVisibility(id, visibility)
         return this
     }
 
-    fun mlElevation(elevation: Float): JJImageCategoryCircle {
+    fun mlElevation(elevation: Float): JJSearchBarViewStatic {
         mMotionConstraintSet?.setElevation(id, elevation)
         return this
     }
 
-    fun mlApply(): JJImageCategoryCircle {
+    fun mlApply(): JJSearchBarViewStatic {
         mMotionConstraintSet?.applyTo(parent as ConstraintLayout)
         return this
     }
 
-    fun mlSetConstraint(cs : ConstraintSet?): JJImageCategoryCircle {
+    fun mlSetConstraint(cs : ConstraintSet?): JJSearchBarViewStatic {
         mMotionConstraintSet = cs
         return this
     }
 
-    fun mlDisposeConstraint(): JJImageCategoryCircle {
+    fun mlDisposeConstraint(): JJSearchBarViewStatic {
         mMotionConstraintSet = null
         return this
     }
@@ -2805,129 +2793,129 @@ class JJImageCategoryCircle : ConstraintLayout {
     protected val mConstraintSet = ConstraintSet()
 
 
-    fun clFloatCustomAttribute(attrName: String, value: Float): JJImageCategoryCircle {
+    fun clFloatCustomAttribute(attrName: String, value: Float): JJSearchBarViewStatic {
         mConstraintSet.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun clIntCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun clIntCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mConstraintSet.setIntValue(id,attrName,value)
         return this
     }
 
-    fun clColorCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun clColorCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mConstraintSet.setColorValue(id,attrName,value)
         return this
     }
 
-    fun clStringCustomAttribute(attrName: String, value: String): JJImageCategoryCircle {
+    fun clStringCustomAttribute(attrName: String, value: String): JJSearchBarViewStatic {
         mConstraintSet.setStringValue(id,attrName,value)
         return this
     }
 
-    fun clRotation(float: Float): JJImageCategoryCircle {
+    fun clRotation(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotation(id,float)
         return this
     }
 
-    fun clRotationX(float: Float): JJImageCategoryCircle {
+    fun clRotationX(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotationX(id,float)
         return this
     }
 
-    fun clRotationY(float: Float): JJImageCategoryCircle {
+    fun clRotationY(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotationY(id,float)
         return this
     }
 
-    fun clTranslation(x: Float,y: Float): JJImageCategoryCircle {
+    fun clTranslation(x: Float,y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslation(id,x,y)
         return this
     }
-    fun clTranslationX(x: Float): JJImageCategoryCircle {
+    fun clTranslationX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationX(id,x)
         return this
     }
 
-    fun clTranslationY(y: Float): JJImageCategoryCircle {
+    fun clTranslationY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationY(id,y)
         return this
     }
 
-    fun clTranslationZ(z: Float): JJImageCategoryCircle {
+    fun clTranslationZ(z: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationZ(id,z)
         return this
     }
 
-    fun clTransformPivot(x: Float, y: Float): JJImageCategoryCircle {
+    fun clTransformPivot(x: Float, y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivot(id,x,y)
         return this
     }
 
-    fun clTransformPivotX(x: Float): JJImageCategoryCircle {
+    fun clTransformPivotX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivotX(id,x)
         return this
     }
 
-    fun clTransformPivotY(y: Float): JJImageCategoryCircle {
+    fun clTransformPivotY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivotY(id,y)
         return this
     }
 
-    fun clScaleX(x: Float): JJImageCategoryCircle {
+    fun clScaleX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setScaleX(id,x)
         return this
     }
 
-    fun clScaleY(y: Float): JJImageCategoryCircle {
+    fun clScaleY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setScaleY(id,y)
         return this
     }
 
-    fun clDimensionRatio(ratio: String): JJImageCategoryCircle {
+    fun clDimensionRatio(ratio: String): JJSearchBarViewStatic {
         mConstraintSet.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun clAlpha(alpha: Float): JJImageCategoryCircle {
+    fun clAlpha(alpha: Float): JJSearchBarViewStatic {
         mConstraintSet.setAlpha(id,alpha)
         return this
     }
 
 
-    fun clApply(): JJImageCategoryCircle {
+    fun clApply(): JJSearchBarViewStatic {
         mConstraintSet.applyTo(parent as ConstraintLayout)
         return this
     }
 
-    fun clVisibilityMode(visibility: Int): JJImageCategoryCircle {
+    fun clVisibilityMode(visibility: Int): JJSearchBarViewStatic {
         mConstraintSet.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun clVerticalBias(float: Float): JJImageCategoryCircle {
+    fun clVerticalBias(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setVerticalBias(id,float)
         return this
     }
-    fun clHorizontalBias(float: Float): JJImageCategoryCircle {
+    fun clHorizontalBias(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setHorizontalBias(id,float)
         return this
     }
 
-    fun clCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJImageCategoryCircle {
+    fun clCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mConstraintSet.setHorizontalBias(id,0.5f)
         return this
     }
-    fun clCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJImageCategoryCircle {
+    fun clCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mConstraintSet.setVerticalBias(id,0.5f)
         return this
     }
 
-    fun clMargins(margins: JJMargin) : JJImageCategoryCircle {
+    fun clMargins(margins: JJMargin) : JJSearchBarViewStatic {
         mConstraintSet.setMargin(id, ConstraintSet.TOP,margins.top)
         mConstraintSet.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mConstraintSet.setMargin(id, ConstraintSet.END,margins.right)
@@ -2936,110 +2924,110 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun clTopToTop(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clTopToTop(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clTopToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clTopToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun clTopToBottom(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clTopToBottom(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clTopToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clTopToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clBottomToTop(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clBottomToTop(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clBottomToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clBottomToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clBottomToBottom(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clBottomToBottom(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clBottomToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clBottomToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clStartToStart(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clStartToStart(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun clStartToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clStartToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
-    fun clStartToEnd(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clStartToEnd(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun clStartToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clStartToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
-    fun clEndToEnd(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clEndToEnd(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun clEndToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clEndToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
 
-    fun clEndToStart(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun clEndToStart(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun clEndToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun clEndToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSet.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun clWidth(width: Int): JJImageCategoryCircle {
+    fun clWidth(width: Int): JJSearchBarViewStatic {
         mConstraintSet.constrainWidth(id, width)
         return this
     }
 
-    fun clHeight(height: Int): JJImageCategoryCircle {
+    fun clHeight(height: Int): JJSearchBarViewStatic {
         mConstraintSet.constrainHeight(id, height)
         return this
     }
 
-    fun clPercentWidth(width: Float): JJImageCategoryCircle {
+    fun clPercentWidth(width: Float): JJSearchBarViewStatic {
         mConstraintSet.constrainPercentWidth(id, width)
         return this
     }
 
-    fun clPercentHeight(height: Float): JJImageCategoryCircle {
+    fun clPercentHeight(height: Float): JJSearchBarViewStatic {
         mConstraintSet.constrainPercentHeight(id, height)
         return this
     }
 
-    fun clCenterInParent(): JJImageCategoryCircle {
+    fun clCenterInParent(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3049,7 +3037,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun clCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJImageCategoryCircle {
+    fun clCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3059,28 +3047,28 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun clCenterInParentVertically(): JJImageCategoryCircle {
+    fun clCenterInParentVertically(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentHorizontally(): JJImageCategoryCircle {
+    fun clCenterInParentHorizontally(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun clCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mConstraintSet.setVerticalBias(id, bias)
         return this
     }
 
-    fun clCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJImageCategoryCircle {
+    fun clCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mConstraintSet.setHorizontalBias(id, bias)
@@ -3088,7 +3076,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun clCenterInParentTopVertically(): JJImageCategoryCircle {
+    fun clCenterInParentTopVertically(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
@@ -3096,28 +3084,28 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun clCenterInParentBottomVertically(): JJImageCategoryCircle {
+    fun clCenterInParentBottomVertically(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentStartHorizontally(): JJImageCategoryCircle {
+    fun clCenterInParentStartHorizontally(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentEndHorizontally(): JJImageCategoryCircle {
+    fun clCenterInParentEndHorizontally(): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInTopVertically(topId: Int): JJImageCategoryCircle {
+    fun clCenterInTopVertically(topId: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, topId, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, topId, ConstraintSet.TOP, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
@@ -3125,39 +3113,39 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun clCenterInBottomVertically(bottomId: Int): JJImageCategoryCircle {
+    fun clCenterInBottomVertically(bottomId: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.TOP, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInStartHorizontally(startId: Int): JJImageCategoryCircle {
+    fun clCenterInStartHorizontally(startId: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, startId, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, startId, ConstraintSet.START, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInEndHorizontally(endId: Int): JJImageCategoryCircle {
+    fun clCenterInEndHorizontally(endId: Int): JJSearchBarViewStatic {
         mConstraintSet.connect(id, ConstraintSet.START, endId, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.END, endId, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun clCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarViewStatic {
         mConstraintSet.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun clCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun clCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarViewStatic {
         mConstraintSet.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun clFillParent(): JJImageCategoryCircle {
+    fun clFillParent(): JJSearchBarViewStatic {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3167,7 +3155,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun clFillParent(margin: JJMargin): JJImageCategoryCircle {
+    fun clFillParent(margin: JJMargin): JJSearchBarViewStatic {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3177,42 +3165,42 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun clFillParentHorizontally(): JJImageCategoryCircle {
+    fun clFillParentHorizontally(): JJSearchBarViewStatic {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun clFillParentVertically(): JJImageCategoryCircle {
+    fun clFillParentVertically(): JJSearchBarViewStatic {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun clFillParentHorizontally(startMargin: Int, endMargin: Int): JJImageCategoryCircle {
+    fun clFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarViewStatic {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun clFillParentVertically(topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun clFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun clVisibility(visibility: Int): JJImageCategoryCircle {
+    fun clVisibility(visibility: Int): JJSearchBarViewStatic {
         mConstraintSet.setVisibility(id, visibility)
         return this
     }
 
 
 
-    fun clElevation(elevation: Float): JJImageCategoryCircle {
+    fun clElevation(elevation: Float): JJSearchBarViewStatic {
         mConstraintSet.setElevation(id, elevation)
 
         return this
@@ -3222,22 +3210,22 @@ class JJImageCategoryCircle : ConstraintLayout {
         return mConstraintSet
     }
 
-    fun clMinWidth(w:Int): JJImageCategoryCircle {
+    fun clMinWidth(w:Int): JJSearchBarViewStatic {
         mConstraintSet.constrainMinWidth(id,w)
         return this
     }
 
-    fun clMinHeight(h:Int): JJImageCategoryCircle {
+    fun clMinHeight(h:Int): JJSearchBarViewStatic {
         mConstraintSet.constrainMinHeight(id,h)
         return this
     }
 
-    fun clMaxWidth(w:Int): JJImageCategoryCircle {
+    fun clMaxWidth(w:Int): JJSearchBarViewStatic {
         mConstraintSet.constrainMaxWidth(id,w)
         return this
     }
 
-    fun clMaxHeight(h:Int): JJImageCategoryCircle {
+    fun clMaxHeight(h:Int): JJSearchBarViewStatic {
         mConstraintSet.constrainMaxHeight(id,h)
         return this
     }
@@ -3252,130 +3240,130 @@ class JJImageCategoryCircle : ConstraintLayout {
     //region ConstraintLayout LandScape Params
     protected val mConstraintSetLandScape = ConstraintSet()
 
-    fun cllApply(): JJImageCategoryCircle {
+    fun cllApply(): JJSearchBarViewStatic {
         mConstraintSetLandScape.applyTo(parent as ConstraintLayout)
         return this
     }
 
 
-    fun cllFloatCustomAttribute(attrName: String, value: Float): JJImageCategoryCircle {
+    fun cllFloatCustomAttribute(attrName: String, value: Float): JJSearchBarViewStatic {
         mConstraintSet.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun cllIntCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun cllIntCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mConstraintSet.setIntValue(id,attrName,value)
         return this
     }
 
-    fun cllColorCustomAttribute(attrName: String, value: Int): JJImageCategoryCircle {
+    fun cllColorCustomAttribute(attrName: String, value: Int): JJSearchBarViewStatic {
         mConstraintSet.setColorValue(id,attrName,value)
         return this
     }
 
-    fun cllStringCustomAttribute(attrName: String, value: String): JJImageCategoryCircle {
+    fun cllStringCustomAttribute(attrName: String, value: String): JJSearchBarViewStatic {
         mConstraintSet.setStringValue(id,attrName,value)
         return this
     }
 
-    fun cllRotation(float: Float): JJImageCategoryCircle {
+    fun cllRotation(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotation(id,float)
         return this
     }
 
-    fun cllRotationX(float: Float): JJImageCategoryCircle {
+    fun cllRotationX(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotationX(id,float)
         return this
     }
 
-    fun cllRotationY(float: Float): JJImageCategoryCircle {
+    fun cllRotationY(float: Float): JJSearchBarViewStatic {
         mConstraintSet.setRotationY(id,float)
         return this
     }
 
-    fun cllTranslation(x: Float,y: Float): JJImageCategoryCircle {
+    fun cllTranslation(x: Float,y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslation(id,x,y)
         return this
     }
-    fun cllTranslationX(x: Float): JJImageCategoryCircle {
+    fun cllTranslationX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationX(id,x)
         return this
     }
 
-    fun cllTranslationY(y: Float): JJImageCategoryCircle {
+    fun cllTranslationY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationY(id,y)
         return this
     }
 
-    fun cllTranslationZ(z: Float): JJImageCategoryCircle {
+    fun cllTranslationZ(z: Float): JJSearchBarViewStatic {
         mConstraintSet.setTranslationZ(id,z)
         return this
     }
 
-    fun cllTransformPivot(x: Float, y: Float): JJImageCategoryCircle {
+    fun cllTransformPivot(x: Float, y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivot(id,x,y)
         return this
     }
 
-    fun cllTransformPivotX(x: Float): JJImageCategoryCircle {
+    fun cllTransformPivotX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivotX(id,x)
         return this
     }
 
-    fun cllTransformPivotY(y: Float): JJImageCategoryCircle {
+    fun cllTransformPivotY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setTransformPivotY(id,y)
         return this
     }
 
-    fun cllScaleX(x: Float): JJImageCategoryCircle {
+    fun cllScaleX(x: Float): JJSearchBarViewStatic {
         mConstraintSet.setScaleX(id,x)
         return this
     }
 
-    fun cllScaleY(y: Float): JJImageCategoryCircle {
+    fun cllScaleY(y: Float): JJSearchBarViewStatic {
         mConstraintSet.setScaleY(id,y)
         return this
     }
 
-    fun cllDimensionRatio(ratio: String): JJImageCategoryCircle {
+    fun cllDimensionRatio(ratio: String): JJSearchBarViewStatic {
         mConstraintSet.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun cllAlpha(alpha: Float): JJImageCategoryCircle {
+    fun cllAlpha(alpha: Float): JJSearchBarViewStatic {
         mConstraintSet.setAlpha(id,alpha)
         return this
     }
 
 
-    fun cllVisibilityMode(visibility: Int): JJImageCategoryCircle {
+    fun cllVisibilityMode(visibility: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun cllVerticalBias(float: Float): JJImageCategoryCircle {
+    fun cllVerticalBias(float: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.setVerticalBias(id,float)
         return this
     }
-    fun cllHorizontalBias(float: Float): JJImageCategoryCircle {
+    fun cllHorizontalBias(float: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.setHorizontalBias(id,float)
         return this
     }
 
-    fun cllCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJImageCategoryCircle {
+    fun cllCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mConstraintSetLandScape.setHorizontalBias(id,0.5f)
         return this
     }
-    fun cllCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJImageCategoryCircle {
+    fun cllCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mConstraintSetLandScape.setVerticalBias(id,0.5f)
         return this
     }
 
-    fun cllMargins(margins: JJMargin) : JJImageCategoryCircle {
+    fun cllMargins(margins: JJMargin) : JJSearchBarViewStatic {
         mConstraintSetLandScape.setMargin(id, ConstraintSet.TOP,margins.top)
         mConstraintSetLandScape.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mConstraintSetLandScape.setMargin(id, ConstraintSet.END,margins.right)
@@ -3384,110 +3372,110 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun cllTopToTop(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllTopToTop(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllTopToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllTopToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun cllTopToBottom(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllTopToBottom(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllTopToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllTopToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllBottomToTop(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllBottomToTop(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllBottomToTopParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllBottomToTopParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllBottomToBottom(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllBottomToBottom(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllBottomToBottomParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllBottomToBottomParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllStartToStart(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllStartToStart(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllStartToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllStartToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllStartToEnd(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllStartToEnd(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllStartToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllStartToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllEndToEnd(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllEndToEnd(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllEndToEndParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllEndToEndParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
 
-    fun cllEndToStart(viewId: Int, margin: Int = 0): JJImageCategoryCircle {
+    fun cllEndToStart(viewId: Int, margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllEndToStartParent(margin: Int = 0): JJImageCategoryCircle {
+    fun cllEndToStartParent(margin: Int = 0): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun cllWidth(width: Int): JJImageCategoryCircle {
+    fun cllWidth(width: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainWidth(id, width)
         return this
     }
 
-    fun cllHeight(height: Int): JJImageCategoryCircle {
+    fun cllHeight(height: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainHeight(id, height)
         return this
     }
 
-    fun cllPercentWidth(width: Float): JJImageCategoryCircle {
+    fun cllPercentWidth(width: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainPercentWidth(id, width)
         return this
     }
 
-    fun cllPercentHeight(height: Float): JJImageCategoryCircle {
+    fun cllPercentHeight(height: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainPercentHeight(id, height)
         return this
     }
 
-    fun cllCenterInParent(): JJImageCategoryCircle {
+    fun cllCenterInParent(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3497,7 +3485,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun cllCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJImageCategoryCircle {
+    fun cllCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3507,28 +3495,28 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun cllCenterInParentVertically(): JJImageCategoryCircle {
+    fun cllCenterInParentVertically(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentHorizontally(): JJImageCategoryCircle {
+    fun cllCenterInParentHorizontally(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun cllCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mConstraintSetLandScape.setVerticalBias(id, bias)
         return this
     }
 
-    fun cllCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJImageCategoryCircle {
+    fun cllCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mConstraintSetLandScape.setHorizontalBias(id, bias)
@@ -3536,7 +3524,7 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun cllCenterInParentTopVertically(): JJImageCategoryCircle {
+    fun cllCenterInParentTopVertically(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
@@ -3544,28 +3532,28 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun cllCenterInParentBottomVertically(): JJImageCategoryCircle {
+    fun cllCenterInParentBottomVertically(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentStartHorizontally(): JJImageCategoryCircle {
+    fun cllCenterInParentStartHorizontally(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentEndHorizontally(): JJImageCategoryCircle {
+    fun cllCenterInParentEndHorizontally(): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInTopVertically(topId: Int): JJImageCategoryCircle {
+    fun cllCenterInTopVertically(topId: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, topId, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, topId, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
@@ -3573,39 +3561,39 @@ class JJImageCategoryCircle : ConstraintLayout {
     }
 
 
-    fun cllCenterInBottomVertically(bottomId: Int): JJImageCategoryCircle {
+    fun cllCenterInBottomVertically(bottomId: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInStartHorizontally(startId: Int): JJImageCategoryCircle {
+    fun cllCenterInStartHorizontally(startId: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, startId, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, startId, ConstraintSet.START, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInEndHorizontally(endId: Int): JJImageCategoryCircle {
+    fun cllCenterInEndHorizontally(endId: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, endId, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, endId, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun cllCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun cllCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJImageCategoryCircle {
+    fun cllCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun cllFillParent(): JJImageCategoryCircle {
+    fun cllFillParent(): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3615,7 +3603,7 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun cllFillParent(margin: JJMargin): JJImageCategoryCircle {
+    fun cllFillParent(margin: JJMargin): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3625,42 +3613,42 @@ class JJImageCategoryCircle : ConstraintLayout {
         return this
     }
 
-    fun cllFillParentHorizontally(): JJImageCategoryCircle {
+    fun cllFillParentHorizontally(): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun cllFillParentVertically(): JJImageCategoryCircle {
+    fun cllFillParentVertically(): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun cllFillParentHorizontally(startMargin: Int, endMargin: Int): JJImageCategoryCircle {
+    fun cllFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun cllFillParentVertically(topMargin: Int, bottomMargin: Int): JJImageCategoryCircle {
+    fun cllFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun cllVisibility(visibility: Int): JJImageCategoryCircle {
+    fun cllVisibility(visibility: Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.setVisibility(id, visibility)
         return this
     }
 
 
 
-    fun cllElevation(elevation: Float): JJImageCategoryCircle {
+    fun cllElevation(elevation: Float): JJSearchBarViewStatic {
         mConstraintSetLandScape.setElevation(id, elevation)
 
         return this
@@ -3670,22 +3658,22 @@ class JJImageCategoryCircle : ConstraintLayout {
         return mConstraintSetLandScape
     }
 
-    fun cllMinWidth(w:Int): JJImageCategoryCircle {
+    fun cllMinWidth(w:Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainMinWidth(id,w)
         return this
     }
 
-    fun cllMinHeight(h:Int): JJImageCategoryCircle {
+    fun cllMinHeight(h:Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainMinHeight(id,h)
         return this
     }
 
-    fun cllMaxWidth(w:Int): JJImageCategoryCircle {
+    fun cllMaxWidth(w:Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainMaxWidth(id,w)
         return this
     }
 
-    fun cllMaxHeight(h:Int): JJImageCategoryCircle {
+    fun cllMaxHeight(h:Int): JJSearchBarViewStatic {
         mConstraintSetLandScape.constrainMaxHeight(id,h)
         return this
     }
