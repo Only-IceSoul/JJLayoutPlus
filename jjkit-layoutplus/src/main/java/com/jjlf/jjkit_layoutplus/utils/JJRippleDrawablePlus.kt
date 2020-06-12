@@ -11,7 +11,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class JJRippleDrawablePlus(color: ColorStateList,
+internal class JJRippleDrawablePlus(color: ColorStateList,
                            content: Drawable? = null, mask: Drawable? = null
 ) : RippleDrawable(color, content, mask) {
 

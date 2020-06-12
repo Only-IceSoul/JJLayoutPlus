@@ -488,7 +488,7 @@ open class JJSearchBarViewStatic : ConstraintLayout {
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalPerScWidth -> {
-                val mar = JJScreen.percentHeight(a.getFloat(R.styleable.jjlayoutplus_lpPaddingHorizontalPerScWidth,0f))
+                val mar = JJScreen.percentWidth(a.getFloat(R.styleable.jjlayoutplus_lpPaddingHorizontalPerScWidth,0f))
                 mlpPadding.left = mar ; mlpPadding.right = mar
             }
             R.styleable.jjlayoutplus_lpPaddingHorizontalResponsive -> {
