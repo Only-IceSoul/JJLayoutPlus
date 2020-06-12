@@ -8,6 +8,7 @@ import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.text.Editable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -214,6 +215,14 @@ class JJSearchBarView : ConstraintLayout {
 
     fun getImageView(): AppCompatImageView{
         return mImageView
+    }
+
+    fun getText(): Editable? {
+        return mEditText.text
+    }
+
+    fun getEditText(): AppCompatEditText {
+        return mEditText
     }
 
     //endregion
