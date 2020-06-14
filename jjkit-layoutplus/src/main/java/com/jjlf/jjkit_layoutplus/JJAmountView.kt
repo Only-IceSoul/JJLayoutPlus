@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.view.animation.Interpolator
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
@@ -52,10 +53,10 @@ class JJAmountView : ConstraintLayout {
         for (i in 0 until t.indexCount){
             when(t.getIndex(i)){
                 R.styleable.JJAmountView_min ->{
-                    mMin = t.getInt(R.styleable.JJAmountView_min,1)
+                    setMin(t.getInt(R.styleable.JJAmountView_min,1))
                 }
                 R.styleable.JJAmountView_max ->{
-                    mMax = t.getInt(R.styleable.JJAmountView_max,1)
+                    setMax(t.getInt(R.styleable.JJAmountView_max,1))
                 }
                 R.styleable.JJAmountView_controlWidth ->{
                     width = t.getDimensionPixelSize(R.styleable.JJAmountView_controlWidth,width)
@@ -135,6 +136,7 @@ class JJAmountView : ConstraintLayout {
         mDecreaseView.setOnClickListener{
             mCount -= 1
             mTextView.text = mCount.toString()
+
             if(mCount <= mMin){
                 it.isEnabled = false
                 it.alpha = 0.3f
@@ -143,11 +145,13 @@ class JJAmountView : ConstraintLayout {
                 mIncreaseView.isEnabled = true
                 mIncreaseView.alpha = 1f
             }
+            mOnChangedListener?.invoke(mCount)
         }
 
         mIncreaseView.setOnClickListener {
             mCount += 1
             mTextView.text =  mCount.toString()
+
             if(mCount > mMin){
                 mDecreaseView.isEnabled = true
                 mDecreaseView.alpha = 1f
@@ -156,6 +160,7 @@ class JJAmountView : ConstraintLayout {
                 it.isEnabled = false
                 it.alpha = 0.3f
             }
+            mOnChangedListener?.invoke(mCount)
         }
 
     }
@@ -187,17 +192,21 @@ class JJAmountView : ConstraintLayout {
     }
 
     fun setMin(min:Int): JJAmountView {
-        mMin = min
+        mMin = if(min < 0) 0 else min
         return this
     }
     fun setMax(max:Int): JJAmountView {
-        mMax = max
+        mMax = if(max < 0) 0 else max
         return this
     }
 
+    val amount : Int  get() = mCount
 
-    val text: CharSequence get() = mTextView.text
-
+    private var mOnChangedListener : ((Int)->Unit)? = null
+    fun setOnAmountChangedListener(listener:(Int)->Unit):JJAmountView{
+        mOnChangedListener = listener
+        return this
+    }
 
     //endregion
 
