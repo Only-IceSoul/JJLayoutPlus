@@ -8,20 +8,15 @@ import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.text.Editable
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewOutlineProvider
+import android.view.*
 import android.view.animation.Interpolator
-import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -35,195 +30,178 @@ import com.jjlf.jjkit_layoututils.JJPadding
 import com.jjlf.jjkit_layoututils.JJScreen
 
 @SuppressLint("ResourceType")
-class JJSearchBarView : ConstraintLayout {
+class JJAmountView : ConstraintLayout {
 
     //region custom
 
-    private lateinit var mSearchBar: ConstraintLayout
-    private lateinit var mImageView: AppCompatImageView
-    private lateinit var mEditText : AppCompatEditText
+    private lateinit var mLinearLayout: LinearLayout
+    private lateinit var mDecreaseView: AppCompatImageView
+    private lateinit var mIncreaseView : AppCompatImageView
+    private lateinit var mTextView : AppCompatTextView
 
-    //elevation 0 default
-    //attribute theme viene con el context el context theme wrapper sobreescribe este atributo si force
-    //theme no sirve textalignment y gravity
-    //context wrapper iniciador de default atributes , pero sobre escrito por attributeset
-    //contextWrapper  no afecta al theme general, cada theme de cada view es independiente
-    //style va junto con el attribute set pero es sobre escrito si hay attr solos definidos por usuario
-    //style sobre escribe los atributos default del theme tb de material design
+    private var mMin = 1
+    private var mMax = 5
+    private var mCount = 1
+
+
     private fun setupViews(context: Context, attrs: AttributeSet?){
-
-        val t = context.obtainStyledAttributes(attrs,R.styleable.JJSearchBarView,0,0)
-        val ce = ContextThemeWrapper(context,R.style.BlankTheme)
-        ce.theme.applyStyle(R.style.textSize16,false)
-        ce.theme.applyStyle(R.style.InputTypeText,false)
-
-        mEditText = AppCompatEditText(ce,attrs)
-        mSearchBar = ConstraintLayout(context)
-        mImageView = AppCompatImageView(context)
-        mSearchBar.id = View.generateViewId()
-        mImageView.id = View.generateViewId()
-        mEditText.id = View.generateViewId()
-
-
-        addView(mSearchBar)
-
-        mSearchBar.addView(mImageView)
-        mSearchBar.addView(mEditText)
-        val marginHorizontal = JJScreen.percentWidth(0.04f)
-
-        JJLayout.clSetView(mSearchBar)
-            .clCenterInParent()
-            .clWidth(0)
-            .clPercentWidth(0.9f)
-            .clHeight(JJScreen.percentHeight(0.07f))
-
-            .clSetView(mImageView)
-            .clHeight(JJScreen.percentHeight(0.04f))
-            .clWidth(JJScreen.percentHeight(0.04f))
-            .clCenterInParentVertically()
-            .clStartToStarParent(JJScreen.percentHeight(0.02f))
-
-            .clSetView(mEditText)
-            .clWidth(0)
-            .clHeight(0)
-            .clStartToEndOf(mImageView.id,marginHorizontal)
-            .clEndToEndParent(marginHorizontal)
-            .clFillParentVertically()
-
-            .clDisposeView()
-
-        if(mImageView.drawable == null) mImageView.setImageResource(R.drawable.ic_search)
-        mEditText.background = null
-        mEditText.imeOptions = EditorInfo.IME_ACTION_SEARCH
-
-
-//        val textAttr = JJTextAttributes()
-
-        for(i in 0 until t.indexCount){
+        var width = JJScreen.percentWidth(0.34f)
+        var surface = Color.WHITE
+        var onSurface = Color.BLACK
+        val t = context.obtainStyledAttributes(attrs, R.styleable.JJAmountView,0,0)
+        for (i in 0 until t.indexCount){
             when(t.getIndex(i)){
-//                R.styleable.JJSearchBarView_android_hint -> {
-//                    textAttr.setHint(t, R.styleable.JJSearchBarView_android_hint)
-//                }
-//                R.styleable.JJSearchBarView_hintTextColor ->  {
-//                    textAttr.setHintTextColor(t, R.styleable.JJSearchBarView_hintTextColor)
-//                }
-//                R.styleable.JJSearchBarView_android_textColor ->{
-//                    textAttr.setTextColor(t,R.styleable.JJSearchBarView_android_textColor)
-//                }
-//                R.styleable.JJSearchBarView_android_textSize -> {
-//                    textAttr.setTextSize(t,R.styleable.JJSearchBarView_android_textSize)
-//                }
-//                R.styleable.JJSearchBarView_android_textAlignment -> {
-//                    textAttr.setTextAlignment(t,R.styleable.JJSearchBarView_android_textAlignment)
-//                }
-//                R.styleable.JJSearchBarView_android_gravity -> {
-//                    textAttr.setGravity(t,R.styleable.JJSearchBarView_android_gravity)
-//                }
-//                R.styleable.JJSearchBarView_android_fontFamily -> {
-//                   textAttr.setFontFamily(context,t,R.styleable.JJSearchBarView_android_fontFamily)
-//                }
-//                R.styleable.JJSearchBarView_android_typeface -> {
-//                   textAttr.setTypeFace(t, R.styleable.JJSearchBarView_android_typeface)
-//                }
-//                R.styleable.JJSearchBarView_android_textStyle -> {
-//                    textAttr.setTextStyle(t,R.styleable.JJSearchBarView_android_textStyle)
-//                }
-                R.styleable.JJSearchBarView_colorSurface -> {
-                    val radiusBar = JJScreen.percentHeight(0.065f).toFloat() * 0.15f
-                    val surface = t.getColor(R.styleable.JJSearchBarView_colorSurface, Color.parseColor("#F6F8F7"))
-                    mSearchBar.background = JJColorDrawablePlus().setFillColor(surface).setRadius(radiusBar)
+                R.styleable.JJAmountView_min ->{
+                    mMin = t.getInt(R.styleable.JJAmountView_min,1)
                 }
-                R.styleable.JJSearchBarView_colorOnSurface -> {
-                    val onSurface = t.getColor(R.styleable.JJSearchBarView_colorOnSurface,Color.parseColor("#A9B0B6"))
-                     setColorOnSurface(onSurface)
+                R.styleable.JJAmountView_max ->{
+                    mMax = t.getInt(R.styleable.JJAmountView_max,1)
                 }
-                R.styleable.JJSearchBarView_srcCompat -> {
-                    val srcCompat = t.getResourceId(R.styleable.JJSearchBarView_srcCompat,View.NO_ID)
-                    if(srcCompat != View.NO_ID) mImageView.setImageResource(srcCompat)
+                R.styleable.JJAmountView_controlWidth ->{
+                    width = t.getDimensionPixelSize(R.styleable.JJAmountView_controlWidth,width)
+                }
+                R.styleable.JJAmountView_controlWidthPerScHeight ->{
+                    val v = JJScreen.percentHeight(t.getFloat(R.styleable.JJAmountView_controlWidthPerScHeight,-1f))
+                    if(v != -1) width = v
+                }
+                R.styleable.JJAmountView_controlWidthPerScWidth ->{
+                    val v = JJScreen.percentWidth(t.getFloat(R.styleable.JJAmountView_controlWidthPerScWidth,-1f))
+                    if(v != -1) width = v
+                }
+                R.styleable.JJAmountView_colorSurface -> {
+                    surface = t.getColor(R.styleable.JJAmountView_colorSurface,Color.WHITE)
+                }
+                R.styleable.JJAmountView_colorOnSurface -> {
+                    onSurface = t.getColor(R.styleable.JJAmountView_colorOnSurface,Color.BLACK)
                 }
             }
         }
-
         t.recycle()
-//        textAttr.apply(context,mEditText)
+
+        mLinearLayout = LinearLayout(context)
+        mLinearLayout.id = View.generateViewId()
+        mDecreaseView = AppCompatImageView(context)
+        mIncreaseView = AppCompatImageView(context)
+        val cw = ContextThemeWrapper(context,R.style.BlankTheme)
+        cw.theme.applyStyle(R.style.textSize16,false)
+        mTextView = AppCompatTextView(cw,attrs)
+        addViews(mLinearLayout)
 
 
-    }
+        val h = (width * 0.36f).toInt()
+        val sizeItems = (width / 4f).toInt()
+        val pad = sizeItems / 2
+        val padImg = (h * 0.3f).toInt()
 
 
-    fun setOnActionClickListener(listener: ()-> Unit) : JJSearchBarView {
-        mEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                listener()
-                return@setOnEditorActionListener true
+        JJLayout.clSetView(mLinearLayout)
+            .clCenterInParent()
+            .clWidth(ConstraintSet.WRAP_CONTENT)
+            .clHeight(h)
+
+        mLinearLayout.orientation = LinearLayout.HORIZONTAL
+        mLinearLayout.setPaddingRelative(pad,0,pad,0)
+
+        mDecreaseView.setPaddingRelative(0,padImg,0,padImg)
+        mIncreaseView.setPaddingRelative(0,padImg,0,padImg)
+        mDecreaseView.layoutParams = LinearLayout.LayoutParams(sizeItems,ViewGroup.LayoutParams.MATCH_PARENT)
+        mTextView.layoutParams = LinearLayout.LayoutParams(sizeItems,ViewGroup.LayoutParams.MATCH_PARENT)
+        mIncreaseView.layoutParams = LinearLayout.LayoutParams(sizeItems,ViewGroup.LayoutParams.MATCH_PARENT)
+        mLinearLayout.addView(mDecreaseView)
+        mLinearLayout.addView(mTextView)
+        mLinearLayout.addView(mIncreaseView)
+
+        mDecreaseView.setImageResource(R.drawable.ic_remove)
+        mIncreaseView.setImageResource(R.drawable.ic_add)
+
+        mDecreaseView.isEnabled = false
+        mDecreaseView.alpha = 0.3f
+
+        val strokeSize = (width * 0.01f)
+        mLinearLayout.background = JJColorDrawablePlus()
+            .setFillColor(surface)
+            .setStroke(strokeSize,onSurface)
+            .setShape(JJColorDrawablePlus.ROUND_CIRCLE)
+        mTextView.setTextColor(onSurface)
+        ImageViewCompat.setImageTintList(mDecreaseView, ColorStateList.valueOf(onSurface))
+        ImageViewCompat.setImageTintList(mIncreaseView, ColorStateList.valueOf(onSurface))
+
+        mTextView.textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+        mTextView.gravity = Gravity.CENTER
+        mTextView.text = mMin.toString()
+        mCount = mMin
+
+
+        mDecreaseView.setOnClickListener{
+            mCount -= 1
+            mTextView.text = mCount.toString()
+            if(mCount <= mMin){
+                it.isEnabled = false
+                it.alpha = 0.3f
             }
-            return@setOnEditorActionListener false
+            if(mCount < mMax) {
+                mIncreaseView.isEnabled = true
+                mIncreaseView.alpha = 1f
+            }
         }
+
+        mIncreaseView.setOnClickListener {
+            mCount += 1
+            mTextView.text =  mCount.toString()
+            if(mCount > mMin){
+                mDecreaseView.isEnabled = true
+                mDecreaseView.alpha = 1f
+            }
+            if(mCount >= mMax){
+                it.isEnabled = false
+                it.alpha = 0.3f
+            }
+        }
+
+    }
+
+    //region set get custom
+
+    fun setTextSize(size:Float): JJAmountView {
+        mTextView.textSize = size
         return this
     }
 
-    fun setHint(s:String): JJSearchBarView{
-        mEditText.hint = s
-        return this
-    }
-    fun setHint(resId:Int): JJSearchBarView{
-        mEditText.setHint(resId)
-        return this
-    }
-    fun setHintTextColor(color:Int): JJSearchBarView{
-        mEditText.setHintTextColor(color)
-        return this
-    }
-    fun setHintTextColor(colors:ColorStateList): JJSearchBarView{
-        mEditText.setHintTextColor(colors)
+    fun setTypeFace(typeface: Typeface) : JJAmountView {
+        mTextView.typeface = typeface
         return this
     }
 
-    fun setTextSize(size:Float) : JJSearchBarView {
-        mEditText.textSize = size
-        return this
-    }
-    fun setTextColor(color:Int) : JJSearchBarView {
-        mEditText.setTextColor(color)
-        return this
-    }
-    fun setTypeFace(typeface: Typeface) : JJSearchBarView {
-        mEditText.typeface = typeface
-        return this
-    }
-    fun setTextAlignmentR(alignment:Int) : JJSearchBarView {
-        mEditText.textAlignment = alignment
-        return this
-    }
-    fun setTextGravity(gravity: Int): JJSearchBarView {
-        mEditText.gravity = gravity
-        return this
-    }
-    fun setColorSurface(color: Int): JJSearchBarView {
-        val dr = (mSearchBar.background as JJColorDrawablePlus).setFillColor(color)
-        dr.invalidateSelf()
-        return this
-    }
-    fun setColorOnSurface(color: Int): JJSearchBarView {
-        ImageViewCompat.setImageTintList(mImageView, ColorStateList.valueOf(color))
-        return this
-    }
-    fun setImageResource(resId:Int): JJSearchBarView {
-        mImageView.setImageResource(resId)
+    fun setColorOnSurface(color:Int): JJAmountView{
+        mTextView.setTextColor(color)
+        ImageViewCompat.setImageTintList(mDecreaseView, ColorStateList.valueOf(color))
+        ImageViewCompat.setImageTintList(mIncreaseView, ColorStateList.valueOf(color))
+        (mLinearLayout.background as JJColorDrawablePlus).setStrokeColor(color).invalidateSelf()
         return this
     }
 
-    fun getImageView(): AppCompatImageView{
-        return mImageView
+    fun setColorSurface(color:Int):JJAmountView{
+        (mLinearLayout.background as JJColorDrawablePlus).setFillColor(color)
+            .invalidateSelf()
+        return this
     }
 
-    fun getText(): Editable? {
-        return mEditText.text
+    fun setMin(min:Int): JJAmountView {
+        mMin = min
+        return this
+    }
+    fun setMax(max:Int): JJAmountView {
+        mMax = max
+        return this
     }
 
-    fun getEditText(): AppCompatEditText {
-        return mEditText
-    }
+
+    val text: CharSequence get() = mTextView.text
+
+
+    //endregion
+
+
 
     //endregion
 
@@ -1713,7 +1691,7 @@ class JJSearchBarView : ConstraintLayout {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
-        mConstraintSet.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
+        mConstraintSet.setVisibilityMode(id, ConstraintSet.VISIBILITY_MODE_IGNORE)
         mConstraintSetLandScape.setVisibilityMode(id,ConstraintSet.VISIBILITY_MODE_IGNORE)
     }
     private fun responsiveSizeDimension(a: TypedArray, style:Int) : Int {
@@ -1726,7 +1704,6 @@ class JJSearchBarView : ConstraintLayout {
         t.recycle()
         return re
     }
-
     private fun responsiveSizePercentScreenWidth(a: TypedArray, style:Int) : Int {
         val t = resources.obtainTypedArray(a.getResourceId(style,
             View.NO_ID))
@@ -1780,7 +1757,7 @@ class JJSearchBarView : ConstraintLayout {
             else -> {
                 layoutParams.height = mlpHeight
                 layoutParams.width = mlpWidth
-                val margin = layoutParams as? ViewGroup.MarginLayoutParams
+                val margin = layoutParams as? MarginLayoutParams
                 margin?.topMargin = mlpMargins.top
                 margin?.marginStart =  mlpMargins.left
                 margin?.marginEnd =  mlpMargins.right
@@ -1838,17 +1815,17 @@ class JJSearchBarView : ConstraintLayout {
 
     //region method set get
 
-    fun setSupportLandScape(support:Boolean) : JJSearchBarView {
+    fun setSupportLandScape(support:Boolean) : JJAmountView {
         mSupportLandScape = support
         return this
     }
 
-    fun setSupportConfigurationChanged(support:Boolean) : JJSearchBarView {
+    fun setSupportConfigurationChanged(support:Boolean) : JJAmountView {
         mConfigurationChanged = support
         return this
     }
 
-    fun addViews(vararg views: View): JJSearchBarView {
+    fun addViews(vararg views: View): JJAmountView {
         for (v in views) {
             addView(v)
         }
@@ -1858,7 +1835,7 @@ class JJSearchBarView : ConstraintLayout {
 
 
     private var mIdentifier = 0
-    fun setIdentifier(value: Int): JJSearchBarView {
+    fun setIdentifier(value: Int): JJAmountView {
         mIdentifier = value
         return this
     }
@@ -1868,7 +1845,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
     private var mState = 0
-    fun setState(state: Int): JJSearchBarView {
+    fun setState(state: Int): JJAmountView {
         mState = state
         return this
     }
@@ -1878,7 +1855,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
     private var mAttribute = ""
-    fun setAttribute(string:String): JJSearchBarView {
+    fun setAttribute(string:String): JJAmountView {
         mAttribute = string
         return this
     }
@@ -1887,101 +1864,101 @@ class JJSearchBarView : ConstraintLayout {
         return mAttribute
     }
 
-    fun setPadding(padding: JJPadding): JJSearchBarView {
+    fun setPadding(padding: JJPadding): JJAmountView {
         mlpPadding = padding
         setPaddingRelative(padding.left,padding.top,padding.right,padding.bottom)
         return this
     }
 
-    fun setOnClickListenerR(listener: (view: View) -> Unit): JJSearchBarView {
+    fun setOnClickListenerR(listener: (view: View) -> Unit): JJAmountView {
         setOnClickListener(listener)
         return this
     }
 
-    fun setOnFocusChangeListenerR(listener: View.OnFocusChangeListener): JJSearchBarView {
+    fun setOnFocusChangeListenerR(listener: View.OnFocusChangeListener): JJAmountView {
         onFocusChangeListener = listener
         return this
     }
 
 
-    fun setIsFocusable(boolean: Boolean): JJSearchBarView {
+    fun setIsFocusable(boolean: Boolean): JJAmountView {
         isFocusable = boolean
         return this
     }
 
-    fun setOnTouchListenerR(listener: View.OnTouchListener): JJSearchBarView {
+    fun setOnTouchListenerR(listener: View.OnTouchListener): JJAmountView {
         setOnTouchListener(listener)
         return this
     }
 
-    fun setFitsSystemWindowsR(boolean: Boolean): JJSearchBarView {
+    fun setFitsSystemWindowsR(boolean: Boolean): JJAmountView {
         fitsSystemWindows = boolean
         return this
     }
 
-    fun setBackgroundColorR(color: Int): JJSearchBarView {
+    fun setBackgroundColorR(color: Int): JJAmountView {
         setBackgroundColor(color)
         return this
     }
 
-    fun setBackgroundR(drawable: Drawable?): JJSearchBarView {
+    fun setBackgroundR(drawable: Drawable?): JJAmountView {
         background = drawable
         return this
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun setOutlineProviderR(provider: ViewOutlineProvider): JJSearchBarView {
+    fun setOutlineProviderR(provider: ViewOutlineProvider): JJAmountView {
         outlineProvider = provider
         return this
     }
 
-    fun setFullScreen(): JJSearchBarView {
+    fun setFullScreen(): JJAmountView {
         systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         return this
     }
 
-    fun setIsFocusableInTouchMode(boolean: Boolean): JJSearchBarView {
+    fun setIsFocusableInTouchMode(boolean: Boolean): JJAmountView {
         isFocusableInTouchMode = boolean
         return this
     }
 
 
 
-    fun setVisibilityR(type: Int): JJSearchBarView {
+    fun setVisibilityR(type: Int): JJAmountView {
         visibility = type
         return this
     }
 
-    fun setMinHeightR(h:Int): JJSearchBarView {
+    fun setMinHeightR(h:Int): JJAmountView {
         minHeight = h
         return this
     }
 
-    fun setMinWidthR(w:Int): JJSearchBarView {
+    fun setMinWidthR(w:Int): JJAmountView {
         minWidth = w
         return this
     }
 
-    fun setMinimumHeightR(h:Int): JJSearchBarView {
+    fun setMinimumHeightR(h:Int): JJAmountView {
         minimumHeight = h
         return this
     }
 
-    fun setMinimumWidthR(w:Int): JJSearchBarView {
+    fun setMinimumWidthR(w:Int): JJAmountView {
         minimumWidth = w
         return this
     }
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun setClipToOutlineR(boolean: Boolean) : JJSearchBarView {
+    fun setClipToOutlineR(boolean: Boolean) : JJAmountView {
         clipToOutline = boolean
         return this
     }
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    fun setClipBoundsR(bounds: Rect) : JJSearchBarView {
+    fun setClipBoundsR(bounds: Rect) : JJAmountView {
         clipBounds = bounds
         return this
     }
@@ -1995,7 +1972,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun setClipChildrenToPath(path: Path): JJSearchBarView {
+    fun setClipChildrenToPath(path: Path): JJAmountView {
         mPathClipChildren = path
         mIsPathClosureClipChildren = false
         mIsClipInPathChildren = true
@@ -2004,7 +1981,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun setClipAllToPath(path: Path): JJSearchBarView {
+    fun setClipAllToPath(path: Path): JJAmountView {
         mPathClipAll = path
         mIsPathClosureClipAll = false
         mIsClipInPathAll = true
@@ -2014,7 +1991,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun setClipOutChildrenToPath(path: Path): JJSearchBarView {
+    fun setClipOutChildrenToPath(path: Path): JJAmountView {
         mPathClipChildren = path
         mIsPathClosureClipChildren = false
         mIsClipOutPathChildren = true
@@ -2024,7 +2001,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun setClipOutAllToPath(path: Path): JJSearchBarView {
+    fun setClipOutAllToPath(path: Path): JJAmountView {
         mPathClipAll = path
         mIsPathClosureClipAll = false
         mIsClipOutPathAll = true
@@ -2033,7 +2010,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun setClipChildrenToPath(closure:(RectF, Path)->Unit): JJSearchBarView {
+    fun setClipChildrenToPath(closure:(RectF, Path)->Unit): JJAmountView {
         mIsClipInPathChildren = true
         mIsPathClosureClipChildren = true
         mIsClipOutPathChildren = false
@@ -2042,7 +2019,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun setClipAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJSearchBarView {
+    fun setClipAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJAmountView {
         mIsClipInPathAll = true
         mIsPathClosureClipAll = true
         mIsClipOutPathAll = false
@@ -2051,7 +2028,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun setClipOutChildrenToPath(closure:(RectF, Path)->Unit): JJSearchBarView {
+    fun setClipOutChildrenToPath(closure:(RectF, Path)->Unit): JJAmountView {
         mIsClipInPathChildren = false
         mIsPathClosureClipChildren = true
         mIsClipOutPathChildren = true
@@ -2060,7 +2037,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun setClipOutAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJSearchBarView {
+    fun setClipOutAllToPath(closure:(RectF, Path, JJPadding)->Unit): JJAmountView {
         mIsClipInPathAll = false
         mIsPathClosureClipAll = true
         mIsClipOutPathAll = true
@@ -2069,7 +2046,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun disposeClipPathChildren(): JJSearchBarView {
+    fun disposeClipPathChildren(): JJAmountView {
         mIsClipOutPathChildren = false
         mIsPathClosureClipChildren = false
         mIsClipChildrenEnabled = false
@@ -2077,7 +2054,7 @@ class JJSearchBarView : ConstraintLayout {
         mClosurePathClipChildren = null
         return  this
     }
-    fun disposeClipPathAll(): JJSearchBarView {
+    fun disposeClipPathAll(): JJAmountView {
         mIsClipOutPathAll = false
         mIsPathClosureClipAll = false
         mIsClipAllEnabled = false
@@ -2180,25 +2157,25 @@ class JJSearchBarView : ConstraintLayout {
 
     //region layout params
 
-    fun lpWidth(w: Int) : JJSearchBarView {
+    fun lpWidth(w: Int) : JJAmountView {
         mlpWidth = w
         return this
     }
-    fun lpHeight(h: Int) : JJSearchBarView {
+    fun lpHeight(h: Int) : JJAmountView {
         mlpHeight = h
         return this
     }
-    fun lpPadding(pad: JJPadding) : JJSearchBarView {
+    fun lpPadding(pad: JJPadding) : JJAmountView {
         mlpPadding = pad
         return this
     }
 
-    fun lpMargin(mar: JJMargin) : JJSearchBarView {
+    fun lpMargin(mar: JJMargin) : JJAmountView {
         mlpMargins = mar
         return this
     }
 
-    fun lpApply() :  JJSearchBarView {
+    fun lpApply() :  JJAmountView {
         layoutParams.height = mlpHeight
         layoutParams.width = mlpWidth
         val margin = layoutParams as? MarginLayoutParams
@@ -2214,25 +2191,25 @@ class JJSearchBarView : ConstraintLayout {
 
     //region layout params landscape
 
-    fun lplWidth(w: Int) : JJSearchBarView {
+    fun lplWidth(w: Int) : JJAmountView {
         mlsWidth = w
         return this
     }
-    fun lplHeight(h: Int) : JJSearchBarView {
+    fun lplHeight(h: Int) : JJAmountView {
         mlsHeight = h
         return this
     }
-    fun lplPadding(pad: JJPadding) : JJSearchBarView {
+    fun lplPadding(pad: JJPadding) : JJAmountView {
         mlsPadding = pad
         return this
     }
 
-    fun lplMargin(mar: JJMargin) : JJSearchBarView {
+    fun lplMargin(mar: JJMargin) : JJAmountView {
         mlsMargins = mar
         return this
     }
 
-    fun lplApply():JJSearchBarView{
+    fun lplApply():JJAmountView{
         layoutParams.height = mlsHeight
         layoutParams.width = mlsWidth
         val margin = layoutParams as? MarginLayoutParams
@@ -2253,7 +2230,7 @@ class JJSearchBarView : ConstraintLayout {
         layoutParams = a
     }
 
-    fun colGravity(gravity: Int): JJSearchBarView {
+    fun colGravity(gravity: Int): JJAmountView {
         setupCol()
         (layoutParams as?  CoordinatorLayout.LayoutParams)?.gravity = gravity
         return this
@@ -2272,13 +2249,13 @@ class JJSearchBarView : ConstraintLayout {
         layoutParams = a
     }
 
-    fun ablScrollFlags(flags: Int) : JJSearchBarView {
+    fun ablScrollFlags(flags: Int) : JJAmountView {
         setupAblp()
         (layoutParams as? AppBarLayout.LayoutParams)?.scrollFlags = flags
         return this
     }
 
-    fun ablScrollInterpolator(interpolator: Interpolator) : JJSearchBarView {
+    fun ablScrollInterpolator(interpolator: Interpolator) : JJAmountView {
         setupAblp()
         (layoutParams as? AppBarLayout.LayoutParams)?.scrollInterpolator = interpolator
         return this
@@ -2293,143 +2270,143 @@ class JJSearchBarView : ConstraintLayout {
         layoutParams = a
     }
 
-    fun rlAbove(viewId: Int): JJSearchBarView {
+    fun rlAbove(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ABOVE,viewId)
         return this
     }
 
-    fun rlBelow(viewId: Int): JJSearchBarView {
+    fun rlBelow(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.BELOW,viewId)
         return this
     }
 
-    fun rlAlignParentBottom(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentBottom(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,data)
         return this
     }
 
-    fun rlAlignParentTop(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentTop(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_TOP,data)
         return this
     }
 
-    fun rlAlignParentStart(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentStart(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_START,data)
         return this
     }
 
-    fun rlAlignParentEnd(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentEnd(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_END,data)
         return this
     }
 
-    fun rlAlignParentLeft(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentLeft(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_LEFT,data)
         return this
     }
 
-    fun rlAlignParentRight(value : Boolean = true): JJSearchBarView {
+    fun rlAlignParentRight(value : Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,data)
         return this
     }
 
-    fun rlAlignEnd(viewId: Int): JJSearchBarView {
+    fun rlAlignEnd(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_END,viewId)
         return this
     }
 
-    fun rlAlignStart(viewId: Int): JJSearchBarView {
+    fun rlAlignStart(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_START,viewId)
         return this
     }
 
-    fun rlAlignTop(viewId: Int): JJSearchBarView {
+    fun rlAlignTop(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_TOP,viewId)
         return this
     }
 
-    fun rlAlignBottom(viewId: Int): JJSearchBarView {
+    fun rlAlignBottom(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BOTTOM,viewId)
         return this
     }
 
 
-    fun rlAlignLeft(viewId: Int): JJSearchBarView {
+    fun rlAlignLeft(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_LEFT,viewId)
         return this
     }
 
-    fun rlAlignRight(viewId: Int): JJSearchBarView {
+    fun rlAlignRight(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_RIGHT,viewId)
         return this
     }
 
-    fun rlRightToLeft(viewId: Int): JJSearchBarView {
+    fun rlRightToLeft(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.LEFT_OF,viewId)
         return this
     }
 
-    fun rlLeftToRight(viewId: Int): JJSearchBarView {
+    fun rlLeftToRight(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.RIGHT_OF,viewId)
         return this
     }
 
-    fun rlStartToEnd(viewId: Int): JJSearchBarView {
+    fun rlStartToEnd(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.END_OF,viewId)
         return this
     }
 
-    fun rlEndToStart(viewId: Int): JJSearchBarView {
+    fun rlEndToStart(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.START_OF,viewId)
         return this
     }
 
-    fun rlCenterInParent(value:Boolean = true): JJSearchBarView {
+    fun rlCenterInParent(value:Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_IN_PARENT,data)
         return this
     }
 
-    fun rlCenterInParentVertically(value:Boolean = true): JJSearchBarView {
+    fun rlCenterInParentVertically(value:Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_VERTICAL,data)
         return this
     }
 
-    fun rlCenterInParentHorizontally(value:Boolean = true): JJSearchBarView {
+    fun rlCenterInParentHorizontally(value:Boolean = true): JJAmountView {
         setupRlp()
         val data = if(value) 1 else 0
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.CENTER_HORIZONTAL,data)
         return this
     }
 
-    fun rlAlignBaseline(viewId: Int): JJSearchBarView {
+    fun rlAlignBaseline(viewId: Int): JJAmountView {
         setupRlp()
         (layoutParams as? RelativeLayout.LayoutParams)?.addRule(RelativeLayout.ALIGN_BASELINE,viewId)
         return this
@@ -2443,12 +2420,12 @@ class JJSearchBarView : ConstraintLayout {
         val a = layoutParams as? LinearLayout.LayoutParams
         layoutParams = a
     }
-    fun llWeight(w: Float): JJSearchBarView {
+    fun llWeight(w: Float): JJAmountView {
         setupLlp()
         (layoutParams as? LinearLayout.LayoutParams)?.weight = w
         return this
     }
-    fun llGravity(gravity: Int): JJSearchBarView {
+    fun llGravity(gravity: Int): JJAmountView {
         setupLlp()
         (layoutParams as? LinearLayout.LayoutParams)?.gravity = gravity
         return this
@@ -2461,34 +2438,34 @@ class JJSearchBarView : ConstraintLayout {
     private var mMotionConstraintSet: ConstraintSet? = null
 
 
-    fun mlVisibilityMode(visibility: Int): JJSearchBarView {
+    fun mlVisibilityMode(visibility: Int): JJAmountView {
         mMotionConstraintSet?.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun mlVerticalBias(float: Float): JJSearchBarView {
+    fun mlVerticalBias(float: Float): JJAmountView {
         mMotionConstraintSet?.setVerticalBias(id,float)
         return this
     }
-    fun mlHorizontalBias(float: Float): JJSearchBarView {
+    fun mlHorizontalBias(float: Float): JJAmountView {
         mMotionConstraintSet?.setHorizontalBias(id,float)
         return this
     }
 
-    fun mlCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarView {
+    fun mlCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mMotionConstraintSet?.setHorizontalBias(viewId,0.5f)
         return this
     }
-    fun mlCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarView {
+    fun mlCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mMotionConstraintSet?.setVerticalBias(viewId,0.5f)
         return this
     }
 
-    fun mlMargins(margins: JJMargin) : JJSearchBarView {
+    fun mlMargins(margins: JJMargin) : JJAmountView {
         mMotionConstraintSet?.setMargin(id, ConstraintSet.TOP,margins.top)
         mMotionConstraintSet?.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mMotionConstraintSet?.setMargin(id, ConstraintSet.END,margins.right)
@@ -2497,211 +2474,211 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun mlFloatCustomAttribute(attrName: String, value: Float): JJSearchBarView {
+    fun mlFloatCustomAttribute(attrName: String, value: Float): JJAmountView {
         mMotionConstraintSet?.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun mlIntCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun mlIntCustomAttribute(attrName: String, value: Int): JJAmountView {
         mMotionConstraintSet?.setIntValue(id,attrName,value)
         return this
     }
 
-    fun mlColorCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun mlColorCustomAttribute(attrName: String, value: Int): JJAmountView {
         mMotionConstraintSet?.setColorValue(id,attrName,value)
         return this
     }
 
-    fun mlStringCustomAttribute(attrName: String, value: String): JJSearchBarView {
+    fun mlStringCustomAttribute(attrName: String, value: String): JJAmountView {
         mMotionConstraintSet?.setStringValue(id,attrName,value)
         return this
     }
 
-    fun mlRotation(float: Float): JJSearchBarView {
+    fun mlRotation(float: Float): JJAmountView {
         mMotionConstraintSet?.setRotation(id,float)
         return this
     }
 
-    fun mlRotationX(float: Float): JJSearchBarView {
+    fun mlRotationX(float: Float): JJAmountView {
         mMotionConstraintSet?.setRotationX(id,float)
         return this
     }
 
-    fun mlRotationY(float: Float): JJSearchBarView {
+    fun mlRotationY(float: Float): JJAmountView {
         mMotionConstraintSet?.setRotationY(id,float)
         return this
     }
 
-    fun mlTranslation(x: Float,y: Float): JJSearchBarView {
+    fun mlTranslation(x: Float,y: Float): JJAmountView {
         mMotionConstraintSet?.setTranslation(id,x,y)
         return this
     }
-    fun mlTranslationX(x: Float): JJSearchBarView {
+    fun mlTranslationX(x: Float): JJAmountView {
         mMotionConstraintSet?.setTranslationX(id,x)
         return this
     }
 
-    fun mlTranslationY(y: Float): JJSearchBarView {
+    fun mlTranslationY(y: Float): JJAmountView {
         mMotionConstraintSet?.setTranslationY(id,y)
         return this
     }
 
-    fun mlTranslationZ(z: Float): JJSearchBarView {
+    fun mlTranslationZ(z: Float): JJAmountView {
         mMotionConstraintSet?.setTranslationZ(id,z)
         return this
     }
 
-    fun mlTransformPivot(x: Float, y: Float): JJSearchBarView {
+    fun mlTransformPivot(x: Float, y: Float): JJAmountView {
         mMotionConstraintSet?.setTransformPivot(id,x,y)
         return this
     }
 
-    fun mlTransformPivotX(x: Float): JJSearchBarView {
+    fun mlTransformPivotX(x: Float): JJAmountView {
         mMotionConstraintSet?.setTransformPivotX(id,x)
         return this
     }
 
-    fun mlTransformPivotY(y: Float): JJSearchBarView {
+    fun mlTransformPivotY(y: Float): JJAmountView {
         mMotionConstraintSet?.setTransformPivotY(id,y)
         return this
     }
 
-    fun mlScaleX(x: Float): JJSearchBarView {
+    fun mlScaleX(x: Float): JJAmountView {
         mMotionConstraintSet?.setScaleX(id,x)
         return this
     }
 
-    fun mlScaleY(y: Float): JJSearchBarView {
+    fun mlScaleY(y: Float): JJAmountView {
         mMotionConstraintSet?.setScaleY(id,y)
         return this
     }
 
-    fun mlDimensionRatio(ratio: String): JJSearchBarView {
+    fun mlDimensionRatio(ratio: String): JJAmountView {
         mMotionConstraintSet?.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun mlAlpha(alpha: Float): JJSearchBarView {
+    fun mlAlpha(alpha: Float): JJAmountView {
         mMotionConstraintSet?.setAlpha(id,alpha)
         return this
     }
 
 
 
-    fun mlTopToTop(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlTopToTop(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun mlTopToTopParent(margin: Int = 0): JJSearchBarView {
+    fun mlTopToTopParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun mlTopToBottomOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlTopToBottomOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun mlTopToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun mlTopToBottomParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun mlBottomToTopOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlBottomToTopOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
 
         return this
     }
 
-    fun mlBottomToTopParent(margin: Int = 0): JJSearchBarView {
+    fun mlBottomToTopParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
 
         return this
     }
 
-    fun mlBottomToBottomOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlBottomToBottomOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
 
         return this
     }
 
-    fun mlBottomToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun mlBottomToBottomParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
 
         return this
     }
 
-    fun mlStartToStartOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlStartToStartOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
 
         return this
     }
 
-    fun mlStartToStartParent(margin: Int = 0): JJSearchBarView {
+    fun mlStartToStartParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
 
         return this
     }
 
-    fun mlStartToEndOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlStartToEndOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlStartToEndParent(margin: Int = 0): JJSearchBarView {
+    fun mlStartToEndParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlEndToEndOf(viewId: Int, margin: Int= 0): JJSearchBarView {
+    fun mlEndToEndOf(viewId: Int, margin: Int= 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
 
         return this
     }
 
-    fun mlEndToEndParent(margin: Int = 0): JJSearchBarView {
+    fun mlEndToEndParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
 
         return this
     }
 
 
-    fun mlEndToStartOf(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun mlEndToStartOf(viewId: Int, margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun mlEndToStartParent(margin: Int = 0): JJSearchBarView {
+    fun mlEndToStartParent(margin: Int = 0): JJAmountView {
         mMotionConstraintSet?.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun mlWidth(width: Int): JJSearchBarView {
+    fun mlWidth(width: Int): JJAmountView {
         mMotionConstraintSet?.constrainWidth(id, width)
         return this
     }
 
-    fun mlHeight(height: Int): JJSearchBarView {
+    fun mlHeight(height: Int): JJAmountView {
         mMotionConstraintSet?.constrainHeight(id, height)
         return this
     }
 
-    fun mlPercentWidth(width: Float): JJSearchBarView {
+    fun mlPercentWidth(width: Float): JJAmountView {
         mMotionConstraintSet?.constrainPercentWidth(id, width)
         return this
     }
 
-    fun mlPercentHeight(height: Float): JJSearchBarView {
+    fun mlPercentHeight(height: Float): JJAmountView {
         mMotionConstraintSet?.constrainPercentHeight(id, height)
         return this
     }
 
-    fun mlCenterInParent(): JJSearchBarView {
+    fun mlCenterInParent(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -2712,7 +2689,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarView {
+    fun mlCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -2722,7 +2699,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParentVertically(): JJSearchBarView {
+    fun mlCenterInParentVertically(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2730,21 +2707,21 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun mlCenterInParentHorizontally(): JJSearchBarView {
+    fun mlCenterInParentHorizontally(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun mlCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mMotionConstraintSet?.setVerticalBias(id, bias)
         return this
     }
 
-    fun mlCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarView {
+    fun mlCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mMotionConstraintSet?.setHorizontalBias(id, bias)
@@ -2752,7 +2729,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun mlCenterInParentTopVertically(): JJSearchBarView {
+    fun mlCenterInParentTopVertically(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2760,28 +2737,28 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun mlCenterInParentBottomVertically(): JJSearchBarView {
+    fun mlCenterInParentBottomVertically(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentStartHorizontally(): JJSearchBarView {
+    fun mlCenterInParentStartHorizontally(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInParentEndHorizontally(): JJSearchBarView {
+    fun mlCenterInParentEndHorizontally(): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInTopVerticallyOf(viewId: Int): JJSearchBarView {
+    fun mlCenterInTopVerticallyOf(viewId: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
@@ -2789,39 +2766,39 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun mlCenterInBottomVerticallyOf(viewId: Int): JJSearchBarView {
+    fun mlCenterInBottomVerticallyOf(viewId: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, 0)
         mMotionConstraintSet?.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInStartHorizontallyOf(viewId: Int): JJSearchBarView {
+    fun mlCenterInStartHorizontallyOf(viewId: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, viewId, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, viewId, ConstraintSet.START, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterInEndHorizontallyOf(viewId: Int): JJSearchBarView {
+    fun mlCenterInEndHorizontallyOf(viewId: Int): JJAmountView {
         mMotionConstraintSet?.connect(id, ConstraintSet.START, viewId, ConstraintSet.END, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, viewId, ConstraintSet.END, 0)
         mMotionConstraintSet?.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun mlCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarView {
+    fun mlCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJAmountView {
         mMotionConstraintSet?.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun mlCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarView {
+    fun mlCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJAmountView {
         mMotionConstraintSet?.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun mlFillParent(): JJSearchBarView {
+    fun mlFillParent(): JJAmountView {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -2831,7 +2808,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun mlFillParent(margin: JJMargin): JJSearchBarView {
+    fun mlFillParent(margin: JJMargin): JJAmountView {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -2841,55 +2818,55 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun mlFillParentHorizontally(): JJSearchBarView {
+    fun mlFillParentHorizontally(): JJAmountView {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun mlFillParentVertically(): JJSearchBarView {
+    fun mlFillParentVertically(): JJAmountView {
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun mlFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarView {
+    fun mlFillParentHorizontally(startMargin: Int, endMargin: Int): JJAmountView {
         mMotionConstraintSet?.constrainWidth(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun mlFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun mlFillParentVertically(topMargin: Int, bottomMargin: Int): JJAmountView {
         mMotionConstraintSet?.constrainHeight(id,0)
         mMotionConstraintSet?.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mMotionConstraintSet?.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun mlVisibility(visibility: Int): JJSearchBarView {
+    fun mlVisibility(visibility: Int): JJAmountView {
         mMotionConstraintSet?.setVisibility(id, visibility)
         return this
     }
 
-    fun mlElevation(elevation: Float): JJSearchBarView {
+    fun mlElevation(elevation: Float): JJAmountView {
         mMotionConstraintSet?.setElevation(id, elevation)
         return this
     }
 
-    fun mlApply(): JJSearchBarView {
+    fun mlApply(): JJAmountView {
         mMotionConstraintSet?.applyTo(parent as ConstraintLayout)
         return this
     }
 
-    fun mlSetConstraint(cs : ConstraintSet?): JJSearchBarView {
+    fun mlSetConstraint(cs : ConstraintSet?): JJAmountView {
         mMotionConstraintSet = cs
         return this
     }
 
-    fun mlDisposeConstraint(): JJSearchBarView {
+    fun mlDisposeConstraint(): JJAmountView {
         mMotionConstraintSet = null
         return this
     }
@@ -2900,129 +2877,129 @@ class JJSearchBarView : ConstraintLayout {
     protected val mConstraintSet = ConstraintSet()
 
 
-    fun clFloatCustomAttribute(attrName: String, value: Float): JJSearchBarView {
+    fun clFloatCustomAttribute(attrName: String, value: Float): JJAmountView {
         mConstraintSet.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun clIntCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun clIntCustomAttribute(attrName: String, value: Int): JJAmountView {
         mConstraintSet.setIntValue(id,attrName,value)
         return this
     }
 
-    fun clColorCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun clColorCustomAttribute(attrName: String, value: Int): JJAmountView {
         mConstraintSet.setColorValue(id,attrName,value)
         return this
     }
 
-    fun clStringCustomAttribute(attrName: String, value: String): JJSearchBarView {
+    fun clStringCustomAttribute(attrName: String, value: String): JJAmountView {
         mConstraintSet.setStringValue(id,attrName,value)
         return this
     }
 
-    fun clRotation(float: Float): JJSearchBarView {
+    fun clRotation(float: Float): JJAmountView {
         mConstraintSet.setRotation(id,float)
         return this
     }
 
-    fun clRotationX(float: Float): JJSearchBarView {
+    fun clRotationX(float: Float): JJAmountView {
         mConstraintSet.setRotationX(id,float)
         return this
     }
 
-    fun clRotationY(float: Float): JJSearchBarView {
+    fun clRotationY(float: Float): JJAmountView {
         mConstraintSet.setRotationY(id,float)
         return this
     }
 
-    fun clTranslation(x: Float,y: Float): JJSearchBarView {
+    fun clTranslation(x: Float,y: Float): JJAmountView {
         mConstraintSet.setTranslation(id,x,y)
         return this
     }
-    fun clTranslationX(x: Float): JJSearchBarView {
+    fun clTranslationX(x: Float): JJAmountView {
         mConstraintSet.setTranslationX(id,x)
         return this
     }
 
-    fun clTranslationY(y: Float): JJSearchBarView {
+    fun clTranslationY(y: Float): JJAmountView {
         mConstraintSet.setTranslationY(id,y)
         return this
     }
 
-    fun clTranslationZ(z: Float): JJSearchBarView {
+    fun clTranslationZ(z: Float): JJAmountView {
         mConstraintSet.setTranslationZ(id,z)
         return this
     }
 
-    fun clTransformPivot(x: Float, y: Float): JJSearchBarView {
+    fun clTransformPivot(x: Float, y: Float): JJAmountView {
         mConstraintSet.setTransformPivot(id,x,y)
         return this
     }
 
-    fun clTransformPivotX(x: Float): JJSearchBarView {
+    fun clTransformPivotX(x: Float): JJAmountView {
         mConstraintSet.setTransformPivotX(id,x)
         return this
     }
 
-    fun clTransformPivotY(y: Float): JJSearchBarView {
+    fun clTransformPivotY(y: Float): JJAmountView {
         mConstraintSet.setTransformPivotY(id,y)
         return this
     }
 
-    fun clScaleX(x: Float): JJSearchBarView {
+    fun clScaleX(x: Float): JJAmountView {
         mConstraintSet.setScaleX(id,x)
         return this
     }
 
-    fun clScaleY(y: Float): JJSearchBarView {
+    fun clScaleY(y: Float): JJAmountView {
         mConstraintSet.setScaleY(id,y)
         return this
     }
 
-    fun clDimensionRatio(ratio: String): JJSearchBarView {
+    fun clDimensionRatio(ratio: String): JJAmountView {
         mConstraintSet.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun clAlpha(alpha: Float): JJSearchBarView {
+    fun clAlpha(alpha: Float): JJAmountView {
         mConstraintSet.setAlpha(id,alpha)
         return this
     }
 
 
-    fun clApply(): JJSearchBarView {
+    fun clApply(): JJAmountView {
         mConstraintSet.applyTo(parent as ConstraintLayout)
         return this
     }
 
-    fun clVisibilityMode(visibility: Int): JJSearchBarView {
+    fun clVisibilityMode(visibility: Int): JJAmountView {
         mConstraintSet.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun clVerticalBias(float: Float): JJSearchBarView {
+    fun clVerticalBias(float: Float): JJAmountView {
         mConstraintSet.setVerticalBias(id,float)
         return this
     }
-    fun clHorizontalBias(float: Float): JJSearchBarView {
+    fun clHorizontalBias(float: Float): JJAmountView {
         mConstraintSet.setHorizontalBias(id,float)
         return this
     }
 
-    fun clCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarView {
+    fun clCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mConstraintSet.setHorizontalBias(id,0.5f)
         return this
     }
-    fun clCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarView {
+    fun clCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mConstraintSet.setVerticalBias(id,0.5f)
         return this
     }
 
-    fun clMargins(margins: JJMargin) : JJSearchBarView {
+    fun clMargins(margins: JJMargin) : JJAmountView {
         mConstraintSet.setMargin(id, ConstraintSet.TOP,margins.top)
         mConstraintSet.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mConstraintSet.setMargin(id, ConstraintSet.END,margins.right)
@@ -3031,110 +3008,110 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun clTopToTop(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clTopToTop(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clTopToTopParent(margin: Int = 0): JJSearchBarView {
+    fun clTopToTopParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun clTopToBottom(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clTopToBottom(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clTopToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun clTopToBottomParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clBottomToTop(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clBottomToTop(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clBottomToTopParent(margin: Int = 0): JJSearchBarView {
+    fun clBottomToTopParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun clBottomToBottom(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clBottomToBottom(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clBottomToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun clBottomToBottomParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun clStartToStart(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clStartToStart(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun clStartToStartParent(margin: Int = 0): JJSearchBarView {
+    fun clStartToStartParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
-    fun clStartToEnd(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clStartToEnd(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun clStartToEndParent(margin: Int = 0): JJSearchBarView {
+    fun clStartToEndParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
-    fun clEndToEnd(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clEndToEnd(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun clEndToEndParent(margin: Int = 0): JJSearchBarView {
+    fun clEndToEndParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
 
-    fun clEndToStart(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun clEndToStart(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun clEndToStartParent(margin: Int = 0): JJSearchBarView {
+    fun clEndToStartParent(margin: Int = 0): JJAmountView {
         mConstraintSet.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun clWidth(width: Int): JJSearchBarView {
+    fun clWidth(width: Int): JJAmountView {
         mConstraintSet.constrainWidth(id, width)
         return this
     }
 
-    fun clHeight(height: Int): JJSearchBarView {
+    fun clHeight(height: Int): JJAmountView {
         mConstraintSet.constrainHeight(id, height)
         return this
     }
 
-    fun clPercentWidth(width: Float): JJSearchBarView {
+    fun clPercentWidth(width: Float): JJAmountView {
         mConstraintSet.constrainPercentWidth(id, width)
         return this
     }
 
-    fun clPercentHeight(height: Float): JJSearchBarView {
+    fun clPercentHeight(height: Float): JJAmountView {
         mConstraintSet.constrainPercentHeight(id, height)
         return this
     }
 
-    fun clCenterInParent(): JJSearchBarView {
+    fun clCenterInParent(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3144,7 +3121,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun clCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarView {
+    fun clCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3154,28 +3131,28 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun clCenterInParentVertically(): JJSearchBarView {
+    fun clCenterInParentVertically(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentHorizontally(): JJSearchBarView {
+    fun clCenterInParentHorizontally(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun clCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mConstraintSet.setVerticalBias(id, bias)
         return this
     }
 
-    fun clCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarView {
+    fun clCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mConstraintSet.setHorizontalBias(id, bias)
@@ -3183,7 +3160,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun clCenterInParentTopVertically(): JJSearchBarView {
+    fun clCenterInParentTopVertically(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
@@ -3191,28 +3168,28 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun clCenterInParentBottomVertically(): JJSearchBarView {
+    fun clCenterInParentBottomVertically(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentStartHorizontally(): JJSearchBarView {
+    fun clCenterInParentStartHorizontally(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInParentEndHorizontally(): JJSearchBarView {
+    fun clCenterInParentEndHorizontally(): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInTopVertically(topId: Int): JJSearchBarView {
+    fun clCenterInTopVertically(topId: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, topId, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, topId, ConstraintSet.TOP, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
@@ -3220,39 +3197,39 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun clCenterInBottomVertically(bottomId: Int): JJSearchBarView {
+    fun clCenterInBottomVertically(bottomId: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.TOP, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSet.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInStartHorizontally(startId: Int): JJSearchBarView {
+    fun clCenterInStartHorizontally(startId: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, startId, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, startId, ConstraintSet.START, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterInEndHorizontally(endId: Int): JJSearchBarView {
+    fun clCenterInEndHorizontally(endId: Int): JJAmountView {
         mConstraintSet.connect(id, ConstraintSet.START, endId, ConstraintSet.END, 0)
         mConstraintSet.connect(id, ConstraintSet.END, endId, ConstraintSet.END, 0)
         mConstraintSet.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun clCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarView {
+    fun clCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJAmountView {
         mConstraintSet.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun clCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarView {
+    fun clCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJAmountView {
         mConstraintSet.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun clFillParent(): JJSearchBarView {
+    fun clFillParent(): JJAmountView {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3262,7 +3239,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun clFillParent(margin: JJMargin): JJSearchBarView {
+    fun clFillParent(margin: JJMargin): JJAmountView {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3272,42 +3249,42 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun clFillParentHorizontally(): JJSearchBarView {
+    fun clFillParentHorizontally(): JJAmountView {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun clFillParentVertically(): JJSearchBarView {
+    fun clFillParentVertically(): JJAmountView {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun clFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarView {
+    fun clFillParentHorizontally(startMargin: Int, endMargin: Int): JJAmountView {
         mConstraintSet.constrainWidth(id,0)
         mConstraintSet.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSet.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun clFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun clFillParentVertically(topMargin: Int, bottomMargin: Int): JJAmountView {
         mConstraintSet.constrainHeight(id,0)
         mConstraintSet.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSet.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun clVisibility(visibility: Int): JJSearchBarView {
+    fun clVisibility(visibility: Int): JJAmountView {
         mConstraintSet.setVisibility(id, visibility)
         return this
     }
 
 
 
-    fun clElevation(elevation: Float): JJSearchBarView {
+    fun clElevation(elevation: Float): JJAmountView {
         mConstraintSet.setElevation(id, elevation)
 
         return this
@@ -3317,22 +3294,22 @@ class JJSearchBarView : ConstraintLayout {
         return mConstraintSet
     }
 
-    fun clMinWidth(w:Int): JJSearchBarView {
+    fun clMinWidth(w:Int): JJAmountView {
         mConstraintSet.constrainMinWidth(id,w)
         return this
     }
 
-    fun clMinHeight(h:Int): JJSearchBarView {
+    fun clMinHeight(h:Int): JJAmountView {
         mConstraintSet.constrainMinHeight(id,h)
         return this
     }
 
-    fun clMaxWidth(w:Int): JJSearchBarView {
+    fun clMaxWidth(w:Int): JJAmountView {
         mConstraintSet.constrainMaxWidth(id,w)
         return this
     }
 
-    fun clMaxHeight(h:Int): JJSearchBarView {
+    fun clMaxHeight(h:Int): JJAmountView {
         mConstraintSet.constrainMaxHeight(id,h)
         return this
     }
@@ -3347,130 +3324,130 @@ class JJSearchBarView : ConstraintLayout {
     //region ConstraintLayout LandScape Params
     protected val mConstraintSetLandScape = ConstraintSet()
 
-    fun cllApply(): JJSearchBarView {
+    fun cllApply(): JJAmountView {
         mConstraintSetLandScape.applyTo(parent as ConstraintLayout)
         return this
     }
 
 
-    fun cllFloatCustomAttribute(attrName: String, value: Float): JJSearchBarView {
+    fun cllFloatCustomAttribute(attrName: String, value: Float): JJAmountView {
         mConstraintSet.setFloatValue(id,attrName,value)
         return this
     }
 
-    fun cllIntCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun cllIntCustomAttribute(attrName: String, value: Int): JJAmountView {
         mConstraintSet.setIntValue(id,attrName,value)
         return this
     }
 
-    fun cllColorCustomAttribute(attrName: String, value: Int): JJSearchBarView {
+    fun cllColorCustomAttribute(attrName: String, value: Int): JJAmountView {
         mConstraintSet.setColorValue(id,attrName,value)
         return this
     }
 
-    fun cllStringCustomAttribute(attrName: String, value: String): JJSearchBarView {
+    fun cllStringCustomAttribute(attrName: String, value: String): JJAmountView {
         mConstraintSet.setStringValue(id,attrName,value)
         return this
     }
 
-    fun cllRotation(float: Float): JJSearchBarView {
+    fun cllRotation(float: Float): JJAmountView {
         mConstraintSet.setRotation(id,float)
         return this
     }
 
-    fun cllRotationX(float: Float): JJSearchBarView {
+    fun cllRotationX(float: Float): JJAmountView {
         mConstraintSet.setRotationX(id,float)
         return this
     }
 
-    fun cllRotationY(float: Float): JJSearchBarView {
+    fun cllRotationY(float: Float): JJAmountView {
         mConstraintSet.setRotationY(id,float)
         return this
     }
 
-    fun cllTranslation(x: Float,y: Float): JJSearchBarView {
+    fun cllTranslation(x: Float,y: Float): JJAmountView {
         mConstraintSet.setTranslation(id,x,y)
         return this
     }
-    fun cllTranslationX(x: Float): JJSearchBarView {
+    fun cllTranslationX(x: Float): JJAmountView {
         mConstraintSet.setTranslationX(id,x)
         return this
     }
 
-    fun cllTranslationY(y: Float): JJSearchBarView {
+    fun cllTranslationY(y: Float): JJAmountView {
         mConstraintSet.setTranslationY(id,y)
         return this
     }
 
-    fun cllTranslationZ(z: Float): JJSearchBarView {
+    fun cllTranslationZ(z: Float): JJAmountView {
         mConstraintSet.setTranslationZ(id,z)
         return this
     }
 
-    fun cllTransformPivot(x: Float, y: Float): JJSearchBarView {
+    fun cllTransformPivot(x: Float, y: Float): JJAmountView {
         mConstraintSet.setTransformPivot(id,x,y)
         return this
     }
 
-    fun cllTransformPivotX(x: Float): JJSearchBarView {
+    fun cllTransformPivotX(x: Float): JJAmountView {
         mConstraintSet.setTransformPivotX(id,x)
         return this
     }
 
-    fun cllTransformPivotY(y: Float): JJSearchBarView {
+    fun cllTransformPivotY(y: Float): JJAmountView {
         mConstraintSet.setTransformPivotY(id,y)
         return this
     }
 
-    fun cllScaleX(x: Float): JJSearchBarView {
+    fun cllScaleX(x: Float): JJAmountView {
         mConstraintSet.setScaleX(id,x)
         return this
     }
 
-    fun cllScaleY(y: Float): JJSearchBarView {
+    fun cllScaleY(y: Float): JJAmountView {
         mConstraintSet.setScaleY(id,y)
         return this
     }
 
-    fun cllDimensionRatio(ratio: String): JJSearchBarView {
+    fun cllDimensionRatio(ratio: String): JJAmountView {
         mConstraintSet.setDimensionRatio(id,ratio)
         return this
     }
 
-    fun cllAlpha(alpha: Float): JJSearchBarView {
+    fun cllAlpha(alpha: Float): JJAmountView {
         mConstraintSet.setAlpha(id,alpha)
         return this
     }
 
 
-    fun cllVisibilityMode(visibility: Int): JJSearchBarView {
+    fun cllVisibilityMode(visibility: Int): JJAmountView {
         mConstraintSetLandScape.setVisibilityMode(id, visibility)
         return this
     }
 
-    fun cllVerticalBias(float: Float): JJSearchBarView {
+    fun cllVerticalBias(float: Float): JJAmountView {
         mConstraintSetLandScape.setVerticalBias(id,float)
         return this
     }
-    fun cllHorizontalBias(float: Float): JJSearchBarView {
+    fun cllHorizontalBias(float: Float): JJAmountView {
         mConstraintSetLandScape.setHorizontalBias(id,float)
         return this
     }
 
-    fun cllCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJSearchBarView {
+    fun cllCenterHorizontallyOf(viewId: Int, marginStart: Int = 0, marginEnd: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, marginStart)
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, marginEnd)
         mConstraintSetLandScape.setHorizontalBias(id,0.5f)
         return this
     }
-    fun cllCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJSearchBarView {
+    fun cllCenterVerticallyOf(viewId: Int,marginTop: Int = 0, marginBottom: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, marginTop)
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, marginBottom)
         mConstraintSetLandScape.setVerticalBias(id,0.5f)
         return this
     }
 
-    fun cllMargins(margins: JJMargin) : JJSearchBarView {
+    fun cllMargins(margins: JJMargin) : JJAmountView {
         mConstraintSetLandScape.setMargin(id, ConstraintSet.TOP,margins.top)
         mConstraintSetLandScape.setMargin(id, ConstraintSet.BOTTOM,margins.bottom)
         mConstraintSetLandScape.setMargin(id, ConstraintSet.END,margins.right)
@@ -3479,110 +3456,110 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun cllTopToTop(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllTopToTop(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllTopToTopParent(margin: Int = 0): JJSearchBarView {
+    fun cllTopToTopParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
 
-    fun cllTopToBottom(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllTopToBottom(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllTopToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun cllTopToBottomParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllBottomToTop(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllBottomToTop(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllBottomToTopParent(margin: Int = 0): JJSearchBarView {
+    fun cllBottomToTopParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin)
         return this
     }
 
-    fun cllBottomToBottom(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllBottomToBottom(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, viewId, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllBottomToBottomParent(margin: Int = 0): JJSearchBarView {
+    fun cllBottomToBottomParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, margin)
         return this
     }
 
-    fun cllStartToStart(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllStartToStart(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllStartToStartParent(margin: Int = 0): JJSearchBarView {
+    fun cllStartToStartParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllStartToEnd(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllStartToEnd(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllStartToEndParent(margin: Int = 0): JJSearchBarView {
+    fun cllStartToEndParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllEndToEnd(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllEndToEnd(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.END, margin)
         return this
     }
 
-    fun cllEndToEndParent(margin: Int = 0): JJSearchBarView {
+    fun cllEndToEndParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin)
         return this
     }
 
 
-    fun cllEndToStart(viewId: Int, margin: Int = 0): JJSearchBarView {
+    fun cllEndToStart(viewId: Int, margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, viewId, ConstraintSet.START, margin)
         return this
     }
 
-    fun cllEndToStartParent(margin: Int = 0): JJSearchBarView {
+    fun cllEndToStartParent(margin: Int = 0): JJAmountView {
         mConstraintSetLandScape.connect(this.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, margin)
         return this
     }
 
 
-    fun cllWidth(width: Int): JJSearchBarView {
+    fun cllWidth(width: Int): JJAmountView {
         mConstraintSetLandScape.constrainWidth(id, width)
         return this
     }
 
-    fun cllHeight(height: Int): JJSearchBarView {
+    fun cllHeight(height: Int): JJAmountView {
         mConstraintSetLandScape.constrainHeight(id, height)
         return this
     }
 
-    fun cllPercentWidth(width: Float): JJSearchBarView {
+    fun cllPercentWidth(width: Float): JJAmountView {
         mConstraintSetLandScape.constrainPercentWidth(id, width)
         return this
     }
 
-    fun cllPercentHeight(height: Float): JJSearchBarView {
+    fun cllPercentHeight(height: Float): JJAmountView {
         mConstraintSetLandScape.constrainPercentHeight(id, height)
         return this
     }
 
-    fun cllCenterInParent(): JJSearchBarView {
+    fun cllCenterInParent(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3592,7 +3569,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun cllCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJSearchBarView {
+    fun cllCenterInParent(verticalBias: Float, horizontalBias: Float, margin: JJMargin): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin.left)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin.right)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3602,28 +3579,28 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun cllCenterInParentVertically(): JJSearchBarView {
+    fun cllCenterInParentVertically(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentHorizontally(): JJSearchBarView {
+    fun cllCenterInParentHorizontally(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun cllCenterInParentVertically(bias: Float, topMargin: Int, bottomMargin: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         mConstraintSetLandScape.setVerticalBias(id, bias)
         return this
     }
 
-    fun cllCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJSearchBarView {
+    fun cllCenterInParentHorizontally(bias: Float, startMargin: Int, endtMargin: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endtMargin)
         mConstraintSetLandScape.setHorizontalBias(id, bias)
@@ -3631,7 +3608,7 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun cllCenterInParentTopVertically(): JJSearchBarView {
+    fun cllCenterInParentTopVertically(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
@@ -3639,28 +3616,28 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun cllCenterInParentBottomVertically(): JJSearchBarView {
+    fun cllCenterInParentBottomVertically(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentStartHorizontally(): JJSearchBarView {
+    fun cllCenterInParentStartHorizontally(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInParentEndHorizontally(): JJSearchBarView {
+    fun cllCenterInParentEndHorizontally(): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInTopVertically(topId: Int): JJSearchBarView {
+    fun cllCenterInTopVertically(topId: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, topId, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, topId, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
@@ -3668,39 +3645,39 @@ class JJSearchBarView : ConstraintLayout {
     }
 
 
-    fun cllCenterInBottomVertically(bottomId: Int): JJSearchBarView {
+    fun cllCenterInBottomVertically(bottomId: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, bottomId, ConstraintSet.BOTTOM, 0)
         mConstraintSetLandScape.setVerticalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInStartHorizontally(startId: Int): JJSearchBarView {
+    fun cllCenterInStartHorizontally(startId: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, startId, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, startId, ConstraintSet.START, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterInEndHorizontally(endId: Int): JJSearchBarView {
+    fun cllCenterInEndHorizontally(endId: Int): JJAmountView {
         mConstraintSetLandScape.connect(id, ConstraintSet.START, endId, ConstraintSet.END, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, endId, ConstraintSet.END, 0)
         mConstraintSetLandScape.setHorizontalBias(id, 0.5f)
         return this
     }
 
-    fun cllCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJSearchBarView {
+    fun cllCenterVertically(topId: Int, topSide: Int, topMargin: Int, bottomId: Int, bottomSide: Int, bottomMargin: Int, bias: Float): JJAmountView {
         mConstraintSetLandScape.centerVertically(id, topId, topSide, topMargin, bottomId, bottomSide, bottomMargin, bias)
         return this
     }
 
-    fun cllCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJSearchBarView {
+    fun cllCenterHorizontally(startId: Int, startSide: Int, startMargin: Int, endId: Int, endSide: Int, endMargin: Int, bias: Float): JJAmountView {
         mConstraintSetLandScape.centerHorizontally(id, startId, startSide, startMargin, endId, endSide, endMargin, bias)
         return this
     }
 
 
-    fun cllFillParent(): JJSearchBarView {
+    fun cllFillParent(): JJAmountView {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
@@ -3710,7 +3687,7 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun cllFillParent(margin: JJMargin): JJSearchBarView {
+    fun cllFillParent(margin: JJMargin): JJAmountView {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, margin.top)
@@ -3720,42 +3697,42 @@ class JJSearchBarView : ConstraintLayout {
         return this
     }
 
-    fun cllFillParentHorizontally(): JJSearchBarView {
+    fun cllFillParentHorizontally(): JJAmountView {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0)
         return this
     }
 
-    fun cllFillParentVertically(): JJSearchBarView {
+    fun cllFillParentVertically(): JJAmountView {
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         return this
     }
 
-    fun cllFillParentHorizontally(startMargin: Int, endMargin: Int): JJSearchBarView {
+    fun cllFillParentHorizontally(startMargin: Int, endMargin: Int): JJAmountView {
         mConstraintSetLandScape.constrainWidth(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, endMargin)
         return this
     }
 
-    fun cllFillParentVertically(topMargin: Int, bottomMargin: Int): JJSearchBarView {
+    fun cllFillParentVertically(topMargin: Int, bottomMargin: Int): JJAmountView {
         mConstraintSetLandScape.constrainHeight(id,0)
         mConstraintSetLandScape.connect(id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
         mConstraintSetLandScape.connect(id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, bottomMargin)
         return this
     }
 
-    fun cllVisibility(visibility: Int): JJSearchBarView {
+    fun cllVisibility(visibility: Int): JJAmountView {
         mConstraintSetLandScape.setVisibility(id, visibility)
         return this
     }
 
 
 
-    fun cllElevation(elevation: Float): JJSearchBarView {
+    fun cllElevation(elevation: Float): JJAmountView {
         mConstraintSetLandScape.setElevation(id, elevation)
 
         return this
@@ -3765,26 +3742,25 @@ class JJSearchBarView : ConstraintLayout {
         return mConstraintSetLandScape
     }
 
-    fun cllMinWidth(w:Int): JJSearchBarView {
+    fun cllMinWidth(w:Int): JJAmountView {
         mConstraintSetLandScape.constrainMinWidth(id,w)
         return this
     }
 
-    fun cllMinHeight(h:Int): JJSearchBarView {
+    fun cllMinHeight(h:Int): JJAmountView {
         mConstraintSetLandScape.constrainMinHeight(id,h)
         return this
     }
 
-    fun cllMaxWidth(w:Int): JJSearchBarView {
+    fun cllMaxWidth(w:Int): JJAmountView {
         mConstraintSetLandScape.constrainMaxWidth(id,w)
         return this
     }
 
-    fun cllMaxHeight(h:Int): JJSearchBarView {
+    fun cllMaxHeight(h:Int): JJAmountView {
         mConstraintSetLandScape.constrainMaxHeight(id,h)
         return this
     }
 
-   //endregion
-
+    //endregion
 }

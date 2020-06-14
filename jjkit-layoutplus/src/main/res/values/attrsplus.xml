@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="styleColorControlActivated" format="reference" />
-
     <declare-styleable name="jjlayoutplus" parent="JJConstraintLayout" >
         <attr name="layout_ignoreCl"/>
         <attr name="lpPaddingPercentScHeight"/>
@@ -364,6 +362,17 @@
         <attr name="cllWidthResponsivePercentScreenHeight"/>
     </declare-styleable>
 
+    <attr name="controlWidth" format="dimension" />
+    <attr name="controlHeight" format="dimension" />
+    <attr name="controlWidthPerScHeight" format="float" />
+    <attr name="controlHeightPerScHeight" format="float" />
+    <attr name="controlWidthPerScWidth" format="float" />
+    <attr name="controlHeightPerScWidth" format="float" />
+    <attr name="min" format="integer" />
+    <attr name="max" format="integer" />
+    <attr name="styleColorControlActivated" format="reference" />
+
+
     <declare-styleable name="JJSearchBarViewStatic" parent="jjlayoutplus" >
         <attr name="android:text" />
         <attr name="android:textColor" />
@@ -409,6 +418,20 @@
         <attr name="progressSize" format="dimension"/>
         <attr name="colorOnSurface" format="color" />
 
+    </declare-styleable>
+
+    <declare-styleable name="JJAmountView">
+        <attr name="colorSurface" />
+        <attr name="colorOnSurface" />
+        <attr name="android:fontFamily" />
+        <attr name="android:typeface" />
+        <attr name="android:textStyle" />
+        <attr name="android:textSize" />
+        <attr name="max" />
+        <attr name="min" />
+        <attr name="controlWidth" />
+        <attr name="controlWidthPerScHeight" />
+        <attr name="controlWidthPerScWidth"  />
     </declare-styleable>
 
 </resources>

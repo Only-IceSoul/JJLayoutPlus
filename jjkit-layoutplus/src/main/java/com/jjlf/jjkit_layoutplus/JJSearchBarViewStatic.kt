@@ -2113,6 +2113,19 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         return this
     }
 
+
+    fun lpApply() :  JJSearchBarViewStatic {
+        layoutParams.height = mlpHeight
+        layoutParams.width = mlpWidth
+        val margin = layoutParams as? MarginLayoutParams
+        margin?.topMargin = mlpMargins.top
+        margin?.marginStart =  mlpMargins.left
+        margin?.marginEnd =  mlpMargins.right
+        margin?.bottomMargin =  mlpMargins.bottom
+        setPaddingRelative(mlpPadding.left,mlpPadding.top,mlpPadding.right,mlpPadding.bottom)
+        return this
+    }
+
     //endregion
 
     //region layout params landscape
@@ -2134,6 +2147,19 @@ open class JJSearchBarViewStatic : ConstraintLayout {
         mlsMargins = mar
         return this
     }
+
+    fun lplApply():JJSearchBarViewStatic{
+        layoutParams.height = mlsHeight
+        layoutParams.width = mlsWidth
+        val margin = layoutParams as? MarginLayoutParams
+        margin?.topMargin = mlsMargins.top
+        margin?.marginStart = mlsMargins.left
+        margin?.marginEnd = mlsMargins.right
+        margin?.bottomMargin = mlsMargins.bottom
+        setPaddingRelative(mlsPadding.left,mlsPadding.top,mlsPadding.right,mlsPadding.bottom)
+        return this
+    }
+
 
     //endregion 
 
