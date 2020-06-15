@@ -75,6 +75,12 @@ class JJAmountView : ConstraintLayout {
                 R.styleable.JJAmountView_colorOnSurface -> {
                     onSurface = t.getColor(R.styleable.JJAmountView_colorOnSurface,Color.BLACK)
                 }
+                R.styleable.JJAmountView_colorOnSurface -> {
+                    onSurface = t.getColor(R.styleable.JJAmountView_colorOnSurface,Color.BLACK)
+                }
+                R.styleable.JJAmountView_number -> {
+                    setNumber(t.getInteger(R.styleable.JJAmountView_number,1))
+                }
             }
         }
         t.recycle()
@@ -115,8 +121,6 @@ class JJAmountView : ConstraintLayout {
         mDecreaseView.setImageResource(R.drawable.ic_remove)
         mIncreaseView.setImageResource(R.drawable.ic_add)
 
-        mDecreaseView.isEnabled = false
-        mDecreaseView.alpha = 0.3f
 
         val strokeSize = (width * 0.01f)
         mLinearLayout.background = JJColorDrawablePlus()
@@ -129,40 +133,53 @@ class JJAmountView : ConstraintLayout {
 
         mTextView.textAlignment = View.TEXT_ALIGNMENT_GRAVITY
         mTextView.gravity = Gravity.CENTER
-        mTextView.text = mMin.toString()
-        mCount = mMin
+        mTextView.text = mCount.toString()
 
 
         mDecreaseView.setOnClickListener{
             mCount -= 1
             mTextView.text = mCount.toString()
-
-            if(mCount <= mMin){
-                it.isEnabled = false
-                it.alpha = 0.3f
-            }
-            if(mCount < mMax) {
-                mIncreaseView.isEnabled = true
-                mIncreaseView.alpha = 1f
-            }
+            disableDecreaseViewIfNeeded()
+            enableIncreaseViewIfNeeded()
             mOnChangedListener?.invoke(mCount)
         }
 
         mIncreaseView.setOnClickListener {
             mCount += 1
             mTextView.text =  mCount.toString()
-
-            if(mCount > mMin){
-                mDecreaseView.isEnabled = true
-                mDecreaseView.alpha = 1f
-            }
-            if(mCount >= mMax){
-                it.isEnabled = false
-                it.alpha = 0.3f
-            }
+            enableDecreaseViewIfNeeded()
+            disableIncreaseViewIfNeeded()
             mOnChangedListener?.invoke(mCount)
         }
 
+        disableDecreaseViewIfNeeded()
+        disableIncreaseViewIfNeeded()
+    }
+
+    private fun enableDecreaseViewIfNeeded(){
+        if(mCount > mMin){
+            mDecreaseView.isEnabled = true
+            mDecreaseView.alpha = 1f
+        }
+    }
+    private fun enableIncreaseViewIfNeeded(){
+        if(mCount < mMax) {
+            mIncreaseView.isEnabled = true
+            mIncreaseView.alpha = 1f
+        }
+    }
+    private fun disableDecreaseViewIfNeeded(){
+        if(mCount <= mMin){
+            mDecreaseView.isEnabled = false
+            mDecreaseView.alpha = 0.3f
+        }
+    }
+
+    private fun disableIncreaseViewIfNeeded(){
+        if(mCount >= mMax){
+            mIncreaseView.isEnabled = false
+            mIncreaseView.alpha = 0.3f
+        }
     }
 
     //region set get custom
@@ -191,16 +208,21 @@ class JJAmountView : ConstraintLayout {
         return this
     }
 
-    fun setMin(min:Int): JJAmountView {
-        mMin = if(min < 0) 0 else min
-        return this
-    }
-    fun setMax(max:Int): JJAmountView {
-        mMax = if(max < 0) 0 else max
+    fun setNumber(num : Int): JJAmountView{
+        mCount = if(num <= 0) 1 else num
         return this
     }
 
-    val amount : Int  get() = mCount
+    fun setMin(min:Int): JJAmountView {
+        mMin = if(min <= 0) 1 else min
+        return this
+    }
+    fun setMax(max:Int): JJAmountView {
+        mMax = if(max <= 0) 1 else max
+        return this
+    }
+
+    val number : Int  get() = mCount
 
     private var mOnChangedListener : ((Int)->Unit)? = null
     fun setOnAmountChangedListener(listener:(Int)->Unit):JJAmountView{

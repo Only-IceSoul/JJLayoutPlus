@@ -372,7 +372,6 @@
     <attr name="max" format="integer" />
     <attr name="styleColorControlActivated" format="reference" />
 
-
     <declare-styleable name="JJSearchBarViewStatic" parent="jjlayoutplus" >
         <attr name="android:text" />
         <attr name="android:textColor" />
@@ -429,6 +428,7 @@
         <attr name="android:textSize" />
         <attr name="max" />
         <attr name="min" />
+        <attr name="number" />
         <attr name="controlWidth" />
         <attr name="controlWidthPerScHeight" />
         <attr name="controlWidthPerScWidth"  />
