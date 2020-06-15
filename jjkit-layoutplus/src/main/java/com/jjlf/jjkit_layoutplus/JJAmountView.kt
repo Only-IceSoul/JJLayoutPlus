@@ -135,18 +135,12 @@ class JJAmountView : ConstraintLayout {
         mTextView.gravity = Gravity.CENTER
 
         mDecreaseView.setOnClickListener{
-            mCount -= 1
-            mTextView.text = mCount.toString()
-            disableDecreaseViewIfNeeded()
-            enableIncreaseViewIfNeeded()
+            setNumber(mCount - 1)
             mOnChangedListener?.invoke(mCount)
         }
 
         mIncreaseView.setOnClickListener {
-            mCount += 1
-            mTextView.text =  mCount.toString()
-            enableDecreaseViewIfNeeded()
-            disableIncreaseViewIfNeeded()
+            setNumber(mCount + 1)
             mOnChangedListener?.invoke(mCount)
         }
 
@@ -209,6 +203,10 @@ class JJAmountView : ConstraintLayout {
     fun setNumber(num : Int): JJAmountView{
         mCount = if(num <= 0) 1 else num
         mTextView.text = mCount.toString()
+        enableDecreaseViewIfNeeded()
+        enableIncreaseViewIfNeeded()
+        disableDecreaseViewIfNeeded()
+        disableIncreaseViewIfNeeded()
         return this
     }
 
