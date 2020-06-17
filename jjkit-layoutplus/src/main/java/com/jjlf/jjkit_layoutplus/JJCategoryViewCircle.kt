@@ -209,7 +209,7 @@ class JJCategoryViewCircle : ConstraintLayout {
         clMargins(mClMargin)
         cllMargins(mCllMargin)
 
-        if(id == View.NO_ID) id = View.generateViewId()
+
 
     }
     private fun setupAndroidBase(attrs: AttributeSet?){
@@ -220,7 +220,7 @@ class JJCategoryViewCircle : ConstraintLayout {
         )
         val ba = context.obtainStyledAttributes(attrs,
             attrsArray, 0, 0)
-
+        id = ba.getResourceId(0,View.generateViewId())
         val attrWidth = ba.getLayoutDimension(1, 0)
         val attrHeight = ba.getLayoutDimension(2, 0)
 
