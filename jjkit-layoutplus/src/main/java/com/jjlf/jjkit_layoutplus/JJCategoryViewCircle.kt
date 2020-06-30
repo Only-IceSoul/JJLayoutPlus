@@ -27,6 +27,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.doOnNextLayout
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.jjlf.jjkit_layoutplus.utils.JJColorDrawablePlus
@@ -106,6 +107,12 @@ class JJCategoryViewCircle : ConstraintLayout {
         }
         mTextView.background = null
 
+
+        mTextView.doOnNextLayout {
+            if(textIsEllipsized()){
+                mTextView.textSize = mTextView.textSize - 2f
+            }
+        }
     }
 
 
@@ -158,6 +165,21 @@ class JJCategoryViewCircle : ConstraintLayout {
 
     //endregion
 
+
+    private fun textIsEllipsized(): Boolean {
+        val truncateAt = mTextView.ellipsize
+        if (truncateAt == null || TextUtils.TruncateAt.MARQUEE == truncateAt) {
+            return false
+        }
+        val layout = mTextView.layout ?: return false
+        for (line in 0 until layout.lineCount) {
+            val num = layout.getEllipsisCount(line)
+            if ( num > 0) {
+                return true
+            }
+        }
+        return false
+    }
 
     //region init
 
