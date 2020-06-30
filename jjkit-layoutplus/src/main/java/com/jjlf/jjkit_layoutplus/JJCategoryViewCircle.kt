@@ -107,12 +107,6 @@ class JJCategoryViewCircle : ConstraintLayout {
         }
         mTextView.background = null
 
-
-        mTextView.doOnNextLayout {
-            if(textIsEllipsized()){
-                mTextView.textSize = mTextView.textSize - 2f
-            }
-        }
     }
 
 
@@ -162,6 +156,10 @@ class JJCategoryViewCircle : ConstraintLayout {
         return mImageView
     }
 
+
+    fun getTextView() : AppCompatTextView {
+        return mTextView
+    }
 
     //endregion
 
