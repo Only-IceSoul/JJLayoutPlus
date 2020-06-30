@@ -9,6 +9,7 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity
@@ -70,6 +71,8 @@ class JJCategoryViewCircle : ConstraintLayout {
         lpT.topMargin = JJScreen.percentHeight(0.008f)
         lpT.gravity = Gravity.CENTER_HORIZONTAL
         mTextView.layoutParams = lpT
+        mTextView.maxLines = 1
+        mTextView.ellipsize = TextUtils.TruncateAt.END
         mLinearLayout.addView(mImageView)
         mLinearLayout.addView(mTextView)
 
