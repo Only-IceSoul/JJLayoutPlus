@@ -1660,13 +1660,13 @@ class JJImageScale : AppCompatImageView {
 
 
     private var mOnStartListener : (()-> Unit)? = null
-    fun setOnStartListener(listener: ()-> Unit): JJImageScale {
+    fun setOnScaleStartListener(listener: ()-> Unit): JJImageScale {
         mOnStartListener = listener
         return this
     }
 
     private var mOnEndListener : (()-> Unit)? = null
-    fun setOnEndListener(listener: ()-> Unit): JJImageScale {
+    fun setOnScaleEndListener(listener: ()-> Unit): JJImageScale {
         mOnEndListener = listener
         return this
     }
@@ -1677,19 +1677,34 @@ class JJImageScale : AppCompatImageView {
         return this
     }
 
+    private var mOnTapRightListener: (()-> Unit)? = null
+    fun setOnTapRightListener(listener: ()-> Unit): JJImageScale {
+        mOnTapRightListener = listener
+        return this
+    }
+
+    private var mOnTapLeftListener: (()-> Unit)? = null
+    fun setOnTapLeftListener(listener: ()-> Unit): JJImageScale {
+        mOnTapLeftListener = listener
+        return this
+    }
     private var mMinScaleFactor = 0.92f
 
 
+    private var mInScale = false
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
        if(event?.pointerCount == 1){
+           if(!mInScale) mGestureScroll.onTouchEvent(event)
            if (event.actionMasked == MotionEvent.ACTION_UP) {
                parent.requestDisallowInterceptTouchEvent(false)
                counterScale = 0
                animateToIdentity()
                mOnEndListener?.invoke()
+               mInScale = false
            }
         } else {
+           mInScale = true
            parent.requestDisallowInterceptTouchEvent(true)
            mGestureScale.onTouchEvent(event)
            mGestureScroll.onTouchEvent(event)
@@ -1719,6 +1734,15 @@ class JJImageScale : AppCompatImageView {
         }
     }
     private fun gestureScrollScale() = object : GestureDetector.SimpleOnGestureListener(){
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            val midX = width/2f
+            if(e.x > midX){
+                mOnTapRightListener?.invoke()
+            }else{
+                mOnTapLeftListener?.invoke()
+            }
+            return true
+        }
         override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
             //scroll if bitmap is bigger
             val dstY = if(isBitmapHeightOverLimit()) computeScrollAxisYLimitToBitmap(distanceY) else 0f
