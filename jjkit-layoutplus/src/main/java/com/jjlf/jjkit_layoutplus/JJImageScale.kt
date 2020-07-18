@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
@@ -1858,7 +1859,7 @@ class JJImageScale : AppCompatImageView {
     
     //region identity
 
-    private var mScaleIdentity = 0f
+    private var mScaleIdentity = 1f
     private fun fitXY(){
         val bitmap = (drawable as? BitmapDrawable)?.bitmap
         bitmap?.let {
@@ -1877,8 +1878,7 @@ class JJImageScale : AppCompatImageView {
             mMatrix.reset()
             mMatrix.postTranslate((width - bitmap.width) / 2f,(height - bitmap.height) / 2f )
             updateImagePoints(mMatrix)
-            val scale = min(width / getMapPointsWidth(mImageRectPoints), height / getMapPointsHeight(mImageRectPoints))
-            mMatrix.postScale(scale,scale,getMapPointCenterX(mImageRectPoints),getMapPointCenterY(mImageRectPoints))
+            mMatrix.postScale(mScaleIdentity,mScaleIdentity,getMapPointCenterX(mImageRectPoints),getMapPointCenterY(mImageRectPoints))
             mAnimator.ssStartState(imageMatrix)
             mAnimator.ssEndState(mMatrix)
             startAnimation(mAnimator)
@@ -1923,9 +1923,9 @@ class JJImageScale : AppCompatImageView {
 
     //endregion
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
         fitXY()
-        super.onSizeChanged(w, h, oldw, oldh)
     }
 
 
